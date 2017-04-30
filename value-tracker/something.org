@@ -2,7 +2,7 @@
 #+OPTIONS: author:t broken-links:nil c:nil creator:nil
 #+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:t f:t inline:t num:t
 #+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
-#+OPTIONS: timestamp:nil title:t toc:t todo:t |:t
+#+OPTIONS: timestamp:nil title:t toc:nil todo:t |:t
 #+TITLE: elect式value-tracker
 #+SUBTITLE: 
 #+DATE: 
@@ -15,8 +15,8 @@
 
 #+LATEX_CLASS: koma-article
 #+LATEX_CLASS_OPTIONS:
-#+LATEX_HEADER: \usepackage[backend=biber,bibencoding=utf8,style=authoryear-icomp]{biblatex}
-#+LATEX_HEADER: \addbibresource{my-bib.bib}
+#+LATEX_HEADER: 
+#+LATEX_HEADER: 
 #+LATEX_HEADER_EXTRA:
 #+DESCRIPTION:
 #+KEYWORDS:
@@ -24,7 +24,20 @@
 #+STARTUP: indent overview inlineimages
 * 最終目標
  公開できる〇〇予測APIにする。
-* 目標を絞ってみる
+* 担当教員に求めたいもの
+ 大規模データの機械学習、データベース処理に関する知識。
+また、それらをつなげるためのメソッド。
+ *疑問点ができ次第* 質問させていただきたいと思っています。
+** 現在質問したい内容
+ - 大規模なデータを毎秒単位で収集しなければならない可能性がでてくるが、どうやってコンピュータで処理すべきなのか（メモリ等の問題）
+ - 大容量のデータを処理できるデータベースにはどのようなものがふさわしいか（Hbaseでこと足りるのか）
+ - データベースと機械学習をつなげるパイプをどのように設計すればいいのか
+ - 機械学習全般の知識(学習は主には自分たちでついていく予定です)
+
+* 担当教員に求めないもの
+ プログラミング言語の教育技術（使う言語は自分達で学習）
+ 全体のスケジュール管理（グループリーダーが統括する予定です）
+* 目標を絞った現段階での目標
  すべてのー＞何か　に
  - 例えば...
    　コンビニの売上予想・・・必要なデータ例
