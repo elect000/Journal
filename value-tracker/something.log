@@ -1,8 +1,8 @@
-This is e-pTeX, Version 3.14159265-p3.7-160201-2.6 (utf8.euc) (TeX Live 2016) (preloaded format=platex 2017.4.2)  30 APR 2017 16:24
+This is e-pTeX, Version 3.14159265-p3.7-160201-2.6 (utf8.euc) (TeX Live 2016) (preloaded format=platex 2017.4.2)  30 APR 2017 18:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**something.tex
+**something.
 (./something.tex
 pLaTeX2e <2016/11/29> (based on LaTeX2e <2017/01/01> patch level 3)
 Babel <3.9r> and hyphenation patterns for 83 language(s) loaded.
@@ -882,17 +882,17 @@ LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <14.4> not available
 (Font)              Font shape `JT1/gt/m/n' tried instead on input line 18.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <14.4> not available
 (Font)              Font shape `JY1/gt/m/n' tried instead on input line 18.
-LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 26.
-LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 26.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 29.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 22.
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 29.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 22.
+LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 34.
+LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 34.
  [1
 
 
@@ -906,12 +906,12 @@ Package logreq Info: Writing requests to 'something.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 12069 strings out of 493683
- 204052 string characters out of 6149654
- 715654 words of memory out of 5000000
- 15506 multiletter control sequences out of 15000+600000
+ 12068 strings out of 493683
+ 203961 string characters out of 6149654
+ 715619 words of memory out of 5000000
+ 15503 multiletter control sequences out of 15000+600000
  18968 words of font info for 77 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 44i,7n,51p,8849b,698s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,7n,51p,8846b,698s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on something.dvi (3 pages, 6620 bytes).
+Output written on something.dvi (3 pages, 6724 bytes).
