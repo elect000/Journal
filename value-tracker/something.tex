@@ -1,0 +1,77 @@
+% Intended LaTeX compiler: pdflatex
+\documentclass{scrartcl}
+		\usepackage[utf8]{inputenc}
+		\usepackage[dvipdfmx]{graphicx}
+		\usepackage[backend=biber,bibencoding=utf8]{biblatex}
+		\usepackage{url}
+		\usepackage{indentfirst}
+		\usepackage[normalem]{ulem}
+		\usepackage{listings}
+		\usepackage{amsmath,amssymb}
+		\usepackage[dvipdfm]{color}
+		\usepackage[backend=biber,bibencoding=utf8,style=authoryear-icomp]{biblatex}
+\addbibresource{my-bib.bib}
+\author{e.tmailbank@gmail.com}
+\date{}
+\title{elect式value-tracker}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{最終目標}
+\label{sec:orgb654f81}
+公開できる〇〇予測APIにする。\\
+\section{目標を絞ってみる}
+\label{sec:org0d492b3}
+すべてのー＞何か　に\\
+\begin{itemize}
+\item 例えば\ldots{}\\
+　コンビニの売上予想・・・必要なデータ例\\
+\end{itemize}
+\begin{center}
+\begin{tabular}{lrrrrrr}
+\hline
+内容 & 気温 & 湿度 & 仕入れ & 交通量 & 株価 & 人口遷移\\
+\hline
+重み & 5 & 4 & 2 & 5.5 & 0.1 & 0.2\\
+\hline
+\end{tabular}
+\end{center}
+\subsection{データの入手}
+\label{sec:org0250916}
+はじめのデータは既存のデータ提供サービスから入手する。例えば.jsonなどの形式で入手した後、それをデータベースに登録する。最終的には利用者から提供されたデータ（試行に用いられた）データなどの利用も視野に入れたい。\\
+\subsection{検索}
+\label{sec:orgcc7c84b}
+関連性のあるデータを計算に入れることにするが、その関連性のあるデータの選択については現在検討中である。（利用者に選択してもらうスタイルを取る、何らかの学習でサジェストするなど）\\
+\subsection{データの出力}
+\label{sec:org401a19b}
+データの出力は利用者の入れたデータに関連して、利用者の求めたデータを返す。\\
+\section{具体的な内容を詰めてみる。}
+\label{sec:orgecfa2eb}
+\subsection{データベース}
+\label{sec:org3d6e20b}
+\subsubsection{データベースにほしいもの}
+\label{sec:orga2ae591}
+より高精度な計算のためあらゆるデータが欲しい（※すべてのデータを計算するかどうかは別）\\
+\subsubsection{データをどうやって集めるのか}
+\label{sec:orgacbe5b5}
+前項で述べたとおり、初期段階では例えばweather.apiなどからの公開されているデータを、それからは各利用者から与えられるデータを集める。\\
+\subsubsection{データベースを管理するに当たって}
+\label{sec:orga564ff0}
+Hbaseなどの導入を考えている。\\
+\subsubsection{処理するデータの量}
+\label{sec:org8352e90}
+取捨選択して毎s〜毎日に合計でGB単位で流し込んでみたい。\\
+\subsection{機械学習}
+\label{sec:orgf958110}
+\subsubsection{機械学習とは}
+\label{sec:orgb202540}
+初学者ながら、TensorFlowという機械学習のツールを用いることを考えている。他にある素晴らしいツールが目に叶えば、それを用いる。\\
+\subsubsection{処理するデータの大きさは}
+\label{sec:orgcc79f18}
+GB単位になると予想している。\\
+\subsubsection{与えられるデータは}
+\label{sec:orgb88725f}
+主に数値データを扱う。\\
+\end{document}
