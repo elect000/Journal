@@ -1,52 +1,102 @@
 % Intended LaTeX compiler: pdflatex
 \documentclass{scrartcl}
-		\usepackage[utf8]{inputenc}
-		\usepackage[dvipdfmx]{graphicx}
-		\usepackage[backend=biber,bibencoding=utf8]{biblatex}
-		\usepackage{url}
-		\usepackage{indentfirst}
-		\usepackage[normalem]{ulem}
-		\usepackage{listings}
-		\usepackage{amsmath,amssymb}
-		\usepackage[dvipdfm]{color}
-\author{e.tmailbank@gmail.com}
+\usepackage[utf8]{inputenc}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[dvipdfmx]{color}
+\usepackage[backend=biber,bibencoding=utf8]{biblatex}
+\usepackage{url}
+\usepackage{indentfirst}
+\usepackage[normalem]{ulem}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{minted}
+\author{}
 \date{}
-\title{elect式value-tracker}
+\title{value-tracker}
 \begin{document}
-
 \maketitle
 \section{目標を絞った現段階での目標}
-\label{sec:org9a1ecae}
-何か　に 対する予想APIを組んで見る\\
+\label{sec:org9549e18}
+ある目標　に 対する収益予測APIを組んで見る\\
 \begin{itemize}
 \item 例えば\ldots{}\\
-　コンビニの売上予想・・・必要なデータ例\\
+　つくば市のコンビニAの売上予想・・・必要なデータ例\\
 \end{itemize}
 \begin{center}
 \begin{tabular}{lrrrrrr}
 \hline
-内容 & 気温 & 湿度 & 仕入れ & 交通量 & 株価 & 人口遷移\\
+内容 & 気温 & 湿度 & 仕入れ量 & 交通量 & 株価 & 人口遷移\\
 \hline
 重み & 5 & 4 & 2 & 5.5 & 0.1 & 0.2\\
 \hline
 \end{tabular}
 \end{center}
 \subsection{データの入手}
-\label{sec:orgca3e0b9}
+\label{sec:orgfb068d6}
 はじめのデータは既存のデータ提供サービスから入手する。例えば.jsonなどの形式で入手した後、それをデータベースに登録する。最終的には利用者から提供されたデータ（試行に用いられた）データなどの利用も視野に入れたい。\\
 \subsection{検索}
-\label{sec:org518e0ec}
+\label{sec:org68b68b6}
 関連性のあるデータを計算に入れることにするが、その関連性のあるデータの選択については現在検討中である。（利用者に選択してもらうスタイルを取る、何らかの学習でサジェストするなど）\\
 \subsection{データの出力}
-\label{sec:org758f17f}
+\label{sec:org71ae6b2}
 データの出力は利用者の入れたデータに関連して、利用者の求めたデータを返す。\\
-\section{担当教員に求めたいもの}
-\label{sec:org86fe735}
+\section{日野先生にお願いしたいこと}
+\label{sec:org3c23749}
+\begin{itemize}
+\item 機械学習に関する勉強方法\\
+\end{itemize}
+　大規模なデータを機械学習で処理する際にどのようなツール/手法が使われているのか/使うべきなのか、またそれらのスキルを身につける際にどのような道を通るべきであるのか。\\
+\begin{itemize}
+\item データベースと機械学習の接続\\
+\end{itemize}
+　データベース担当との進捗に合わせることになるが、その使われたデータベース（ex.Hbase）から機械学習ツールにデータを持ち込んでいく部分についてのアドバイス。\\
+\begin{itemize}
+\item その他、理解で行き詰まった部分でのアドバイス\\
+\end{itemize}
+\section{自分たちで進めるもの}
+\label{sec:orgae55919}
+\begin{itemize}
+\item 示された方法の学習\\
+\end{itemize}
+　使うべきツールが示されれば、それについては \textbf{基本的には} 自分達で学習します。\\
+\begin{itemize}
+\item この演習全体のスケジュール管理\\
+\end{itemize}
+　グループリーダーが統括します。\\
+\section{具体的な内容を詰めてみる。}
+\label{sec:orga3648c8}
+\subsection{データベース}
+\label{sec:org94125cb}
+\subsubsection{データベースにほしいもの}
+\label{sec:org629f4b3}
+より高精度な計算のためあらゆるデータが欲しい（※すべてのデータを計算するかどうかは別）\\
+\subsubsection{データをどうやって集めるのか}
+\label{sec:org7f69e31}
+前項で述べたとおり、初期段階では例えばweather.apiなどからの公開されているデータを、それからは各利用者から与えられるデータを集める。\\
+\subsubsection{データベースを管理するに当たって}
+\label{sec:orgcc3ccd1}
+Hbaseなどの導入を考えている。\\
+\subsubsection{処理するデータの量}
+\label{sec:orge23a1f1}
+取捨選択して毎s〜毎日に合計でGB単位で流し込んでみたい。\\
+\subsection{機械学習}
+\label{sec:orgbf647f9}
+\subsubsection{機械学習とは}
+\label{sec:orgd4aecf1}
+初学者ながら、TensorFlowという機械学習のツールを用いることを考えている。他にある素晴らしいツールが目に叶えば、それを用いる。\\
+\subsubsection{処理するデータの大きさは}
+\label{sec:orged72577}
+GB単位になると予想している。\\
+\subsubsection{与えられるデータは}
+\label{sec:orgbf3a2f1}
+主に数値データを扱う。\\
+\section{全体を通して担当教員に求めたいもの}
+\label{sec:orgd3c968e}
  大規模データの機械学習、データベース処理に関する知識。\\
 また、それらをつなげるためのメソッド。\\
+更にそれに関するロードマップの制作。\\
  \textbf{疑問点ができ次第} 質問させていただきたいと思っています。\\
 \subsection{現在質問したい内容}
-\label{sec:org49208d1}
+\label{sec:orgc753dbc}
 \begin{itemize}
 \item 大規模なデータを毎秒単位で収集しなければならない可能性がでてくるが、どうやってコンピュータで処理すべきなのか（メモリ等の問題）\\
 \item 大容量のデータを処理できるデータベースにはどのようなものがふさわしいか（Hbaseでこと足りるのか）\\
@@ -54,38 +104,11 @@
 \item 機械学習全般の知識(学習は主には自分たちでついていく予定です)\\
 \end{itemize}
 \section{担当教員に求めないもの}
-\label{sec:org28177e3}
+\label{sec:org9232ddc}
 プログラミング言語の教育技術（使う言語は自分達で学習）\\
 全体のスケジュール管理（グループリーダーが統括する予定です）\\
-\section{具体的な内容を詰めてみる。}
-\label{sec:org9502074}
-\subsection{データベース}
-\label{sec:orge530610}
-\subsubsection{データベースにほしいもの}
-\label{sec:orgf96a4d7}
-より高精度な計算のためあらゆるデータが欲しい（※すべてのデータを計算するかどうかは別）\\
-\subsubsection{データをどうやって集めるのか}
-\label{sec:orgc9a16d1}
-前項で述べたとおり、初期段階では例えばweather.apiなどからの公開されているデータを、それからは各利用者から与えられるデータを集める。\\
-\subsubsection{データベースを管理するに当たって}
-\label{sec:org715c7b5}
-Hbaseなどの導入を考えている。\\
-\subsubsection{処理するデータの量}
-\label{sec:org07b3855}
-取捨選択して毎s〜毎日に合計でGB単位で流し込んでみたい。\\
-\subsection{機械学習}
-\label{sec:org0a80128}
-\subsubsection{機械学習とは}
-\label{sec:org92e0ebb}
-初学者ながら、TensorFlowという機械学習のツールを用いることを考えている。他にある素晴らしいツールが目に叶えば、それを用いる。\\
-\subsubsection{処理するデータの大きさは}
-\label{sec:org1999783}
-GB単位になると予想している。\\
-\subsubsection{与えられるデータは}
-\label{sec:org6b7f938}
-主に数値データを扱う。\\
 \section{最終目標}
-\label{sec:org1c0e587}
-何か　ー＞　すべての（汎用的な）ものへ\\
+\label{sec:orgecf6e64}
+ある目標　ー＞　社会で通用する収益予測APIの作成\\
 公開できる〇〇予測APIにする。\\
 \end{document}
