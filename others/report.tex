@@ -1,0 +1,58 @@
+% Intended LaTeX compiler: pdflatex
+\documentclass{scrartcl}
+		\usepackage[utf8]{inputenc}
+		\usepackage[dvipdfmx]{graphicx}
+		\usepackage[dvipdfmx]{color}
+		\usepackage[backend=biber,bibencoding=utf8]{biblatex}
+		\usepackage{url}
+		\usepackage{indentfirst}
+		\usepackage[normalem]{ulem}
+		\usepackage[dvipdfmx]{hyperref}
+		\usepackage{minted}
+		\usepackage[top=25truemm,bottom=25truemm,left=25truemm,right=25truemm]{geometry}
+\author{筑波大学情報科学類2年 江畑 拓哉 (201611350)}
+\date{}
+\title{論理回路実験レポート}
+\begin{document}
+
+\maketitle
+\section{Clockにデータスイッチを使っ場合の動作の観測とその考察}
+\label{sec:org5a22e70}
+　Clockをつなぐ端子をパルス出力端子から、データ出力端子に変えた際の違いを観測したところ、見受けられた違いは以下のとおりであった。\\
+\begin{itemize}
+\item 順番ではなく一気にカウントが進んだ。\\
+\item スイッチを動かしても反応しないことがあった、\\
+\item 途中でリセットされた。\\
+\end{itemize}
+　また、これらの問題が起こった場合の共通点としてデータ出力に用いたスイッチを高速に動作させたことが挙げられる。残念ながら、ゆっくりとスイッチを操作した場合ではパルススイッチとほとんど変わらない動作をした。\\
+\subsection{本来起こってほしい動作}
+\label{sec:org42e7d1c}
+以下に本来起こってほしい動作のタイミングチャートを示す。\\
+\begin{center}
+\includegraphics[width=1.5\linewidth]{flowchart1.png}
+\end{center}
+
+
+\subsection{起きた問題}
+\label{sec:org26566d7}
+起きた問題についてのタイミングチャートを順に示す。\\
+\begin{center}
+\includegraphics[width=1.5\linewidth]{flowchart2.png}
+\end{center}
+
+
+\subsection{原因と考えられるもの}
+\label{sec:orgbee7ee8}
+
+    原因としてまず考えられるものとして、チャタリングによる値の不確実さが挙げられる。言うまでもないがチャタリングとは入力の変化に値が不安定になってしまうことで、その時間中は入力の値は不定とされる。つまり、早い時間でスイッチを高速に動作させるとチャタリングによる不安定さも相まって信号が正しく伝わらなくなる可能性が出てくるのだ。この動作の不具合は人から見てスイッチの切り替えが明白であるデータスイッチにおいてわかりやすい違和感として感じられるだろう。\\
+　　また、同様にD-FFの構造的な問題も考えられるだろう。\\
+    更には、ジャンパ線の多様による回路の煩雑化もこの不安定さに一役買っていると考えられる。この実験では、単芯と長いジャンパ線を用いて配線を行うが、私の場合回路の最適化を怠っており、長いジャンパ線がICトレーナーを覆っている状態になっていた。このような無駄の多い配線は、それだけ電気信号の伝達に遅れが出ることは明白である。\\
+　　また、使用している機材そのものの問題も考えられる。例えばブレットボードの漏電、ジャンパ線の劣化(途中の断線)が考えられる。\\
+　　\\
+
+\subsection{対策}
+\label{sec:orgc28c399}
+
+　対策としては、チャタリング除去機能のあるICを使うようにすることや、配線を最適化すること、配線に於いてできる限りテスターを用いて確認をすること、極端に高速で動かさないことを挙げることができるだろう。\\
+　具体的には、NOTゲートで使用している74HC04を74HC14に変えること、できる限りのジャンパ線から単芯への移行、小さな配線のグループ単位でのテスト、そして慌てずにテストを行える余裕を持つことが考えられる。\\
+\end{document}
