@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+N0001: U1.1 U1.4 U1.13 U1.10
+       U2.1 U2.4 U2.13 U2.10
+       ICT\PYGZus{}+5V
+N0002: U1.2 ICT\PYGZus{}D.0 ICT\PYGZus{}I.4
+N0003: U1.5 U1.12   ICT\PYGZus{}I.3
+N0004: U1.9 U2.2    ICT\PYGZus{}I.2
+N0005: U2.5 U2.12   ICT\PYGZus{}I.1
+N0006: U2.9 ICT\PYGZus{}I.0
+N0007: U1.3 U1.11
+       U2.3 U2.11
+       ICT\PYGZus{}D.A
+\end{Verbatim}
