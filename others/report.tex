@@ -8,8 +8,8 @@
 		\usepackage{indentfirst}
 		\usepackage[normalem]{ulem}
 		\usepackage[dvipdfmx]{hyperref}
-		\usepackage{minted}
 		\usepackage{fancyvrb}
+                \usepackage{minted}
 		\usepackage[top=25truemm,bottom=25truemm,left=25truemm,right=25truemm]{geometry}
 \author{筑波大学情報科学類2年 江畑 拓哉 (201611350)}
 \date{}
@@ -19,7 +19,7 @@
 \maketitle
 \section{右方向シフトレジスタのネットリスト/回路図}
 \label{sec:orgf6d78de}
-使用したもの\\
+使用したもの(実験に用いた)\\
 \begin{itemize}
 \item 74HC74 * 2 ( U1 ,U2 )\\
 \item データ出力端子D0 ( ICT\_D.0 )\\
@@ -89,4 +89,9 @@ N0007: U1.3 U1.11
 
 　対策としては、チャタリング除去機能のあるICを使うようにすることや、配線を最適化すること、配線に於いてできる限りテスターを用いて確認をすること、極端に高速で動かさないことを挙げることができるだろう。\\
 　具体的には、NOTゲートで使用している74HC04を74HC14に変えること、できる限りのジャンパ線から単芯への移行、小さな配線のグループ単位でのテスト、そして慌てずにテストを行える余裕を持つことが考えられる。\\
+\subsection{批判}
+　この課題では問題の起きにくい、つまり今までの考察より考えれば、最適化された回路を制作した学生には難しかったのではないだろうか。もっともそれだけ技術がある学生はより繊細な問題を発見するだろうとは考えられる。\\
+　一部の学生間ではより細かい繊細な問題を確認していたようだが、初学者でこの分野における詳しい研究を積んでいない自分としてはもう少し参考文献をいただきたいと考えている。
+\subsection{参考文献}
+　昨年度の論理回路の指定教科書である「だれにもわかるディジタル回路」を用いた他、教員のアドバイスを参考にした。
 \end{document}
