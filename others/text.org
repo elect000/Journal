@@ -1,0 +1,31 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:nil todo:t |:t
+#+TITLE: English
+#+SUBTITLE: 
+#+DATE: 
+#+AUTHOR: elect
+#+LANGUAGE: ja
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 9.0.2)
+
+#+LATEX_CLASS: koma-article
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER:  \usepackage[top=25truemm,bottom=25truemm,left=25truemm,right=25truemm]{geometry}
+#+LATEX_HEADER_EXTRA:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+SUBTITLE:
+#+STARTUP: indent overview inlineimages
+
+
+* 1
+  Unfortunately, material security, leisure, and liberty all cost money; and ultimately money is to be obtained only by productive labour. Now almost all kinds of money-making are detrimental to the subtler and more intense states of mind, because almost all tire the body and blunt the intellect. The case of artists of whom the majority would cease altogether to create were they compelled to break stones or add up fingers for six or seven hours a day, will serve to illustrate this truism. Further, a man who is to be educated to make a living cannot well be educated to make the most of life. To put a youth in the way of experiencing the best a liberal and elaborate education to the age of twenty-four or twenty-five is essential; at the end of which the need for leisure remains as great as ever, seeing that only in free and spacious circumstances can delicate and highly trained sensibilities survive.
+
+ 
+* 2
+  We agreed that when a poet feels something within himself that cannot be publicly discerned, he attempts to express that feeling by creating a verbal experience for the reader which will give him an emotional impact somewhat resembling the un-sayable feeling of the poet. We call this verbal experience a poem. The important thing is that the feeling of the poet should be imparted to the reader; by his verbal creation the poet should re-create in the reader a sharing of joy with his joy, hope with his hope, sorrow with his sorrow.
+  The listener to music is in a position similar to that of a poet. Listening to music is an experience, an inside-the-skin experience that cannot be discerned by anyone else. To one listener it may be a more poignant experience than to another. All our experiences color the glasses through which we perceive any new experience; as our colored glasses are enriched by experiences more deeply understood, they become clearer, enabling us to perceive yet more in new experiences.
