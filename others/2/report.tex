@@ -23,12 +23,12 @@
 
 
 \section{実験の目的}
-\label{sec:org49ea44c}
+\label{sec:org2aaa4be}
 　バイナリカウンタに、ある条件下である数を引くことのできる回路を作成する。今回での条件とは、4以上の場合を指し、引く数は4である。つまりは４以上の数を持っているカウンタから任意のタイミングで４を引くことのできる回路を作るのである。\\
 　たとえば、４から４を引いて０，９から４を引いて５、といった形にしたい。\\
 
 \section{器具及び装置}
-\label{sec:orgb707d57}
+\label{sec:org82be53b}
 器具及び装置の一覧を以下に示す。\\
 \begin{center}
 \begin{tabular}{|l|l|l|l|l|}
@@ -63,21 +63,70 @@ GND &  & 1 & ICトレーナーのブレッドポートに配線 & GND\\
 ※ 他の実験者よりも実装に手間取ったため長いジャンパ線を張り巡らせた。\\
 
 \section{実験経過}
-\label{sec:org4c10535}
+\label{sec:org1325c74}
 
 以下に配線図を示す。\\
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{./logicex-2.png}
+\caption{\label{fig:org661c980}
+配線図}
+\end{figure}
 配線を行った後、ICの電源を入れ、クロックを発生させた。\\
 
 \section{実験結果}
-\label{sec:org87d42f7}
+\label{sec:org5e15a91}
 以下に実行結果を示すためのタイミングチャートを示す。それに続けて説明を加える。\\
+
+\subsection{}
+\label{sec:orgab83d07}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{./logic-1.png}
+\caption{\label{fig:org6ca0bc6}
+タイミングチャートNo.1}
+\end{figure}
+
+
 　CLR(Active-L)をHにすると、カウントが進み始める。逆にCLRが入っている（Hの）間は0になる。\\
+
+\subsection{}
+\label{sec:orgc7ae8c5}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{./logic-2.png}
+\caption{\label{fig:org8ba8ba5}
+タイミングチャートNo.2}
+\end{figure}
+
+
 　最終的に16番目の数（15）までカウントが進み、そこで止まる。\\
+
+\subsection{}
+\label{sec:org5806b69}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{./logic-3.png}
+\caption{\label{fig:org67a8d53}
+タイミングチャートNo.3}
+\end{figure}
+
 　カウンタが４以上のときスイッチを入れることで４を引かれるが、そうでないとき（今回は２）のときは引き算が行われない。条件が揃っているとき（今回は５）のときは４を引かれる（今回は5 - 4 = 1になる）。尚、引かれるタイミングはクロックが立ち上がったときである。\\
-　また、４を引いた後にまだ条件を満たしている場合には、更に４を引くことができるので、連続でそれが行われる。更に念のため、４から４を引いて０になるかどうかを確認することができた。\\
+
+\subsection{}
+\label{sec:org82d769d}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{./logic-4.png}
+\caption{\label{fig:org186077f}
+タイミングチャートNo.4}
+\end{figure}
+　\\
+
+また、４を引いた後にまだ条件を満たしている場合には、更に４を引くことができるので、連続でそれが行われる。更に念のため、４から４を引いて０になるかどうかを確認することができた。\\
 
 \section{考察}
-\label{sec:org5ff96c9}
+\label{sec:orge952ebd}
 　　今回の課題では４を引く、という文言に踊らされたためにロジックを考える時間を多く取られた。これをもし４を引くのではなく、４( \(=2^2\) )の桁や８ ( \(=2^3\) ) の桁を示すビットを操作する、と読み替えれば問題は途端に容易に解決させることができる。問題の処理についてカルノー図で見てみることにする。(Xはdon't care)\\
 
 \begin{table}[htbp]
@@ -116,14 +165,14 @@ GND &  & 1 & ICトレーナーのブレッドポートに配線 & GND\\
 　結論として、回路図制作の際には柔軟な試行を持って処理を様々な角度から見直すことが必要なのだということを身にしみて感じた。\\
 
 \section{批判}
-\label{sec:org335a278}
+\label{sec:orgd7117a2}
   　私は、実験内容に関しては十分に噛みごたえのある良い課題内容であって難易度も適切である、と感じているが、周囲の学生を見ると、かなり難航している方もいれば、早々と課題を解決できた方もおり、進捗のばらつきを感じた。\\
 　  批判に値するかはわからないが、課題の最後になるにつれ難易度が高くなっているため、もう少しTA、教員や友人間で協力できる雰囲気があっても良かったのではないかと考えている。この授業は期末試験がないため、お互いに教え、教えられ合うことでより理解が深まるのではないかと思う。\\
 　　また、レポートの作成に関して、前回のレポートの採点をもう少し早くするか、例年の、あるいはその年のよくある間違い、減点事項を具体例とともに出していただけると、円滑なレポート提出・採点ができるのではないかと感じている。\\
 　　\\
 
 \section{参考文献}
-\label{sec:org19f7a32}
+\label{sec:org3f37bae}
 　基本的には自分の頭を用いて作成したが、半加算器などは昨年度必修科目であった論理回路の指定教科書である、「だれにもわかるディジタル回路 \cite{book1}」を用いた。\\
 
 
