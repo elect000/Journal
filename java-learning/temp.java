@@ -35,6 +35,9 @@ class Paint2 extends Frame implements MouseListener,MouseMotionListener{
         if(obj != null) obj.paint(g);
     }
     @Override public void mousePressed(MouseEvent e){
+        // 案3 (ボタンを押された範囲で四角を作るかどうか) 
+        // x = e.getX() % 1000;
+        // y = e.getY() % 1000;
         x = e.getX();
         y = e.getY();
         obj = new Circle();
@@ -74,14 +77,14 @@ class Coord{
         x=y=0;
     }
     public void move(int dx,int dy){
-        // 案１
+        // 案１　(範囲外に出た時の処理)
         // this.x = (this.x + dx) % 1000
         // this.y = (this.y + dy) % 1000
         x += dx;
         y += dy;
     }
     public void moveto(int x,int y){
-        // 案２
+        // 案２　（範囲外に出た時の処理）
         // this.x = x % 1000
         // this.y = y % 1000
         this.x=x;
