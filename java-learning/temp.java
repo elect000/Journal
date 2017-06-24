@@ -75,17 +75,27 @@ class Coord{
     }
     public void move(int dx,int dy){
         // 案１
-        // this.x = (this.x + dx) % 1000
-        // this.y = (this.y + dy) % 1000
+        //int re_x, re_y;
+        //re_x = (this.x + dx) % 1000;
+        //re_y = (this.y + dy) % 1000;
+        //this.x += (re_x > 0) ?  re_x :  -1 * re_x;
+        //this.y += (re_y > 0) ?  re_y :  -1 * re_y;
         x += dx;
         y += dy;
     }
     public void moveto(int x,int y){
         // 案２
-        // this.x = x % 1000
-        // this.y = y % 1000
-        this.x=x;
-        this.y=y;
+        this.x =
+            (x <= 100) ?  100 :
+            (x >= 800) ? 800 :
+            x ;
+        this.y =
+            (y <= 100) ? 100 :
+            (y >= 800) ? 800 :
+            y;
+        System.out.println(y+ " " + this.y);
+        // this.x=x;
+        // this.y=y;
     }
 }
 class Figure extends Coord{
