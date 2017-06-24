@@ -77,24 +77,10 @@ class Coord{
         x=y=0;
     }
     public void move(int dx,int dy){
-<<<<<<< HEAD
-        // 案１
-        //int re_x, re_y;
-        //re_x = (this.x + dx) % 1000;
-        //re_y = (this.y + dy) % 1000;
-        //this.x += (re_x > 0) ?  re_x :  -1 * re_x;
-        //this.y += (re_y > 0) ?  re_y :  -1 * re_y;
-=======
-        // 案１　(範囲外に出た時の処理)
-        // this.x = (this.x + dx) % 1000
-        // this.y = (this.y + dy) % 1000
->>>>>>> fa6b73069b8088fdbd3c9650c9959977e85ab010
         x += dx;
         y += dy;
     }
     public void moveto(int x,int y){
-<<<<<<< HEAD
-        // 案２
         this.x =
             (x <= 100) ?  100 :
             (x >= 800) ? 800 :
@@ -103,16 +89,6 @@ class Coord{
             (y <= 100) ? 100 :
             (y >= 800) ? 800 :
             y;
-        System.out.println(y+ " " + this.y);
-        // this.x=x;
-        // this.y=y;
-=======
-        // 案２　（範囲外に出た時の処理）
-        // this.x = x % 1000
-        // this.y = y % 1000
-        this.x=x;
-        this.y=y;
->>>>>>> fa6b73069b8088fdbd3c9650c9959977e85ab010
     }
 }
 class Figure extends Coord{
