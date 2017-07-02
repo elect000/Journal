@@ -608,16 +608,16 @@
 
 
 
-;; emacs-mozc
-(require 'mozc)
-
-(set-language-environment "Japanese")
-
-(setq default-input-method "japanese-mozc")
-(set-default-coding-systems 'utf-8)
-(require 'mozc-popup)
-(setq mozc-candidate-style 'popup)
 
 (load "graphviz-dot-mode.el")
 (add-hook 'graphviz-dot-mode-hook (lambda () (local-set-key [f5] "\C-x\C-s\C-cc\C-m\C-cp")))
 ;;
+
+;; emacs-mozc
+(require 'mozc)
+(set-language-environment "Japanese")
+(setq default-input-method "japanese-mozc")
+(require 'mozc-popup)
+(setq mozc-candidate-style 'popup) ; select popup style.
+(require 'ac-mozc)
+(define-key ac-mode-map (kbd "C-c C-SPC") 'ac-complete-mozc)
