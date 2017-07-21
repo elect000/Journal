@@ -6,3 +6,5 @@
 *.bcf
 *.run.xml
 *.out
+*/ltximg/
+*/_minted-report/
