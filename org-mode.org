@@ -15,8 +15,8 @@
 
 #+LATEX_CLASS: koma-article
 #+LATEX_CLASS_OPTIONS:
-#+LATEX_HEADER: \usepackage[backend=biber,bibencoding=utf8,style=authoryear-icomp]{biblatex}
-#+LATEX_HEADER: \addbibresource{my-bib.bib}
+#+LATEX_HEADER: 
+#+LATEX_HEADER: 
 #+LATEX_HEADER_EXTRA:
 #+DESCRIPTION:
 #+KEYWORDS:
