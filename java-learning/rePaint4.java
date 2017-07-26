@@ -2,25 +2,38 @@ import java.util.*;
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.Checkbox;
+import java.awt.event.WindowAdapter;
+import java.awt.CheckboxGroup;
 
 @SuppressWarnings("unchecked")
-class Paint4 extends Frame implements MouseListener, MouseMotionListener, ActionListener {
+class rePaint4 extends Frame implements MouseListener, MouseMotionListener, ActionListener {
+
   int x, y;
   Vector<Figure> objList;
   CheckboxGroup cbg;
-  CheckboxGroup Z;
-  Checkbox c1, c2, c3, c4, c5, c6, c7, i1, i2, n1;
+  CheckboxGroup state;
+  CheckboxGroup backcolor;
+  /* if you want other attributes, you check below codes and #mousePressed (line 132)*/
+  String[] boxname = new String[] {"丸", "円", "四角", "線", "丸(塗りつぶし)", "円(塗りつぶし)", "四角(塗りつぶし)"};
+  String[] colorname = new String[] {"blue", "red"};
+  String[] backname = new String[] {"white", "gray", "black"};
+  Checkbox[] c = new Checkbox[boxname.length];
+  Checkbox[] i = new Checkbox[colorname.length];
+  Checkbox[] b = new Checkbox[backname.length];
   Button end;
   Button save;
   Button read;
-  int a = 1;
-  int mode = 0;
+  int a, mode;
   Figure obj;
 
-  public static void main(String args[]) {
-    Paint4 f = new Paint4();
+  public static void main(String[] args) {
+    /* ground */
+    rePaint4 f = new rePaint4();
+    /* ground-settings */
     f.setSize(640, 800);
-    f.setTitle("Paint Sample");
+    f.setTitle("Paint Sample_re");
+    /* window-manage */
     f.addWindowListener(
         new WindowAdapter() {
           @Override
@@ -29,54 +42,43 @@ class Paint4 extends Frame implements MouseListener, MouseMotionListener, Action
           }
         });
     f.setVisible(true);
-
     if (args.length == 1) f.load(args[0]);
   }
 
-  Paint4() {
+  rePaint4() {
+    /* object */
     objList = new Vector<Figure>();
-    //gamenn sakusei
     cbg = new CheckboxGroup();
-    Z = new CheckboxGroup();
-    c1 = new Checkbox("丸", cbg, true);
-    c2 = new Checkbox("円", cbg, false);
-    c3 = new Checkbox("四角", cbg, false);
-    c4 = new Checkbox("線", cbg, false);
-    c5 = new Checkbox("丸(塗りつぶし)", cbg, false);
-    c6 = new Checkbox("円(塗りつぶし)", cbg, false);
-    c7 = new Checkbox("四角(塗りつぶし)", cbg, false);
-    i1 = new Checkbox("青", Z, true);
-    i2 = new Checkbox("赤", Z, false);
+    state = new CheckboxGroup();
+    backcolor = new CheckboxGroup();
+    for (int i = 0; i < c.length; i++) {
+      c[i] = new Checkbox(boxname[i], cbg, false);
+      c[i].setBounds(500, 30 * (i + 2), 120, 30);
+    }
+    c[0].setState(true);
+    for (int j = 0; j < i.length; j++) {
+      i[j] = new Checkbox(colorname[j], state, false);
+      i[j].setBounds(500, 30 * (c.length + j + 3), 120, 30);
+    }
+    i[0].setState(true);
+    for (int j = 0; j < b.length; j++) {
+      b[j] = new Checkbox(backname[j], backcolor, false);
+      b[j].setBounds(500, 30 * (c.length + i.length + j + 4), 120, 30);
+    }
+    b[0].setState(true);
     end = new Button("終了");
     save = new Button("保存");
     read = new Button("読込");
-    c1.setBounds(560, 30, 60, 30);
-    c2.setBounds(560, 60, 60, 30);
-    c3.setBounds(560, 90, 60, 30);
-    c4.setBounds(560, 120, 60, 30);
-    c5.setBounds(560, 150, 60, 30);
-    c6.setBounds(560, 180, 60, 30);
-    c7.setBounds(560, 210, 60, 30);
-    i1.setBounds(560, 240, 60, 30);
-    i2.setBounds(560, 270, 60, 30);
-    end.setBounds(560, 420, 60, 30);
-    save.setBounds(560, 450, 60, 30);
-    read.setBounds(560, 480, 60, 30);
+    end.setBounds(500, 30 * (c.length + i.length + b.length + 5), 120, 30);
+    save.setBounds(500, 30 * (c.length + i.length + b.length + 6), 120, 30);
+    read.setBounds(500, 30 * (c.length + i.length + b.length + 7), 120, 30);
     setLayout(null);
-    add(c1);
-    add(c2);
-    add(c3);
-    add(c4);
-    add(c5);
-    add(c6);
-    add(c7);
-    add(i1);
-    add(i2);
+    for (int i = 0; i < c.length; i++) add(c[i]);
+    for (int j = 0; j < i.length; j++) add(i[j]);
+    for (int i = 0; i < b.length; i++) add(b[i]);
     add(end);
     add(save);
     add(read);
-    System.out.println((this).getClass());
-
     addMouseListener(this);
     addMouseMotionListener(this);
     end.addActionListener(this);
@@ -109,62 +111,73 @@ class Paint4 extends Frame implements MouseListener, MouseMotionListener, Action
   }
 
   @Override
-  public void paint(Graphics g) {
-    Figure f;
-    for (int i = 0; i < objList.size(); i++) {
-      f = (Figure) objList.elementAt(i);
-      f.paint(g);
-    }
-    if (mode >= 1) obj.paint(g);
-  }
-
-  @Override
   public void actionPerformed(ActionEvent e) {
     save("paint.dat");
     System.exit(0);
   }
 
   @Override
+  public void paint(Graphics g) {
+    Figure f;
+    /* paint objects which generated until now */
+    for (int i = 0; i < objList.size(); i++) {
+      f = (Figure) objList.elementAt(i);
+      f.paint(g);
+    }
+    /* paint a new object */
+    if (mode >= 1) obj.paint(g);
+  }
+
+  @Override
   public void mousePressed(MouseEvent e) {
-    Checkbox c;
-    Checkbox cl;
+    Checkbox cbg_select;
+    Checkbox state_select;
+    Checkbox backcolor_select;
     x = e.getX();
     y = e.getY();
-    c = cbg.getSelectedCheckbox();
-    cl = Z.getSelectedCheckbox();
+    cbg_select = cbg.getSelectedCheckbox();
+    state_select = state.getSelectedCheckbox();
+    backcolor_select = backcolor.getSelectedCheckbox();
     obj = null;
 
-    if (cl == i1) {
-      a = 1;
-    } else if (cl == i2) {
-      a = 2;
-    }
-    if (c == c1) {
+    // item-color settings : i[0] = blue , i[1] = red
+    if (state_select == i[0]) a = 1;
+    else a = 2;
+
+    // object-type settings
+    if (cbg_select == c[0]) {
       mode = 1;
       obj = new Ring(a);
-    } else if (c == c2) {
+    } else if (cbg_select == c[1]) {
       mode = 2;
       obj = new Circle();
-    } else if (c == c3) {
+    } else if (cbg_select == c[2]) {
       mode = 2;
       obj = new Box();
-    } else if (c == c4) {
+    } else if (cbg_select == c[3]) {
       mode = 2;
       obj = new Line();
-    } else if (c == c5) {
+    } else if (cbg_select == c[4]) {
       mode = 2;
       obj = new Ringa();
-    } else if (c == c6) {
+    } else if (cbg_select == c[5]) {
       mode = 2;
       obj = new Circlea();
-    } else if (c == c7) {
+    } else {
       mode = 2;
       obj = new Boxa();
     }
-    if (obj != null) {
-      obj.moveto(x, y);
-      repaint();
-    }
+
+    // background-color settings
+    if (backcolor_select == b[0]) this.setBackground(Color.white);
+    else if (backcolor_select == b[1]) this.setBackground(Color.gray);
+    else this.setBackground(Color.black);
+
+    for (int i = 0; i < c.length; i++)
+      if (obj != null) {
+        obj.moveto(x, y);
+        repaint();
+      }
   }
 
   @Override
