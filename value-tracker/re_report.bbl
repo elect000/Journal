@@ -1,0 +1,365 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.8 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \sortlist[entry]{nty/global/}
+    \entry{sarima05}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=f76628a015c6bbe66e68137a8f7f5354}{%
+           family={Andres\bibnamedelimb M.\bibnamedelimi Alonso},
+           familyi={A\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           given={Carolia\bibnamedelima Garcia-Martos},
+           giveni={C\bibinitperiod\bibinitdelim G\bibinithyphendelim M\bibinitperiod}}}%
+      }
+      \strng{namehash}{f76628a015c6bbe66e68137a8f7f5354}
+      \strng{fullhash}{f76628a015c6bbe66e68137a8f7f5354}
+      \strng{authornamehash}{f76628a015c6bbe66e68137a8f7f5354}
+      \strng{authorfullhash}{f76628a015c6bbe66e68137a8f7f5354}
+      \field{sortinit}{A}
+      \field{sortinithash}{3248043b5fe8d0a34dab5ab6b8d4309b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Time Series Analysis}
+      \verb{url}
+      \verb http://www.etsii.upm.es/ingor/estadistica/Carol/TSAtema4petten.pdf
+      \endverb
+    \endentry
+    \entry{rf09}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=3c4b3990040840e943734cd9d00dc9f2}{%
+           family={Baba},
+           familyi={B\bibinitperiod},
+           given={Teppei},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{3c4b3990040840e943734cd9d00dc9f2}
+      \strng{fullhash}{3c4b3990040840e943734cd9d00dc9f2}
+      \strng{authornamehash}{3c4b3990040840e943734cd9d00dc9f2}
+      \strng{authorfullhash}{3c4b3990040840e943734cd9d00dc9f2}
+      \field{sortinit}{B}
+      \field{sortinithash}{5f6fa000f686ee5b41be67ba6ff7962d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{SlideShare}
+      \field{title}{機械学習ハッカソン：ランダムフォレスト}
+      \verb{url}
+      \verb https://www.slideshare.net/teppeibaba5/ss-37143977
+      \endverb
+    \endentry
+    \entry{Breiman:2001:RF:570181.570182}{article}{}
+      \name{author}{1}{}{%
+        {{hash=132b7100417675d55d5d4d8b244f7a34}{%
+           family={Breiman},
+           familyi={B\bibinitperiod},
+           given={Leo},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Hingham, MA, USA}%
+      }
+      \list{publisher}{1}{%
+        {Kluwer Academic Publishers}%
+      }
+      \strng{namehash}{132b7100417675d55d5d4d8b244f7a34}
+      \strng{fullhash}{132b7100417675d55d5d4d8b244f7a34}
+      \strng{authornamehash}{132b7100417675d55d5d4d8b244f7a34}
+      \strng{authorfullhash}{132b7100417675d55d5d4d8b244f7a34}
+      \field{sortinit}{B}
+      \field{sortinithash}{5f6fa000f686ee5b41be67ba6ff7962d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0885-6125}
+      \field{journaltitle}{Mach. Learn.}
+      \field{month}{10}
+      \field{number}{1}
+      \field{title}{Random Forests}
+      \field{volume}{45}
+      \field{year}{2001}
+      \field{pages}{5\bibrangedash 32}
+      \range{pages}{28}
+      \verb{doi}
+      \verb 10.1023/A:1010933404324
+      \endverb
+      \verb{url}
+      \verb http://dx.doi.org/10.1023/A:1010933404324
+      \endverb
+      \keyw{classification,ensemble,regression}
+    \endentry
+    \entry{rf05}{article}{}
+      \name{author}{1}{}{%
+        {{hash=bf06fa4d30b0637c09e7fbe557376a14}{%
+           family={Fei\bibnamedelima Tang},
+           familyi={F\bibinitperiod\bibinitdelim T\bibinitperiod},
+           given={Hemant\bibnamedelima Ishwaren},
+           giveni={H\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Division of Viostatistics, University of Miami}%
+      }
+      \strng{namehash}{bf06fa4d30b0637c09e7fbe557376a14}
+      \strng{fullhash}{bf06fa4d30b0637c09e7fbe557376a14}
+      \strng{authornamehash}{bf06fa4d30b0637c09e7fbe557376a14}
+      \strng{authorfullhash}{bf06fa4d30b0637c09e7fbe557376a14}
+      \field{sortinit}{F}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{1}
+      \field{title}{Random Forest Missing Data Algolithms}
+      \field{year}{2017}
+      \verb{url}
+      \verb https://arxiv.org/pdf/1701.05305.pdf
+      \endverb
+    \endentry
+    \entry{hbase03}{misc}{}
+      \list{organization}{1}{%
+        {tutorials point}%
+      }
+      \field{sortinit}{H}
+      \field{sortinithash}{2f664b453ec75da1fe3804ca92633405}
+      \field{labeltitlesource}{title}
+      \field{title}{HBase Tutorial}
+      \verb{url}
+      \verb https://www.tutorialspoint.com/hbase/index.htm
+      \endverb
+    \endentry
+    \entry{rf07}{misc}{}
+      \field{sortinit}{I}
+      \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Cross Validated}
+      \field{title}{Imputation with Random Forests}
+      \verb{url}
+      \verb https://stats.stackexchange.com/questions/49270/imputation-with-random-forests
+      \endverb
+    \endentry
+    \entry{rf03}{misc}{}
+      \list{organization}{1}{%
+        {scikit learn}%
+      }
+      \field{sortinit}{I}
+      \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
+      \field{labeltitlesource}{title}
+      \field{title}{Imputing missing values before building an estimator}
+      \verb{url}
+      \verb http://scikit-learn.org/stable/auto_examples/missing_values.html
+      \endverb
+    \endentry
+    \entry{rf01}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=973d18293848d5b3c30e785826648259}{%
+           family={Kato},
+           familyi={K\bibinitperiod},
+           given={Satoshi},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{973d18293848d5b3c30e785826648259}
+      \strng{fullhash}{973d18293848d5b3c30e785826648259}
+      \strng{authornamehash}{973d18293848d5b3c30e785826648259}
+      \strng{authorfullhash}{973d18293848d5b3c30e785826648259}
+      \field{sortinit}{K}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{SlideShare}
+      \field{title}{Imputation of Missing Values using Random Forest}
+      \verb{url}
+      \verb https://www.slideshare.net/kato_kohaku/imputation-of-missing-values-using-random-forest?ref=http://kato-kohaku-0.hatenablog.com/entry/2016/05/01/155908
+      \endverb
+    \endentry
+    \entry{hbase02}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=8d44c62546bd6d1d604c155063836681}{%
+           family={Miles},
+           familyi={M\bibinitperiod},
+           given={Christopher},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{8d44c62546bd6d1d604c155063836681}
+      \strng{fullhash}{8d44c62546bd6d1d604c155063836681}
+      \strng{authornamehash}{8d44c62546bd6d1d604c155063836681}
+      \strng{authorfullhash}{8d44c62546bd6d1d604c155063836681}
+      \field{sortinit}{M}
+      \field{sortinithash}{c26a05ef03e4429073ed5c825140fac3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{1}
+      \field{title}{All Your HBase Are Belong to Clojure}
+      \field{year}{2012}
+      \verb{url}
+      \verb https://twitch.nervestaple.com/2012/01/12/clojure-hbase/
+      \endverb
+    \endentry
+    \entry{rf06}{article}{}
+      \field{sortinit}{R}
+      \field{sortinithash}{c15bc8eb6936bc6b3c8baa9e8575af53}
+      \field{labeltitlesource}{title}
+      \field{title}{Random Forests}
+      \verb{url}
+      \verb https://www.stat.berkeley.edu/~breiman/randomforest2001.pdf
+      \endverb
+    \endentry
+    \entry{rf04}{misc}{}
+      \list{organization}{1}{%
+        {RDocumentation}%
+      }
+      \field{sortinit}{r}
+      \field{sortinithash}{c15bc8eb6936bc6b3c8baa9e8575af53}
+      \field{labeltitlesource}{title}
+      \field{title}{rfImpute}
+      \verb{url}
+      \verb https://www.rdocumentation.org/packages/randomForest/versions/4.6-12/topics/rfImpute
+      \endverb
+    \endentry
+    \entry{sarima01}{book}{}
+      \name{author}{1}{}{%
+        {{hash=e2dc32e07724960d31381de104b86919}{%
+           family={Rob\bibnamedelimb J\bibnamedelima Hyndman},
+           familyi={R\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim H\bibinitperiod},
+           given={George\bibnamedelima Athanasopoulos},
+           giveni={G\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{e2dc32e07724960d31381de104b86919}
+      \strng{fullhash}{e2dc32e07724960d31381de104b86919}
+      \strng{authornamehash}{e2dc32e07724960d31381de104b86919}
+      \strng{authorfullhash}{e2dc32e07724960d31381de104b86919}
+      \field{sortinit}{R}
+      \field{sortinithash}{c15bc8eb6936bc6b3c8baa9e8575af53}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{10}
+      \field{title}{Forecasting: principles and practice}
+      \field{year}{2017}
+      \verb{url}
+      \verb https://www.otexts.org/fpp/8
+      \endverb
+    \endentry
+    \entry{hbase01}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=58d78f2ca3116234c6db3df106edb415}{%
+           family={Santiago},
+           familyi={S\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{58d78f2ca3116234c6db3df106edb415}
+      \strng{fullhash}{58d78f2ca3116234c6db3df106edb415}
+      \strng{authornamehash}{58d78f2ca3116234c6db3df106edb415}
+      \strng{authorfullhash}{58d78f2ca3116234c6db3df106edb415}
+      \field{sortinit}{S}
+      \field{sortinithash}{3c1547c63380458f8ca90e40ed14b83e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{6}
+      \field{title}{clojure-hbase}
+      \field{year}{2014}
+      \verb{url}
+      \verb https://github.com/davidsantiago/clojure-hbase
+      \endverb
+    \endentry
+    \entry{sarima03}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=b218f2a7d7574c848d657a0ec0a9cf16}{%
+           family={University},
+           familyi={U\bibinitperiod},
+           given={The\bibnamedelimb Pennsylvania\bibnamedelima State},
+           giveni={T\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{b218f2a7d7574c848d657a0ec0a9cf16}
+      \strng{fullhash}{b218f2a7d7574c848d657a0ec0a9cf16}
+      \strng{authornamehash}{b218f2a7d7574c848d657a0ec0a9cf16}
+      \strng{authorfullhash}{b218f2a7d7574c848d657a0ec0a9cf16}
+      \field{sortinit}{U}
+      \field{sortinithash}{1554584e7f69d2b4fe0a645e73d50194}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Seasonal ARIMA models}
+      \field{year}{2017}
+      \verb{url}
+      \verb https://onlinecourses.science.psu.edu/stat510/node/50
+      \endverb
+    \endentry
+    \entry{rf08}{misc}{}
+      \field{sortinit}{W}
+      \field{sortinithash}{6d25b3eefe5aa2147d1f339686808918}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Cross Validated}
+      \field{title}{What is the proper way to use rfImpute? (Imputation by Random Forest in R)}
+      \verb{url}
+      \verb https://stats.stackexchange.com/questions/226803/what-is-the-proper-way-to-use-rfimpute-imputation-by-random-forest-in-r?rq=1
+      \endverb
+    \endentry
+    \entry{sarima04}{misc}{}
+      \field{sortinit}{時}
+      \field{sortinithash}{56a086f08eca5a9b7d9a938122dabf70}
+      \field{labeltitlesource}{title}
+      \field{title}{時系列解析}
+      \verb{url}
+      \verb https://upo-net.ouj.ac.jp/tokei/contents/sub_contents/c01_06_00.xml
+      \endverb
+    \endentry
+    \entry{sarima02}{misc}{}
+      \field{sortinit}{時}
+      \field{sortinithash}{56a086f08eca5a9b7d9a938122dabf70}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Logics of Blue}
+      \field{month}{6}
+      \field{title}{時系列解析＿理論編}
+      \field{year}{2017}
+    \endentry
+    \entry{tree01}{misc}{}
+      \list{organization}{1}{%
+        {Matlab}%
+      }
+      \field{sortinit}{決}
+      \field{sortinithash}{4eb5c3569d97535f38acc99fe2bda426}
+      \field{labeltitlesource}{title}
+      \field{title}{決定木}
+      \verb{url}
+      \verb https://jp.mathworks.com/help/stats/classification-trees-and-regression-trees.html#bsw6a62
+      \endverb
+    \endentry
+    \entry{rf02}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=3c3db3ec757a00236e3dc907ab9f6251}{%
+           family={石岡恒憲},
+           familyi={石\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {大学入試センター研究開発部}%
+      }
+      \strng{namehash}{3c3db3ec757a00236e3dc907ab9f6251}
+      \strng{fullhash}{3c3db3ec757a00236e3dc907ab9f6251}
+      \strng{authornamehash}{3c3db3ec757a00236e3dc907ab9f6251}
+      \strng{authorfullhash}{3c3db3ec757a00236e3dc907ab9f6251}
+      \field{sortinit}{石}
+      \field{sortinithash}{dafda4b6313705b41121a74589eec290}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{11}
+      \field{title}{Random Forestを用いた欠測データの補完とその応用}
+      \field{year}{2010}
+      \verb{url}
+      \verb http://www.rd.dnc.ac.jp/~tunenori/doc/jjasRf2010slide.pdf
+      \endverb
+    \endentry
+  \endsortlist
+\endrefsection
+\endinput
+
