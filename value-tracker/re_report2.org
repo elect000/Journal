@@ -1,0 +1,41 @@
+# This is a Bibtex reference
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:t todo:t |:t
+#+TITLE: seis-ml-api中間レポート2
+#+DATE: 
+#+AUTHOR: 情報科学類二年 江畑 拓哉(201611350)
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 9.0.
+#+LATEX_CLASS: koma-article
+#+LATEX_CLASS_OPTIONS: 
+#+LATEX_HEADER_EXTRA: \bibliography{reference}
+#+LaTeX_CLASS_OPTIONS:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+SUBTITLE:
+#+STARTUP: indent overview inlineimages
+
+https://medium.com/@shintaro_toyoguchi/quandl%E4%B8%BB%E8%A6%81%E9%8A%98%E6%9F%84%E3%83%AA%E3%83%B3%E3%82%AF%E3%81%BE%E3%81%A8%E3%82%81-66ec25e009ff
+
+https://www.quandl.com/data/NIKKEI/INDEX-Nikkei-Index
+
+https://www.quandl.com/tools/python
+
+http://qiita.com/atsaki/items/33e52e882464e2e07688
+
+https://github.com/quandl/quandl-python/blob/master/FOR_DEVELOPERS.md
+
+http://www.mwsoft.jp/programming/numpy/pandas_csv.html
+
+http://help.quandl.com/article/151-how-do-i-download-aapl-stock-prices-every-day
+
+http://pandas.pydata.org/pandas-docs/version/0.15.2/indexing.html
+
+http://pythondatascience.plavox.info/pandas/%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%82%92%E7%A2%BA%E8%AA%8D
+
+http://pythondatascience.plavox.info/pandas/%E8%A1%8C%E3%83%BB%E5%88%97%E3%81%AE%E6%8A%BD%E5%87%BA
