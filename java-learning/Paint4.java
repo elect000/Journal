@@ -266,9 +266,9 @@ class Circlea extends Figure implements Serializable{
 class Box extends Figure implements Serializable{
 	Box(){
 	this.color=color;
-	}
+  }
 	@Override public void paint(Graphics g){
-		if(color==1){
+		if(color == 1){
 			g.setColor(new Color(0,0,255));
 		}else{
 			g.setColor(new Color(255,0,0));
