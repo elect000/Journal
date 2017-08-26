@@ -1,5 +1,6 @@
 [0] Config.pm:354> INFO - This is Biber 2.7
 [0] Config.pm:357> INFO - Logfile is 're_re_report.blg'
+<<<<<<< HEAD
 [46] biber:303> INFO - === 土  8月 26, 2017, 16:40:28
 [77] Biber.pm:359> INFO - Reading 're_re_report.bcf'
 [178] Biber.pm:835> INFO - Found 20 citekeys in bib section 0
@@ -15,3 +16,18 @@
 [301] bbl.pm:608> INFO - Writing 're_re_report.bbl' with encoding 'UTF-8'
 [304] bbl.pm:712> INFO - Output to re_re_report.bbl
 [304] Biber.pm:109> INFO - WARNINGS: 1
+=======
+[58] biber:303> INFO - === 月  8月  7, 2017, 03:29:44
+[69] Biber.pm:359> INFO - Reading 're_re_report.bcf'
+[183] Biber.pm:835> INFO - Found 20 citekeys in bib section 0
+[202] Biber.pm:3670> INFO - Processing section 0
+[216] Biber.pm:3840> INFO - Looking for bibtex format file 'reference.bib' for section 0
+[217] bibtex.pm:1435> INFO - Decoding LaTeX character macros into UTF-8
+[244] bibtex.pm:1292> INFO - Found BibTeX data source 'reference.bib'
+[291] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[292] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[292] Biber.pm:3499> INFO - Sorting list 'nty/global/' of type 'entry' with scheme 'nty' and locale 'en-US'
+[292] Biber.pm:3505> INFO - No sort tailoring available for locale 'en-US'
+[308] bbl.pm:608> INFO - Writing 're_re_report.bbl' with encoding 'UTF-8'
+[311] bbl.pm:712> INFO - Output to re_re_report.bbl
+>>>>>>> 8b06f277a20cc3d6e2ac8260de58bd4f3f6fca06

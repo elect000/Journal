@@ -305,6 +305,35 @@
       \verb https://stats.stackexchange.com/questions/226803/what-is-the-proper-way-to-use-rfimpute-imputation-by-random-forest-in-r?rq=1
       \endverb
     \endentry
+<<<<<<< HEAD
+=======
+    \entry{bunpou01}{article}{}
+      \name{author}{1}{}{%
+        {{hash=b51990d415bd3fcfbf5d11874ad5a5b5}{%
+           family={中村},
+           familyi={中\bibinitperiod},
+           given={重穂},
+           giveni={重\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {北海道大学留学生センター}%
+      }
+      \strng{namehash}{b51990d415bd3fcfbf5d11874ad5a5b5}
+      \strng{fullhash}{b51990d415bd3fcfbf5d11874ad5a5b5}
+      \strng{authornamehash}{b51990d415bd3fcfbf5d11874ad5a5b5}
+      \strng{authorfullhash}{b51990d415bd3fcfbf5d11874ad5a5b5}
+      \field{sortinit}{中}
+      \field{sortinithash}{172bfecf596f0f4c156f1720d835724a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{12}
+      \field{title}{論文に於ける「だ」と「である」の選択条件に関する試行的考察}
+      \field{year}{2009}
+      \verb{url}
+      \verb https://eprints.lib.hokudai.ac.jp/dspace/handle/2115/45684
+      \endverb
+    \endentry
+>>>>>>> 8b06f277a20cc3d6e2ac8260de58bd4f3f6fca06
     \entry{sarima04}{misc}{}
       \field{sortinit}{時}
       \field{sortinithash}{56a086f08eca5a9b7d9a938122dabf70}
@@ -360,7 +389,10 @@
       \endverb
     \endentry
   \endsortlist
+<<<<<<< HEAD
   \missing{bunpou01}
+=======
+>>>>>>> 8b06f277a20cc3d6e2ac8260de58bd4f3f6fca06
 \endrefsection
 \endinput
 
