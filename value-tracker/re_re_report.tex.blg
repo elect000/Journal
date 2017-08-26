@@ -1,5 +1,0 @@
-[0] Config.pm:354> INFO - This is Biber 2.7
-[0] Config.pm:357> INFO - Logfile is 're_re_report.tex.blg'
-[53] biber:303> INFO - === 月  8月  7, 2017, 03:27:47
-[177] Utils.pm:180> ERROR - Cannot find control file 're_re_report.tex.bcf'! - did you pass the "backend=biber" option to BibLaTeX?
-[181] Biber.pm:113> INFO - ERRORS: 1
