@@ -43,18 +43,22 @@ import stone.ast.*;
             c.nextReg = 0;
             c.frameSize = size + StoneVM.SAVE_AREA_SIZE;
             c.add(SAVE);
-            System.out.println(String.format("%04d", (c.position() - 1)) + ":  save " + encodeOffset(size)); // add!
+            System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":  save " + encodeOffset(size));
             c.add(encodeOffset(size));
             ((ASTreeVmEx)revise(body())).compile(c);
             c.add(MOVE);
-            System.out.println(String.format("%04d", (c.position() - 1)) + ":  move " + "r" + (c.nextReg - 1) + " 0"); // add!
+            System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":  move " + "r" + (c.nextReg - 1) + " 0");
             c.add(encodeRegister(c.nextReg - 1));
             c.add(encodeOffset(0));
             c.add(RESTORE);
-            System.out.println(String.format("%04d", (c.position() - 1)) + ":  restore " + encodeOffset(size)); // add!
+            System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":  restore " + encodeOffset(size));
             c.add(encodeOffset(size));
             c.add(RETURN);
-            System.out.println(String.format("%04d", (c.position() - 1)) + ":  return"); // add!
+            System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":  return");
         }
     }
     @Reviser public static class ParamsEx2 extends EnvOptimizer.ParamsEx {
@@ -70,12 +74,14 @@ import stone.ast.*;
             int v = value();
             if (Byte.MIN_VALUE <= v && v <= Byte.MAX_VALUE) {
                 c.add(BCONST);
-                System.out.println(String.format("%04d", (c.position() - 1)) + ":  bconst " + v + " r" + c.nextReg); // add!
+                System.out.println(String.format("%04d", (c.position() - 1))
+                                   + ":  bconst " + v + " r" + c.nextReg);
                 c.add((byte)v);
             }
             else {
                 c.add(ICONST);
-                System.out.println(String.format("%04d", (c.position() - 1)) + ":  iconst " + v + " r" + c.nextReg); // add!
+                System.out.println(String.format("%04d", (c.position() - 1))
+                                   + ":  iconst " + v + " r" + c.nextReg);
                 c.add(v);
             }
             c.add(encodeRegister(c.nextReg++));
@@ -86,7 +92,8 @@ import stone.ast.*;
         public void compile(Code c) {
             int i = c.record(value());
             c.add(SCONST);
-            System.out.println(String.format("%04d", (c.position() - 1)) + ":  sconst " + value() + " "); // add!
+            System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":  sconst " + value() + " ");
             c.add(encodeShortOffset(i));
             c.add(encodeRegister(c.nextReg++));
         }
@@ -96,13 +103,17 @@ import stone.ast.*;
         public void compile(Code c) {
             if (nest > 0) {
                 c.add(GMOVE);
-                System.out.println(String.format("%04d", (c.position() - 1)) + ":  gmove " + encodeShortOffset(index) + " r" + c.nextReg + "  // " + this.toString()); // add!
+                System.out.println(String.format("%04d", (c.position() - 1))
+                                   + ":  gmove " + encodeShortOffset(index)
+                                   + " r" + c.nextReg + "  // " + this.toString());
                 c.add(encodeShortOffset(index));
                 c.add(encodeRegister(c.nextReg++));
             }
             else {
                 c.add(MOVE);
-                System.out.println(String.format("%04d", (c.position() - 1)) + ":  move " + encodeOffset(index) + " r" + c.nextReg + "  // " + this.toString()); // add!
+                System.out.println(String.format("%04d", (c.position() - 1))
+                                   + ":  move " + encodeOffset(index)
+                                   + " r" + c.nextReg + "  // " + this.toString());
                 c.add(encodeOffset(index));
                 c.add(encodeRegister(c.nextReg++));
             }
@@ -110,13 +121,17 @@ import stone.ast.*;
         public void compileAssign(Code c) {
             if (nest > 0) {
                 c.add(GMOVE);
-                System.out.println(String.format("%04d", (c.position() - 1)) + ":  gmove r" + (c.nextReg - 1) + " " + encodeShortOffset(index) + "  // " + this.toString()); // add!
+                System.out.println(String.format("%04d", (c.position() - 1))
+                                   + ":  gmove r" + (c.nextReg - 1) + " "
+                                   + encodeShortOffset(index) + "  // " + this.toString());
                 c.add(encodeRegister(c.nextReg - 1));
                 c.add(encodeShortOffset(index));
             }
             else {
                 c.add(MOVE);
-                System.out.println(String.format("%04d", (c.position() - 1)) + ":  move r" + (c.nextReg - 1) + " " + encodeOffset(index) + "  // " + this.toString()); // add!
+                System.out.println(String.format("%04d", (c.position() - 1))
+                                   + ":  move r" + (c.nextReg - 1) + " "
+                                   + encodeOffset(index) + "  // " + this.toString());
                 c.add(encodeRegister(c.nextReg - 1));
                 c.add(encodeOffset(index));
             }
@@ -127,8 +142,9 @@ import stone.ast.*;
         public void compile(Code c) {
             ((ASTreeVmEx)operand()).compile(c);
             c.add(NEG);
-            System.out.println(String.format("%4d", (c.position() - 1)) + ":  neg r" + (c.nextReg - 1)); // add!
-            c.add(encodeRegister(c.nextReg - 1));   
+            System.out.println(String.format("%4d", (c.position() - 1))
+                               + ":  neg r" + (c.nextReg - 1));
+            c.add(encodeRegister(c.nextReg - 1));
         }
     }
     @Reviser public static class BinaryEx extends BinaryExpr {
@@ -215,17 +231,21 @@ import stone.ast.*;
             for (ASTree a: this) {
                 ((ASTreeVmEx)a).compile(c);
                 c.add(MOVE);
-                System.out.println(String.format("%04d", (c.position() - 1)) + ":  move r" + (c.nextReg - 1) + " " + (newOffset + 1) + "  // " + a.toString()); // add!
+                System.out.println(String.format("%04d", (c.position() - 1))
+                                   + ":  move r" + (c.nextReg - 1)
+                                   + " " + (newOffset + 1) + "  // " + a.toString());
                 c.add(encodeRegister(--c.nextReg));
                 c.add(encodeOffset(newOffset++));
                 numOfArgs++;
             }
             c.add(CALL);
-            System.out.println((c.position() - 1) + ":  call"); // add!
+            System.out.println((c.position() - 1) + ":  call");
             c.add(encodeRegister(--c.nextReg));
             c.add(encodeOffset(numOfArgs));
             c.add(MOVE);
-            System.out.println(String.format("%04d", (c.position() - 1)) + ":  move " + (c.frameSize) + " r" + (c.nextReg + 1) + "  // " + this.toString()); // add!
+            System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":  move " + (c.frameSize) + " r"
+                               + (c.nextReg + 1) + "  // " + this.toString());
             c.add(encodeOffset(c.frameSize));
             c.add(encodeRegister(c.nextReg++));
         }
@@ -256,7 +276,8 @@ import stone.ast.*;
             }
             else {
                 c.add(BCONST);
-                System.out.println(String.format("%04d", (c.position() - 1)) + ":  bconst " + 0 + " r" + c.nextReg);
+                System.out.println(String.format("%04d", (c.position() - 1))
+                                   + ":  bconst " + 0 + " r" + c.nextReg);
                 c.add((byte)0);
                 c.add(encodeRegister(c.nextReg++));
             }
@@ -268,7 +289,8 @@ import stone.ast.*;
             ((ASTreeVmEx)condition()).compile(c);
             int pos = c.position();
             c.add(IFZERO);
-            System.out.println(String.format("%04d", (c.position() - 1)) + ":  ifzero " + "r" + (c.nextReg - 1) + encodeShortOffset(0));
+            System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":  ifzero " + "r" + (c.nextReg - 1) + encodeShortOffset(0));
             c.add(encodeRegister(--c.nextReg));
             c.add(encodeShortOffset(0));
             int oldReg = c.nextReg;
@@ -284,7 +306,8 @@ import stone.ast.*;
                 ((ASTreeVmEx)b).compile(c);
             else {
                 c.add(BCONST);
-                System.out.println(String.format("%04d", (c.position() - 1)) + ":  bconst " + 0 + " r" + (c.nextReg));
+                System.out.println(String.format("%04d", (c.position() - 1))
+                                   + ":  bconst " + 0 + " r" + (c.nextReg));
                 c.add((byte)0);
                 c.add(encodeRegister(c.nextReg++));
             }
@@ -296,25 +319,30 @@ import stone.ast.*;
         public void compile(Code c) {
             int oldReg = c.nextReg;
             c.add(BCONST);
-            System.out.println(String.format("%04d", (c.position() - 1)) + ":  bconst " + 0 + " r" + c.nextReg); // add!
+            System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":  bconst " + 0 + " r" + c.nextReg);
             c.add((byte)0);
-           	System.out.println(String.format("%04d", (c.position() - 1)) + ":L_WHILE" + (c.position() - oldReg - 16) + ":");
+           	System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":L_WHILE" + (c.position() - oldReg - 16) + ":");
             c.add(encodeRegister(c.nextReg++));
             int pos = c.position();
             ((ASTreeVmEx)condition()).compile(c);
             int pos2 = c.position();
             c.add(IFZERO);
-            System.out.println(String.format("%04d", (c.position() - 1)) + ":  ifzero" + " r" + (c.nextReg - 1) + " L_WHILE" +  (pos2 - pos - 8)); 
+            System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":  ifzero" + " r" + (c.nextReg - 1) + " L_WHILE" +  (pos2 - pos - 8));
             c.add(encodeRegister(--c.nextReg));
             c.add(encodeShortOffset(0));
             c.nextReg = oldReg;
             ((ASTreeVmEx)body()).compile(c);
             int pos3= c.position();
             c.add(GOTO);
-            System.out.println(String.format("%04d", (c.position() - 1)) + ":  goto L_WHILE" + (pos - oldReg - 16 - 1));
+            System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":  goto L_WHILE" + (pos - oldReg - 16 - 1));
             c.add(encodeShortOffset(pos - pos3));
             c.set(encodeShortOffset(c.position() - pos2), pos2 + 2);
-           	System.out.println(String.format("%04d", (c.position() - 1)) + ":L_WHILE" + (pos2 - pos - 8) + ":");
+           	System.out.println(String.format("%04d", (c.position() - 1))
+                               + ":L_WHILE" + (pos2 - pos - 8) + ":");
         }
     }
 }
