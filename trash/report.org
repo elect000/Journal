@@ -1,0 +1,76 @@
+# This is a Bibtex reference
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:nil todo:t |:t
+#+TITLE: 数理メディア情報学レポート(3)
+#+DATE: 
+#+AUTHOR: 情報科学類二年 江畑 拓哉(201611350)
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 9.1.4)
+#+LATEX_CLASS: koma-article
+#+LATEX_CLASS_OPTIONS: 
+#+LATEX_HEADER_EXTRA: \bibliography{reference}
+#+LaTeX_CLASS_OPTIONS:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+SUBTITLE:
+#+STARTUP: indent overview inlineimages
+* ネットワークの価値生成に関連し次の問いに答えよ。
+** べき集合とは何かについて述べよ。集合 S = {a, b, c} について、べき集合 $2^S$ を書き下せ。
+  　べき集合とはすべての部分集合の集合である。
+  　集合S = {a, b, c} のべき集合は、
+  　 $\phi$ {a} {b} {c} {a, b} {b, c} {c, a} {a, b, c} と言える。
+
+** 要素数が n 個から成る集合 S の、べき集合 $2^S$ の要素数がちょうど "2 の n 乗個"になることを示せ。
+   　Sの要素数が1個のとき、そのべき集合の数は明らかに $2 = 2 ^ 1$ ($\phi , {a}$) である。
+   　Sの要素数がk個であるとき、この要素数が $2^k$ であると仮定する。Sの要素数が $k + 1$ 個であるとき、この内のk個の要素についてのべき集合 $S1$ と 残りの1個の要素 $\alpha$ を考えると、 S1のすべての要素(部分集合)に $\alpha$ の和を取って作った部分集合の集合と、S1 そのものとを和集合にとった場合の要素数は $2 * 2^k = 2^{k + 1}$ である($\alpha$ は S1 そのものには含まれていないことから前者と後者の積集合は空集合である)
+   　またこの和集合はSのべき集合として成り立つ。なぜなら、 $\alpha$ についてそれ以外の要素群すべてとの組み合わせを網羅できていることはS1の定義から明らかであるし、 $\alpha$ を含まない場合の S の要素についてのべき集合は S1 であると言えるからである。
+   　以上から、要素数 n 個の集合 S のべき集合 $2^S$ の要素数は $2^n$ 個であると言える。
+
+  
+* Aをn次の正方行列とするとき次の問いに答えよ。
+
+** Aの固有値の存在範囲に関し、ゲルシュゴリンの定理についてのべ、それを証明せよ。
+   　中心が $a_{ii}$ 半径 $r_i = \Sigma \|a_{ij} \|$ の円で囲まれた複素平面内の領域を $S_i$ とする。このとき、行列 $A(a_{ij})$ の全ての固有値 $\lambda _k$ は和集合 $\bigcup_{i=1}^{n} S_i$ の内部に存在する。すなわち以下を満たす行番号 i が存在する
+   　 $|a_{ii} - \lambda _k| \leqq \Sigma _{i \neq j} |a_{ij}|$
+   $\bm{x} \ s.t.\ \bm{A}\bm{x} = \lambda _k \bm{x}$ となる固有ベクトル $\mb{x}$ について、$i$ を $\bm{x} = (x_1 , x_2 , x_3 \dots)$ の中の絶対値最大の要素 $x_i$ を示す $i$ であるとする。 このとき、 $\bm{A}\bm{x} = \lambda _k \bm{x}$ の第 $i$ 行について、
+   　 $(a_ii - \lambda _k) x_i = - \Sigma_{j \neq i} a_{ij} x_j$ であると言える。
+   　 $|a_{ii} - \lambda _k| \leqq |\Sigma _{i \neq j} a_{ij}| |x_j / x_i| \leqq \Sigma_{j \neq i} |a_{ij}|$ $\because |x_j / x_i| < 1$ 
+   これによって、ゲルシュゴリンの定理は証明された。
+** 行列Aが対角優位であるとき、ヤコビ法について説明しその反復列が収束することを、縮小写像の原理と、ゲルシュゴリンの定理を使って証明せよ。
+   　ヤコビ法とは連立一次方程式 $\bm{A}\bm{x} = \bm{b}$ を反復法で解く手法の一つである。
+   　n次正方行列Aを上三角行列U、下三角行列L、対角行列Dに分解すると、 $A = L + D + U$ である。これを用いて、
+   \begin{align*}
+\bm{A}\bm{x} &=& (\bm{L} + \bm{D} + \bm{U}) \bm{x} = \bm{b} \\
+\bm{D}\bm{x} &=& - (\bm{L} + \bm{U}) \bm{x} + \bm{b} \\
+\bm{x} &=& \bm{D} ^ {-1} ((\bm{L} + \bm{U}) \bm{x} + \bm{b}) \\
+&=& \bm{D} ^ {-1} (\bm{L} + \bm{U}) \bm{x} + \bm{D} ^ {-1} \bm{b} \\
+   \end{align*}
+   　上式をn回反復したものを $\bm{x} _n$ であるとすると、
+   $\bm{x}_{n + 1} &=& \bm{D} ^ {-1} (\bm{L} + \bm{U}) \bm{x}_{n} + \bm{D} ^ {-1} \bm{b}$
+   　と書くことができる。
+   これを更に変形すると、 $\Delta \bm{x} _{n + 1} = \bm{x} _{n+1} - \bm{x}_n$ とおくと、
+   　 $\Delta \bm{x} _{n + 1} = \bm{D} ^ {-1} (\bm{L} + \bm{U}) (\bm{x} _n - \bm{x} _{n - 1})$
+   とすることができる。
+   　行列Aが対角優位であるとき、$\bm{M} = - \bm{D} ^{-1} (L + U)$ の固有値の絶対値は1よりも小さい。なぜなら $M = (m_{ij})$ の各成分の値は、
+   　 $m_{ij} = 0$ if $i = j$
+   　 $m_{ij} = - a_{ij} / a_{ii}$ otherwise
+   と表すことができる。ここで $\bm{M}$ についてゲルシュゴリンの定理を用いて、 $\lambda , \ \bm{x}$ をMに対する固有値と固有ベクトルの対応した組であるとすると、($\bm{M} \bm{x} = \lambda \bm{x}$) 
+   \begin{align*}
+|m_{ii} - \lambda| &\leqq& \Sigma_{j \neq i} |m_{ij}| \\
+|\lambda| &\leqq& \Sigma_{j \neq i} |m_{ij}| \\
+|\lambda| &\leqq& \Sigma_{j \neq i} |a_{ij}/a_{ii}| \\
+          &<& 1
+   \end{align*}
+   ($a_{ii}$ は対角優位)
+   つまり $\bm{M}$ は縮小写像になることが示され、縮小写像の原理によりこの反復行列の適用によって $\bm{x}$ は収束することがわかった。
+   　これによって行列Aが対角優位であるときヤコビ法が収束することを示した。
+* 以下の２つのうち、少なくとも一方を回答しなさい。
+
+** ハウスドルフの距離の下で、2つの縮小写像を用意し、その和集合で定義される逐次列を用いてフラクタル図形を生成しなさい。
+
+** 5つ以上のサイトのリンク状態遷移図を作成し、Google のページランクを計算し、その結果から SEO (Search Engine Optimization) の指針について述べよ。
