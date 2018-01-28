@@ -1,0 +1,66 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{graphite-oreilly}{book}{}
+      \name{author}{1}{}{%
+        {{hash=30e1a7ee5e045a6742eb249886efa028}{%
+           family={Dixon},
+           familyi={D\bibinitperiod},
+           given={Jason},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {O'Reilly Media}%
+      }
+      \strng{namehash}{30e1a7ee5e045a6742eb249886efa028}
+      \strng{fullhash}{30e1a7ee5e045a6742eb249886efa028}
+      \strng{bibnamehash}{30e1a7ee5e045a6742eb249886efa028}
+      \strng{authorbibnamehash}{30e1a7ee5e045a6742eb249886efa028}
+      \strng{authornamehash}{30e1a7ee5e045a6742eb249886efa028}
+      \strng{authorfullhash}{30e1a7ee5e045a6742eb249886efa028}
+      \field{sortinit}{D}
+      \field{sortinithash}{d10b5413de1f3d197b20897dd0d565bb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{subtitle}{Tracking Dynamic Host and Application Metrics at Scale}
+      \field{title}{Monitoring with Graphite}
+      \field{volume}{290}
+      \field{year}{2017}
+    \endentry
+    \entry{hbase-reference}{manual}{}
+      \list{location}{1}{%
+        {https://www.slideshare.net/hamadakoichi/randomforest-web}%
+      }
+      \list{organization}{1}{%
+        {Copyright © 2012 Apache Software Foundation.}%
+      }
+      \field{sortinit}{T}
+      \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
+      \field{labeltitlesource}{title}
+      \field{edition}{Revision 0.94.27}
+      \field{month}{12}
+      \field{title}{The Apache HBase™ Reference Guide}
+      \field{year}{2015}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
