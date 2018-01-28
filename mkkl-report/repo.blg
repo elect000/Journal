@@ -1,5 +1,0 @@
-[0] Config.pm:302> INFO - This is Biber 2.10
-[0] Config.pm:305> INFO - Logfile is 'repo.blg'
-[24] biber:313> INFO - === 金  1月 26, 2018, 17:41:41
-[109] Utils.pm:209> ERROR - Cannot find control file 'repo.bcf'! - did you pass the "backend=biber" option to BibLaTeX?
-[109] Biber.pm:114> INFO - ERRORS: 1

@@ -126,12 +126,15 @@
 
     #+LATEX: \newpage
 ** OpenTSDB
-   　OpenTSDB の特徴の説明、セットアップや利用方法に関して説明を行う前に、その基盤である HBase とその周辺知識について簡単にまとめる。HBase とは $\href{http://hadoop.apache.org/}{Apache \textsuperscript{\texttrademark} Hadoop \textsuperscript{\textregistered}}$ (以降 ``Hadoop'' と呼称する) と呼ばれる、大規模データの分散処理フレームワークのためのデータベースである。そして Hadoop の分散サービスを形成するために $\href{http://zookeeper.apache.org/}{Apache \ Zookeeper \textsuperscript{\texttrademark}}$ (以降 ``Zookeeper'' と呼称する)という管理ツールが使われる。
+   　OpenTSDB の特徴の説明、セットアップや利用方法に関して説明を行う前に、その基盤である HBase とその周辺知識について簡単にまとめ、その後 OpenTSDB についての説明を行う。
+
+*** HBase とその周辺知識
+    　HBase とは $\href{http://hadoop.apache.org/}{Apache \textsuperscript{\texttrademark} Hadoop \textsuperscript{\textregistered}}$ (以降 ``Hadoop'' と呼称する) と呼ばれる、大規模データの分散処理フレームワークのためのデータベースである。そして Hadoop の分散サービスを形成するために $\href{http://zookeeper.apache.org/}{Apache \ Zookeeper \textsuperscript{\texttrademark}}$ (以降 ``Zookeeper'' と呼称する)という管理ツールが使われる。
 *** HBase
     　HBase は NoSQL の一つである。NoSQL は大別して、\textcircled{\scriptsize 1}キーバリュー型\textcircled{\scriptsize 2}ワイドカラム型\textcircled{\scriptsize 3}ドキュメント型\textcircled{\scriptsize 4}グラフ型、があり HBase はワイドカラム型\footnote{簡単に説明するとデータを行ごとではなく列に対して管理しており特定の列を取り出して処理することに最適化されており、高いパフォーマンスやスケーラビリティを持っている。}に属している。
         
     #+CAPTION: ワイドカラム型の例 (Name列を取り出すこと等を得意とする)
-    #+ATTR_LATEX: :environemt tabular :align |c|c|c|c|c|
+    #+ATTR_LATEX: :environment tabular :align |c|c|c|c|c|
     |--------+--------+----------------+------------+---------------|
     |     ID | Name   | Email          | Birthday   | Authorization |
     |--------+--------+----------------+------------+---------------|
@@ -140,9 +143,9 @@
     | \vdots | \vdots | \vdots         | \vdots     | \vdots        |
     |--------+--------+----------------+------------+---------------|
 
-    　Hadoop の HDFS (Hadoop Distributed File System) を担っており、複数台のマシンのディスクを一台のディスクであるかのように扱うことができる。全体のデータは Region という単位で分割されており、これをそれぞれのディスクに1つ以上割り振っていくことで分散を行う。
+    　Hadoop の HDFS (Hadoop Distributed File System) の補完を担っており、複数台のマシンのディスクを一台のディスクであるかのように扱うことができる。全体のデータは Region という単位で分割されており、これをそれぞれのディスクに1つ以上割り振っていくことで分散を行う。
     　続いて HBase の論理データモデルについて説明を行う。最上位概念は Namespace と呼ばれるもので、この中には Table と呼ばれるデータを表形式で保持している概念を1個以上含んでいる。 一つ以上の RowKey 、一つ以上の ColumnFamily で構成されている。そして ColumnFamily には一つ以上の ColumnQualifier が存在している。行キーである ColumnQualifier と列キーである RowKey の交差点にはそれぞれ Cell と呼ばれる領域があり、ここにデータが格納されることになる。データは Timestamp とともに保存されており、 Cell にはそのデータが重ねて保存される。つまり Cell には Timestamp に紐付けられたデータが複数存在することになる。また、ワイドカラム型であるという特性上、Table は Rowkey でソートされた状態で保存されることになる。
-    　HBase の物理モデルの Table の構造はキーバリュー形式で保存されている。物理モデルの詳細はデータの分散などの説明も必要となるが、これ以上の内容は本演習で理解することができなかったため説明を省く。
+    　HBase の物理モデルの Table の構造はキーバリュー形式で保存されている。物理モデルの詳細はデータの分散などの説明も必要となるが、これ以上の内容は本演習で理解することができなかったため説明を省略する。
 
     #+BEGIN_SRC ditaa :file hoge2.png :cmdline -E
       +-----------------------------------------------+
@@ -173,21 +176,126 @@
     [[file:hoge2.png]]
     
 *** Hadoop
-    　Hadoop は大規模データセットの分散処理フレームワークである。
+    　Hadoop は大規模データセットの分散処理フレームワークである。 Hadoop はモジュール化されているため、そのコンポーネントの殆どを別のソフトウェアに入れ替えることもできる柔軟な設計がされている。今演習では標準的な Hadoop の構成に付随してインストールされる、\textcircled{\scriptsize 1}Hadoop Common \textcircled{\scriptsize 2}Hadoop YARN\footnote{Yet Another Resource Negotiator} \textcircled{\scriptsize 3}Hadoop MapReduce \textcircled{\scriptsize 4}Hadoop Distributed File System (HDFS) をそのまま利用している。
+    　Common は他のモジュールに利用される基本的なライブラリ群である。 YARN は Hadoop のリソース管理やスケジューリングを行い、 MapReduce は分散処理のためのフレームワークである。 HDFS は分散ファイルシステムで、大容量ファイルを扱うことができる。HDFS は大量の小さなデータを高速に扱うことを不得手としているので、HBase がこの補完を行っている。
 *** Zookeeper
+    　Zookeeper は Hadoop などにおける、構成情報の管理、分散処理の提供、またグループサービスの提供なども行う、分散アプリケーション全体を管理するツールである。使用用途は多岐にわたり、例えば Hadoop などにおける構成管理、 \href{http://storm.apache.org/}{Apache Storm}\textsuperscript{\texttrademark} \footnote{リアルタイム高速分散処理フレームワーク} における処理の同期などに用いられる。ツリー状の階層化された名前空間を持ち、ノードと呼ばれる要素にサーバなどを割り当てている。高速処理や高い信頼性があるにもかかわらず、非常に簡単な API を持っていることが特徴である。ベンチマークとしては \href{http://zookeeper.apache.org/doc/current/zookeeperOver.html#fg_zkPerfRW}{Zookeeper\ 3.4\ Documentation} に記載されている。
     
+
+    #+CAPTION: \href{http://zookeeper.apache.org/doc/current/zookeeperOver.html\#fg_zkPerfRW}{Zookeeperの階層構造}
+    #+ATTR_LATEX: :width 8cm
+    [[./zknamespace.jpg]]
+
+\newline
+
+*** OpenTSDB
+    　OpenTSDB とは HBase をホストとした $\footnote {正確には Google の \href {https://cloud.google.com/bigtable/}{BigTable} もホストとなりうる}$ 時系列データベースで、その構成は\textcircled{\scriptsize 1} 時系列デーモン(以降 TSD と呼称する) \textcircled{\scriptsize 2} コマンドラインユーティリティ、の2つである。特徴としては TSD にマスター・スレーブといった上下関係がないこと、HBase などのホストに各アプリケーションが直接触れる必要がないこと、標準的に保存されているデータをブラウザから視覚的に確認することができることなどが挙げられる。
+    　これによって得られる恩恵として、アプリケーションをチームで開発・維持する際に OpenTSDB を軸にしてデータベース側とアプリケーション側に分割することができるということが考えられる。例えばアプリケーション側はデータベース側の分散等の開発が終わる前に仮設置の HBase に対して OpenTSDB を適用し、アプリケーションをほぼ本環境と同じように動かすことができる。またデータベースの分散数を増やしたい場合は、データベース側にのみ視点を当てて変更を行うことができる。
+
+    #+BEGIN_SRC ditaa :file hoge3.png :cmdline -E
+      +---------+ +---------+ +---------+
+      | Servers | | Servers | | Servers |
+      +-------+-+ +----+----+ ++--------+
+              |        |       |
+      TSD RPC |        |       |
+              |        |       |
+              v        v       v
+          +---------+ +---------+      +------------------+
+          |   TSD   | | TSD     +=---->|DashBord, WebUI   |
+          +---------+ +-------+-+      +------------------+
+                ^       ^     :                            
+      HBase RPC |       |     |        +------------------+
+                |       |     +------->| Programs         | 
+                v       v              +------------------+
+             +--------------+
+             |    HBase     |
+             |      or      |
+             |    BigTable  |
+             +--------------+
+    #+END_SRC
     
+    #+CAPTION: OpenTSDB の概略図
+    #+ATTR_LATEX: :width 10cm
+    #+RESULTS:
+    [[file:hoge3.png]]
+
+    \newpage
+
+    　OpenTSDB の論理モデルは Metric と呼ばれるその時系列データのタイトルとも言える概念が最も外側に位置しており、この中にテーブルに近い構造が一つ含まれていると考えることが出来る。このテーブルの行キーはソートされたタイムスタンプであり、時系列データベースの要である。テーブルの列キーはタグと呼ばれるキーバリュー形式の識別子が0以上割り当てられており、これによって欲しいデータの絞り込みを行うことができる。
+
+    #+BEGIN_SRC ditaa :file hoge4.png :cmdline -E
+      +----------------------------------------+
+      | cBLU Metric                            |
+      +-------------+--------------+-----------+
+      | Timestamp   |cBLU Tag      |cBLU ...   |
+      |  cBLU       +------+-------+-----------+
+      |             |  key | value |     ...   |
+      +-------------+------+-------+-----------+
+      |  Time       |          Value           |
+      |    .        |             .            |
+      |    .        |             .            |
+      |    .        |             .            |
+      +-------------+--------------------------+
+    #+END_SRC
+
+    #+CAPTION: OpenTSDB の論理モデル
+    #+ATTR_LATEX: :width 12cm
+    #+RESULTS:
+    [[file:hoge4.png]]
+    
+    　OpenTSDB はそのアクセスを HTTP API を用いて行うことができる。以降にその概要をまとめる。
+    
+*** OpenTSDB の HTTP API
+    　OpenTSDB を利用するにあたって重要な要素に HTTP API の習得がある。このクエリによってアプリケーション開発者はデータの取得や送信を行うことになる。尚、HTTP API を使わずに Telnet を用いる手段もあるが、どちらも機能として同等であるためここでは HTTP API についての説明のみに留める。
+    　API は、データの取得に関してはクエリ文字列とボディ部の両方の手段をサポートしており、ボディ部を用いる場合はクエリ文字列を用いるよりも詳細な検索をかけることが出来る。対してデータの送信は PUT メソッドによるボディ部を用いた手段のみが利用できる。 それぞれの具体例を示すと以下のようになる。
+    
+    #+CAPTION: OpenTSDBにおけるクエリ例\textcircled{\scriptsize 1}
+    #+ATTR_LATEX: :environment tabular :align |c|l|
+    |------------------+------------------------------------------------------------|
+    | 前提条件         | \cdot http: //localhost:4242 に対して OpenTSDB が開いている |
+    | クエリ内容       | 1年前から現在までの Metric nikkei-index における           |
+    |                  | 　タグについてkeyが ``type'' 、valueが ``close-price''     |
+    |                  | 　であるデータを要求する                                   |
+    |------------------+------------------------------------------------------------|
+    | クエリ文字列     | \cdot http: //localhost:4242/api/query \                   |
+    |                  | 　?start=1y-ago&m=avg:nikkei-index{type=close_price}       |
+    |------------------+------------------------------------------------------------|
+    | ボディコンテンツ | \cdot http: //localhost:4242/api/query                     |
+    |                  | \cdot Content-Type JSON                                    |
+    |                  | \cdot Body                                                 |
+    |                  | { "start" : 1y-ago,                                        |
+    |                  | 　"queries" :                                              |
+    |                  | 　　[{"aggregator" : "sum",                                |
+    |                  | 　　　　　"metric" : "nikkei-index",                       |
+    |                  | 　　　　　　"tags" :                                       |
+    |                  | 　　　　　　　{"type" : "close-price"}                     |
+    |                  | 　}]                                                       |
+    |                  | }                                                          |
+    |------------------+------------------------------------------------------------|
+
+    #+CAPTION: OpenTSDBにおけるクエリ例\textcircled{\scriptsize 2}
+    #+ATTR_LATEX: :environment tabular :align |c|l|
+    |------------+-------------------------------------------------------------|
+    | 前提条件   | \cdot http: //localhost:4242 に対して OpenTSDB が開いている |
+    | クエリ内容 | \cdot Metric ``nikkei-index'' の、                          |
+    |            | 　タグが、key は``type''、value は``close-price'' である    |
+    |            | 　UnixTime が 1517055464 である時間に、                     |
+    |            | 　12000 という値を保存する                                  |
+    |------------+-------------------------------------------------------------|
+    |            | \cdot http: //localhost:4242/api/put                        |
+    |            | \cdot Content-Type JSON                                     |
+    |            | \cdot Body                                                  |
+    |            | { "metric" : "nikkei-index",                                |
+    |            | 　"timestamp" : 1717055464,                                 |
+    |            | 　"value" : 12000,                                          |
+    |            | 　"tags" :                                                  |
+    |            | 　　　{"type" : "close-price"}                              |
+    |            | }                                                           |
+    |------------+-------------------------------------------------------------|
+
 * Clojure を用いた JVM における高速計算技法
-** 
-
-** 
-
-** 
+  
 * ARIMA モデルによる時系列分析
-** 
-** 
-** 
-** 
 * Clojure/ClojureScript を用いた Web 開発
 * MKKL の開発
 * まとめと今後の課題
