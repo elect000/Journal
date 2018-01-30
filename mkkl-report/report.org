@@ -27,7 +27,6 @@
   今情報特別演習において私は、機械学習を初学者が学ぶための Web アプリ開発を行った。当初は大規模データベースを用いた機械学習APIを作るという目標であったが、特に機械学習を学んでいくにあたり、これの中身を理解するための初学者向けの解説の供給が少ないと感じたため、開発目標をやや変更した。$\newline$
   　今回学習した内容は、 $\textcircled{\scriptsize1}$ 大規模データベースの、特に時系列データベースの比較とその利用法 $\textcircled{\scriptsize2}$ 機械学習等を実装する際に重要となる高速計算を JVM 言語内で行う手法 $\textcircled{\scriptsize3}$ 代表的な時系列分析の一つである(S)ARIMA モデル $\textcircled{\scriptsize4}$ 開発言語として取り上げた Clojure/ClojureScript の、言語自体・これを用いたWeb開発手法、の4分野である。
   　結果として 時系列データベースとして OpenTSDB を採用し ARIMA モデルとそれに付随する ADF 検定などを実装・解説を作成した。更に JVM 上で高速計算を行うために、$\href{http://jblas.org/}{jblas}$ や $\href{https://software.intel.com/en-us/mkl}{Intel \textsuperscript{\textregistered} MATH \ KERNEL \  LIBRARY}$ を用いた GPU 演算 、 OpenCL の利用例を調べ比較し、一部を Web アプリの実装に活用した。そして $\href{https://clojure.org/}{Clojure}$ という言語を身に着け、Clojure/ClojureScript を用いて JavaScript のライブラリである $\href{https://reactjs.org/}{React.js}$ などを利用する手法についてまとめ、これらを利用してWebアプリの概形を実装した。
-
 * 序論
   この情報特別演習の初期テーマの決定はグループメンバーからの提案が元であった。その概要は、大規模データベースである $\href{https://hbase.apache.org/}{Apache \  HBase \textsuperscript{\texttrademark}}$ (以降 ``HBase'' と呼称する) を用いて入力されたデータの因果関係を分析、予測する機械学習APIを作成するというものである。ここから因果関係と相関関係の違いについて学習し、機械学習手法について吟味した結果、ニューラルネットを用いた学習手法と、(S)ARIMA モデルを用いた時系列データ予測と Random Forest を用いた欠損値補完を組み合わせたものの2つの手法が議題に上がったが、後者を選択することになりこれを研究することになった。その中で機械学習を学ぶ際にその内部を知る必要があり、学んでいく際にその資料の供給が少ないことを感じ、その資料も兼ね備えたいと考え、また機械学習結果を視覚的にわかりやすく伝える目的も合わせて、Webアプリという形で開発を行うことに目標を定めた。
 \newline
@@ -292,6 +291,7 @@
     |            | }                                                           |
     |------------+-------------------------------------------------------------|
 
+#+LATEX: \newpage
 * Clojure を用いた JVM における高速計算技法
   本演習の開始時、自分のこれまでのプログラム言語学習経歴 \footnote{昨年の情報特別演習においてはPythonを中心に利用し、授業外で Common Lisp をある程度習得した} から、 Lisp の影響を受けた言語を選択することが最も演習に適していると考えており、更に HBase を活用することが決定していたため、 \href{https://www.java.com}{Java} に近い Lisp に近い言語として JVM \footnote{Java virtual machine}上で動作する \href{https://clojure.org}{Clojure} を採用した。また演習を勧めていく上でフロントエンドの開発も行う必要が出てきたため、同様のシンタックスを用いる \href{https://clojurescript.org}{ClojureScript} も採用し、この両方の言語を中心に学習した。
   　この章ではその内の Clojure における高速計算手法についての学習成果を完結にまとめる。
