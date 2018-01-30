@@ -45,6 +45,79 @@
       \field{volume}{290}
       \field{year}{2017}
     \endentry
+    \entry{Brave}{book}{}
+      \name{author}{1}{}{%
+        {{hash=810934035548cd2c9ae98d2af6cca2a9}{%
+           family={Higginbotham},
+           familyi={H\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {No Starch Press}%
+      }
+      \strng{namehash}{810934035548cd2c9ae98d2af6cca2a9}
+      \strng{fullhash}{810934035548cd2c9ae98d2af6cca2a9}
+      \strng{bibnamehash}{810934035548cd2c9ae98d2af6cca2a9}
+      \strng{authorbibnamehash}{810934035548cd2c9ae98d2af6cca2a9}
+      \strng{authornamehash}{810934035548cd2c9ae98d2af6cca2a9}
+      \strng{authorfullhash}{810934035548cd2c9ae98d2af6cca2a9}
+      \field{sortinit}{H}
+      \field{sortinithash}{2f664b453ec75da1fe3804ca92633405}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{subtitle}{Learn the Ultimate Language and Become a Better Programmer}
+      \field{title}{Clojure for the Brave and True}
+    \endentry
+    \entry{high-performance}{book}{}
+      \name{author}{1}{}{%
+        {{hash=3f91a0f60f2d6b597c2edf732f01b199}{%
+           family={Kumar},
+           familyi={K\bibinitperiod},
+           given={Shantau},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Packt Publishing}%
+      }
+      \strng{namehash}{3f91a0f60f2d6b597c2edf732f01b199}
+      \strng{fullhash}{3f91a0f60f2d6b597c2edf732f01b199}
+      \strng{bibnamehash}{3f91a0f60f2d6b597c2edf732f01b199}
+      \strng{authorbibnamehash}{3f91a0f60f2d6b597c2edf732f01b199}
+      \strng{authornamehash}{3f91a0f60f2d6b597c2edf732f01b199}
+      \strng{authorfullhash}{3f91a0f60f2d6b597c2edf732f01b199}
+      \field{sortinit}{K}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Clojure High Performance Programing}
+    \endentry
+    \entry{OpenCL}{book}{}
+      \name{author}{1}{}{%
+        {{hash=18d69ec46d1166f372bf1bcb1f708c98}{%
+           family={Scarpino},
+           familyi={S\bibinitperiod},
+           given={Mattew},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Manning Pubns Co}%
+      }
+      \strng{namehash}{18d69ec46d1166f372bf1bcb1f708c98}
+      \strng{fullhash}{18d69ec46d1166f372bf1bcb1f708c98}
+      \strng{bibnamehash}{18d69ec46d1166f372bf1bcb1f708c98}
+      \strng{authorbibnamehash}{18d69ec46d1166f372bf1bcb1f708c98}
+      \strng{authornamehash}{18d69ec46d1166f372bf1bcb1f708c98}
+      \strng{authorfullhash}{18d69ec46d1166f372bf1bcb1f708c98}
+      \field{sortinit}{S}
+      \field{sortinithash}{3c1547c63380458f8ca90e40ed14b83e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{11}
+      \field{subtitle}{How to Accelerate Graphics and Computaion}
+      \field{title}{OpenCL in Action}
+      \field{year}{2011}
+    \endentry
     \entry{hbase-reference}{manual}{}
       \list{location}{1}{%
         {https://www.slideshare.net/hamadakoichi/randomforest-web}%
