@@ -119,9 +119,6 @@
       \field{year}{2011}
     \endentry
     \entry{hbase-reference}{manual}{}
-      \list{location}{1}{%
-        {https://www.slideshare.net/hamadakoichi/randomforest-web}%
-      }
       \list{organization}{1}{%
         {Copyright © 2012 Apache Software Foundation.}%
       }
@@ -132,6 +129,38 @@
       \field{month}{12}
       \field{title}{The Apache HBase™ Reference Guide}
       \field{year}{2015}
+    \endentry
+    \entry{389899}{inproceedings}{}
+      \name{author}{1}{}{%
+        {{hash=5b27f7a0f23e460041f2904714d9eade}{%
+           family={Thomson},
+           familyi={T\bibinitperiod},
+           given={D.\bibnamedelimi J.},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{5b27f7a0f23e460041f2904714d9eade}
+      \strng{fullhash}{5b27f7a0f23e460041f2904714d9eade}
+      \strng{bibnamehash}{5b27f7a0f23e460041f2904714d9eade}
+      \strng{authorbibnamehash}{5b27f7a0f23e460041f2904714d9eade}
+      \strng{authornamehash}{5b27f7a0f23e460041f2904714d9eade}
+      \strng{authorfullhash}{5b27f7a0f23e460041f2904714d9eade}
+      \field{sortinit}{T}
+      \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This paper describes some aspects of resampling multiple-window estimates of spectra and related functions in a time-series setting. We show that the jackknife variance of a log spectrum estimate is lower than that obtained by computing the variance directly, and describe a hybrid form with better performance than either. We also give some details on jackknifing line frequency parameters. Finally, we describe a projection filter and an associated variance estimate that appears to be useful for exploratory work. Emphasis is on the jackknife, but the ideas apply to other resampling ideas}
+      \field{booktitle}{Acoustics, Speech, and Signal Processing, 1994. ICASSP-94., 1994 IEEE International Conference on}
+      \field{issn}{1520-6149}
+      \field{month}{4}
+      \field{title}{Jackknifing multiple-window spectra}
+      \field{volume}{vi}
+      \field{year}{1994}
+      \field{pages}{VI/73\bibrangedash VI/76 vol.6}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1109/ICASSP.1994.389899
+      \endverb
+      \keyw{filtering theory;frequency estimation;signal sampling;spectral analysis;time series;jackknife variance;jackknifing;line frequency parameters;log spectrum estimate;multiple-window estimates;multiple-window spectra;projection filter;resampling;time-series;variance estimate;Amplitude estimation;Bandwidth;Books;Filters;Frequency estimation;Gaussian processes;Parameter estimation;Phase estimation;Statistics;Time series analysis}
     \endentry
   \enddatalist
 \endrefsection

@@ -1,5 +1,5 @@
 #+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:t ^:nil arch:headline author:t
-#+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
+#+OPTIONS: broken-links:nil c:t creator:t d:(not "LOGBOOK") date:t e:t
 #+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
 #+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
 #+TITLE: 情報特別演習最終レポート
@@ -8,7 +8,7 @@
 #+LANGUAGE: en
 #+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
-#+CREATOR: Emacs 25.3.1 (Org mode 9.1.6)
+#+CREATOR: Emacs 26.0.91 (Org mode 9.1.6)
 
 #+LATEX_CLASS: koma-article
 
@@ -22,6 +22,7 @@
 #+SUBTITLE:
 #+LATEX_COMPILER: pdflatex
 #+DATE: \today
+
 
 * 概要
   今情報特別演習において私は、機械学習を初学者が学ぶための Web アプリ開発を行った。当初は大規模データベースを用いた機械学習APIを作るという目標であったが、特に機械学習を学んでいくにあたり、これの中身を理解するための初学者向けの解説の供給が少ないと感じたため、開発目標をやや変更した。$\newline$
@@ -293,17 +294,18 @@
 
 #+LATEX: \newpage
 * Clojure を用いた JVM における高速計算技法
-  本演習の開始時、自分のこれまでのプログラム言語学習経歴 \footnote{昨年の情報特別演習においてはPythonを中心に利用し、授業外で Common Lisp をある程度習得した} から、 Lisp の影響を受けた言語を選択することが最も演習に適していると考えており、更に HBase を活用することが決定していたため、 \href{https://www.java.com}{Java} に近い Lisp に近い言語として JVM \footnote{Java virtual machine}上で動作する \href{https://clojure.org}{Clojure} を採用した。また演習を勧めていく上でフロントエンドの開発も行う必要が出てきたため、同様のシンタックスを用いる \href{https://clojurescript.org}{ClojureScript} も採用し、この両方の言語を中心に学習した。
+  本演習の開始時、自分のこれまでのプログラム言語学習経歴 \footnote{昨年の情報特別演習においてはPythonを中心に利用し、授業外で Common Lisp をある程度習得した} から、 Lisp の影響を受けた言語を選択することが最も演習に適していると考えており、更に HBase
+ を活用することが決定していたため、 \href{https://www.java.com}{Java} に近い Lisp に近い言語として JVM \footnote{Java virtual machine}上で動作する \href{https://clojure.org}{Clojure} を採用した。また演習を勧めていく上でフロントエンドの開発も行う必要が出てきたため、同様のシンタックスを用いる \href{https://clojurescript.org}{ClojureScript} も採用し、この両方の言語を中心に学習した。
   　この章ではその内の Clojure における高速計算手法についての学習成果を完結にまとめる。
 
 ** Clojure 自身の高速化手法
    Clojure に GPU ライブラリ等を適用する以前に純粋な Clojure で最適化されたコードを書くことが高速計算を行う際に重要であることは言うまでもない。本演習では Clojure 自身の学習も兼ね Clojure for the Brave and True cite:Brave 、Clojure High Performance Programming cite:high-performance を教材に Clojure の最適化手法を学習した。具体的な学習内容としてはプログラム設計の見直しや基本的なシンタックスの見直し、効率の良いスレッド化・並列処理、プログラム全体のパフォーマンス測定法(プロファイリング法)などである。成果としてどこまでの性能向上が認められたかを具体的に比較することは難しいが、性格の良いプログラムを書くことが出来るようになったのではないかと考えている。
-
+   
 ** ClojureCL
    \href{http://clojurecl.uncomplicate.org/}{ClojureCL} とは Clojure で OpenCL を用いるためのライブラリで C言語で書かれる OpenCL のコードよりも簡潔なシンタックスで書くことが主張されている。このライブラリはJVM上でOpenCLを動作させるため、 JNI\footnote{Java Native Interface} を基盤としたライブラリである、jocl を用いており、非常に低レベルな部分で OpenCL とリンクしているため、OpenCL そのものの知識が必要となるものの、その速度を十分に体感することが出来る。本演習ではドキュメントに記載されたソースコードを移し、自分の環境においてそれを体験するまでを行った。2018年2月1日においてはより深い理解を行うために、OpenCL in Action cite:OpenCL を学習している。
 
 ** Neanderthal
-   \href{http://neanderthal.uncomplicate.org/}{Neanderthal} は、Intel \textsuperscript{\textregistered} MKL を用いた高速行列演算・線形代数のためのライブラリである。その速度はGPUを利用するモードの場合には大規模サイズの行列演算に関しては、 Clojure / Java ライブラリに対しても大凡3000倍の高速化を達成し、CPUを利用する場合においても純粋な Java よりも 100 倍の高速化を達成している。この高速化に関しては後述する Clojure.core.matrix 系ライブラリに対してやや扱いが難しいが、その分大幅な高速化が望むことが出来る。
+   \href{http://neanderthal.uncomplicate.org/}{Neanderthal} は、Intel \textsuperscript{\textregistered} MKL を用いた高速行列演算・線形代数のためのライブラリである。その速度はGPUを利用するモードの場合には大規模サイズの行列演算に関しては、 Clojure / Java ライブラリに対しても大凡3000倍の高速化を達成し、CPUを利用する場合においても純粋な Java よりも 100 倍の高速化を達成している。この高速化に関しては後述する Clojure.core.matrix 系ライブラリに対してやや扱いが難しいが、その分大幅な高速化が望むことが出来る。またこのライブラリの依存関係は intel MKL のライブラリ を含むことに意味があるため、 intel MKL のライブラリ $\footnote{Arch Linuxにおいては /opt/intel/lib,/opt/intel/mkl/lib }$ をアプリケーション内に含んでしまえば標準的な環境で動作させることが出来る。
 
    #+CAPTION: ベンチマーク \href{http://neanderthal.uncomplicate.org/articles/benchmarks.html}{Neanderthal Benchmarks} より
    #+ATTR_LATEX: 20cm
@@ -399,18 +401,45 @@
    　このコードからわかるように、このライブラリが返す値は必ずしも求めている・求まった解答の形を示していない。この理由は Intel MKL 内のソースコードが与えられたデータのメモリに解答を書き込む性質があるためである。この破壊的代入を行う性質は高速化に大きな貢献をしているとともに、高い副作用と難解さを招いている原因であると考えられるが、このライブラリを利用するためには Intel MKL のドキュメントを精読することや、内部の Fortran による実装を眺める他にない。
    
 ** Clojure.core.matrix
-   先に紹介した2つに対してこちらは非常におとなしいライブラリであり、 Clojure の標準的な算術関数のラップや行列演算に関するライブラリの基盤を開発している。ライブラリの基盤というのは、 Java などのオブジェクト指向言語におけるインターフェースのようなもので、実装するべき関数を先に示しておくことで、それを様々な手法によって実装・更新されていくことで長期的にそのライブラリ群を使うことが出来るという利点がある。本演習では、高速さが持ち味である \href{https://github.com/mikera/vectorz-clj}{vectorz-clj} や  \href{http://jblas.org/}{jblas} を用いて実装されている幅広い関数を持つ \href{https://github.com/tel/clatrix}{clatrix} の2つを検討しその両方を利用した。
+   　先に紹介した2つに対してこちらは非常におとなしいライブラリであり、 Clojure の標準的な算術関数のラップや行列演算に関するライブラリの基盤を開発している。ライブラリの基盤というのは、 Java などのオブジェクト指向言語におけるインターフェースのようなもので、実装するべき関数を先に示しておくことで、それを様々な手法によって実装・更新されていくことで長期的にそのライブラリ群を使うことが出来るという利点がある。本演習では、高速さが持ち味である \href{https://github.com/mikera/vectorz-clj}{vectorz-clj} や、 \href{http://jblas.org/}{jblas} を用いて実装されている関数が充実している \href{https://github.com/tel/clatrix}{clatrix} の2つを検討しその両方を利用した。
 
 *** vectorz-clj
-    　Vectorz-clj は純粋に JVM で動作する高速な行列計算ライブラリを掲げており、導入にかかるコストの低さが魅力的である。
+    　Vectorz-clj は純粋に JVM で動作する高速な行列計算ライブラリを掲げており、導入にかかるコストの低さが魅力的である。問題としては行列の結合・切り出しに関する関数のいくつかの挙動が不自然であることで、その点を除いては後述する clatrix よりも概ね高速に動作する。
 *** clatrix
+    　clatrix は jblas をラップしたライブラリであり、行列計算において必要とされる関数をほぼすべて網羅しており、先述のライブラリで不足した部分を補完するために利用した。このライブラリを利用するためには jblas がインストールされていることが必要であるため、標準的な環境にこれを用いたアプリケーションを実行したとしても正常に動作しない。不足する関数を自力で補完することでこのライブラリを使用しないという選択肢もあるため、よりアルゴリズムの能力を磨いて自力で必要な関数を補完したいと考えている。
+
 ** ACM3 (Apache Common Math 3)
+   　計算速度そのものの向上という意味ではこのカテゴリからはやや離れるが、良質なアルゴリズムによって様々な数学に関するライブラリとして ACM3 がある。本演習ではそのうちの、アメーバ法に関する関数を ARMA モデルにおける係数推定のために利用した。
 * ARIMA モデルによる時系列分析
-** ARIMA モデルの概要
+  (S)ARIMA モデルは時系列分析手法の一つであり、本演習の要とも言える機械学習手法である。本演習ではこのモデルとその周辺手法を実装した。
+  　ARIMA モデルは 正確には ``Autoregressive integrated moving average model'' と呼ばれ、概要は \textcircled{\scriptsize 1} I \textcircled{\scriptsize 2} AR \textcircled{\scriptsize 3} の3要素によって構成されており、この適用できるデータは「非定常過程が見られる」時系列データ \footnote{「定常過程を持っている」時系列データは ARMA (Autoregressive moving average) モデルでの推定となる} である。定常過程と非定常過程の違いについては後述する [[*単位根検定]] 単位根検定 で説明を行うが、時系列データには非定常過程を持っている場合が少なからずあり、更に ARIMA モデルを ARMA モデルに変換することは非常に容易であるため ARIMA モデルを実装することによって実質的に定常過程、非定常過程両方の性質を持った時系列データを分析することが出来る。
+  　また ARIMA モデルの発展として季節階差を削除することを目的とした SARIMA モデルもあるが、こちらは [[*SARIMA モデルについて]] SARIMA モデルについて にある理由により開発を中断した。
+  　以降にこのモデルの実装において必要になる知識を紹介する。
+
 ** BackShift記法
+   　BackShift記法とは、記号 ``B'' という演算子を用いた時系列データを表現するための手法であり、以下のような使われ方をする。
+   \begin{align}
+   (1-B)y_t &=& 1 * y_t - B * y_t = y_t - y_{t-1} \\
+   (1-B)^2 y_t &=& (1-B) * (1-B) y_t \\
+   (1-B^k) y_t &=& y_t - B^k * y_t \nonumber \\
+   &=& y_t - y_{t-k}
+   \end{align}
+   　但し $y_t$ は時系列データを表しており、また今後の説明のため、tが大きいほど最近のデータであるものとする。
+   　式(1) は一次階差を表しており、後述する AR モデルでは AR(1) の場合に用いられる。式(2) は二次階差を表しており、同様に AR(2) の場合に用いられる。式(3) はある区間を開けて階差を取っており、これは季節階差を取る際等に用いられる。季節階差という考え方から一旦離れてわかりやすい例を挙げるとすれば、時系列データが月単位のデータであった場合、昨年と今年の差分を取る場合には、 $(1-B^{12})y_t$ という形をとることになる。
+   　この記法を用いることでn次階差や季節階差を表しやすくなり、また関数型言語などにおいてはその実装の手がかりを得ることが出来る \footnote{$(1-B^n)$という意味を持つ関数を定義することで理論上ARIMAモデルに必要な階差に関する関数は満足することが出来る}。
+
 ** 単位根検定
+   　実世界に存在する多くの時系列データは非定常過程を持っていることが示唆されている。この示唆について Jackknifing multiple-window spectra cite:389899 から有名な一説を引用すると以下のようになる。
+   #+BEGIN_VERSE
+   Experience with real-world data, however, soon convinces one that both stationarity and Gaussianity are fairy tales invented for the amusement of undergraduates.
+   
+   - Thomson, 1994
+   #+END_VERSE
+   
+   　ARIMA モデルでは「非定常な」時系列データを「定常な」時系列データに変換した上で ARMA モデルに適用することになる。一般にこの階差は一次であるらしいが、理論上は以降に紹介する ADF検定 や KPSS検定 をおこなうことで定常性を判定する。
 *** ADF検定
-*** KPSS検定
+    　ADF検定 () は
+*** KPSS検
 ** AR モデル
 ** MA モデル
 ** 係数推定
@@ -436,4 +465,5 @@
 * まとめと今後の課題
   ゲームエンジン・グラフィクエンジンの開発（GPU）、ゲーム画面をデータベースに保存した上で、解析を行う。（ゲームの進行ログではなく、一般的にユーザが見ることになるゲーム画面の遷移から強化学習を行い、ゲームAIを作成する。）データベースとGPU計算技術は学ぶことができた。時系列解析について入門することができた。ゲームAIの入門については昨年度 Common Lisp を用いて学習済みである。
 \printbibliography
+
 
