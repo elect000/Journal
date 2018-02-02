@@ -561,6 +561,10 @@
     &= Cov(Y_t, Y_s)/\sigma^2
     \end{align}
     　上式では $\sigma_t\sigma_s = \sigma^2$ が成り立っている。これは定常過程を持つ時系列データの分散が時点に依存しないためである。
+    　尚 ACF と PACF には境界値があり、この境界値を超えた値を元に p, q を考えていく。以下にその境界値を求める式を示す。
+    \begin{align}
+    threshold = \pm 2/\sqrt{n}
+    \end{align}
 *** PACF
     　PACF (partical autocorrelation function) は偏自己相関とも呼ばれ、ある時点とそこからある時点分だけ離れた時点の二点間のみの相関関係である。一般式は複雑であるため、二次、三次の PACF の式を示す。尚、一次の PACF は 一次の ACF に等しい。計算の都合上、k次の PACF を $\phi(k, k)$ と表す。
     \begin{align}
@@ -591,11 +595,22 @@
     \rho(k) \end{array}\right)
     \end{equation}
     \end{align}
-    　[[*p, q の決定法]] p, q の決定法 に移る前に、なぜ $\phi(k, k)$ という形で PACF の値を表したのかについて簡単に説明する。
-    
-    
+    　PACF の値 $\phi(i, j)$ は二点間のみの相関関係であるという性質上、ARモデルに似た回帰式を得られる。以下の場合は $\phi(2,2)$ についての例である。
+    \begin{align}
+    \hat{y_t} &= \phi(2,1) \hat{y_{t-1}} + \phi(2,2)\hat{y_{t-2}} + \epsilon_t \\
+    &where \ \hat{y_t} = Y_t - \mu 
+    \end{align}
 *** p, q の決定法
-    
+    　AR(p)、MA(q) モデルの p, q の値を考える際には先述の通り ACF と PACF を用いることがある。この２つのグラフと p, q の関連について簡単に説明する。説明のために具体的なグラフ A, B を以下に示す。
+    #+CAPTION: グラフA
+    #+ATTR_LATEX: :width 16cm
+    [[./acf-pacf.PNG]]
+
+    #+CAPTION: グラフB
+    #+ATTR_LATEX: :width 16cm
+    [[./pacf-acf.PNG]]
+
+    　簡潔に言うならば ACF と q、 PACF と p が強く関係している。
 ** 係数推定
 *** 対数尤度
 *** AIC
