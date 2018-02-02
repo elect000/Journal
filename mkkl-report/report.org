@@ -414,14 +414,14 @@
   　(S)ARIMA モデルは時系列分析手法の一つであり、本演習の要とも言える機械学習手法である。本演習ではこのモデルとその周辺手法を実装した。
   　ARIMA モデルは 正確には ``Autoregressive integrated moving average model'' と呼ばれ、概要は \textcircled{\scriptsize 1} I \textcircled{\scriptsize 2} AR \textcircled{\scriptsize 3} の3要素によって構成されており、この適用できるデータは「非定常過程が見られる」時系列データ \footnote{「定常過程を持っている」時系列データは ARMA (Autoregressive moving average) モデルでの推定となる} である。定常過程と非定常過程の違いについては後述する [[*単位根検定]] 単位根検定 で説明を行うが、時系列データには非定常過程を持っている場合が少なからずあり、更に ARIMA モデルを ARMA モデルに変換することは非常に容易であるため ARIMA モデルを実装することによって実質的に定常過程、非定常過程両方の性質を持った時系列データを分析することが出来る。また ARIMA モデルの分析対象はある時系列データ内の時点間の関係である、自己相関 \footnote{系列相関ともいう} にある。
   　また ARIMA モデルの発展として季節階差を削除することを目的とした SARIMA モデルもあるが、こちらは [[*SARIMA モデルについて]] SARIMA モデルについて にある理由により開発を中断した。
-  　以降にこのモデルの実装において必要になる知識を紹介する。尚ここで使用する式の書式に関しては付録に記載する。
+  　以降にこのモデルの実装において必要になる知識を紹介する。尚ここで使用する式の書式に関しては [[*付録]] 付録に記載する。
 
 ** BackShift記法
    　BackShift記法とは、記号 ``B'' という演算子を用いた時系列データを表現するための手法であり、以下のような使われ方をする。cite:otext
    \begin{align}
-   (1-B)Y_t &=& 1 * Y_t - B * Y_t = Y_t - Y_{t-1} \\
-   (1-B)^2 Y_t &=& (1-B) * (1-B) Y_t \\
-   (1-B^k) Y_t &=& Y_t - B^k * Y_t \nonumber \\
+   (1-B)Y_t &=& 1  Y_t - B  Y_t = Y_t - Y_{t-1} \\
+   (1-B)^2 Y_t &=& (1-B)  (1-B) Y_t \\
+   (1-B^k) Y_t &=& Y_t - B^k  Y_t \nonumber \\
    &=& Y_t - Y_{t-k}
    \end{align}
    　但し $Y_t$ は時系列データを表しており、また今後の説明のため、tが大きいほど最近のデータであるものとする。
@@ -440,10 +440,10 @@
 
    　以降における $y_t$ について定義する。 $Y_t$ を議論の時系列データとして、
    \begin{align}
-   y_t = Y_t - E(Y_t) = Y_t - \mu - \mu_1 * t
+   y_t = Y_t - E(Y_t) = Y_t - \mu - \mu_1 t
    \end{align}
     正確ではないが、ここにおける $\mu$ は $t = 0$ における時系列データの値、 $\mu_t$ は 時系列データの傾きと考えることが出来る。
-
+    
 *** 定常性の性質
     　ここまで``定常性''という言葉を多用してきたが、この定常性について簡単に触れておく。定常性とは同時分布が時間を通じて変わらないこと \footnote{この同時分布が同一であることを持つ時系列過程を特に``強定常である''という} を意味しており、以下のような性質を持っている。
 
@@ -454,13 +454,13 @@
     - $Cov(Y_t, Y_{t-j}) = \gamma_j$ 
       　共分散 (covariance) \footnote{$\sigma_{Y_t Y_{t-j}}$と表すこともある} は 時点 t に依存しない
 
-    　更に $E(Y_t) = \mu \land Cov(Y_t, Y_{t-j} = \gamma_j)$ のみである場合を特に``弱定常である''という。
+    　更に $E(Y_t) = \mu \land Cov(Y_t, Y_{t-j}) = \gamma_j$ のみである場合を特に``弱定常である''という。
 
     　逆に非定常過程の時系列データに目を向けたとき、経済学上重要な要素に以下のようなものがある。
     - 確定的トレンド (deterministic trend)
       　 $Y_t = \beta t + \epsilon_t \ where \ \epsilon_t \sim iid(0, \sigma^2)$ と表され、$E_{DT}(Y_t) = \beta_t$ 、 $Var_{DT}(Y_t) = \sigma^2$ である。こちらは直ちにトレンド定常 (trend stationarity) という形に変形することが出来る。
     - 確率的トレンド (stochastic trend) 又は単位根過程
-      　 $(1-B)Y_t = \beta + \epsilon_t \ wherer \ \epsilon_t \sim iid(0,\sigma^2)$ と表され、 $E_{ST}(Y_t) = \beta_t$ 、 $Var_{ST}(Y_t) = t*\sigma^2$ である。
+      　 $(1-B)Y_t = \beta + \epsilon_t \ wherer \ \epsilon_t \sim iid(0,\sigma^2)$ と表され、 $E_{ST}(Y_t) = \beta_t$ 、 $Var_{ST}(Y_t) = t \sigma^2$ である。
       　確定的トレンドに比べこちらは時間が経過する程に大きな影響を及ぼすことになる。こちらは後述する単位根検定として利用できる ADF 検定や KPSS 検定を行うことで発見することが出来る。
     - 構造変化
       　その時系列が予期しない変化(経済データであるならば、例えば突発的な戦争や飢餓)を受けた際に起こる。本来はこれに対する検定も用意するべきであったが、どのような条件をフラグとして検定が行われるべきであるかが理解できなかったため実装することができなかった。
@@ -473,7 +473,7 @@
 *** ADF 検定
     　ADF 検定 (Augumented Dickey-Fuller test) は DF 検定 (Dickey-Fuller test) の拡張である。
     　DF 検定とは $y_t$ について自己回帰モデル AR(1) を作成し以下の条件を用いて仮説検定を行う手法である。
-    　AR(1)モデル $y_t = \theta * y_{t-1} + \epsilon_t \  where \ \epsilon_t \sim iid(0, \sigma^2)$ とする。（AR モデルそのものについては [[*AR モデル]] AR モデル で解説を行う）
+    　AR(1)モデル $y_t = \theta y_{t-1} + \epsilon_t \  where \ \epsilon_t \sim iid(0, \sigma^2)$ とする。（AR モデルそのものについては [[*AR モデル]] AR モデル で解説を行う）
     　単位根を持っていることを帰無仮説とし、定常であることを対立仮説であるとする。
     　つまり、帰無仮説 $H_0$ と対立仮説 $H_A$ は以下のように定義できる
     \begin{align}
@@ -482,30 +482,30 @@
     \end{align}
     　ここからモデルを変形し、以下の式を立てる。
     \begin{align}
-    \Delta y_t = (\theta - 1) * y_{t-1} + \epsilon_t   
+    \Delta y_t = (\theta - 1) y_{t-1} + \epsilon_t   
     \end{align}
-    上式において、$\pi = (\theta - 1)$ と置換した場合、帰無仮説と対立仮説は以下のように更新される。
+    　上式において、$\pi = (\theta - 1)$ と置換した場合、帰無仮説と対立仮説は以下のように更新される。
     \begin{align}
     H_0\ :\ \pi = 0 \\
     H_A\ :\ \pi < 0
     \end{align}
-    この検定値は簡単な t 検定によって求めることが出来、以下の式によって得られる。
+    　この検定値は簡単な t 検定によって求めることが出来、以下の式によって得られる。
     \begin{align}
 \widetilde{\tau} &= (\hat{\theta} - 1) / {se(\hat{\theta})} \nonumber \\ 
                  &= \hat{\pi} / se(\hat{\pi})
     \end{align}
-    これを自ら指定した有意水準(5% 又は 1% であることが多い) において検定する。この検定手法では対立仮説が成り立つならば定常性を認めることが可能である。混乱を招かないために強調するが、この検定における帰無仮説は、``単位根を持っている''ことである。これが棄却されれば``定常である''ことを認めることができる。
-    また上の場合において、元データの一次階差と取っていることが明らかであるが、この検定で定常であると認められた場合、このデータは １次の単位根 があるという。同様に d次の単位根がある とは、d - 1 次までの単位根検定においてすべて 非定常である と判断され、 d 次において初めて 定常である と判断されたことを示している。
-    DF 検定が AR(1) モデルに対する検定であることにたいして、ADF 検定は AR(n) モデルにまで対象を拡大したものであり、一般式は難解であるため省くが、例えば AR(3) モデルは以下のように示すことが出来る。
+    　これを自ら指定した有意水準(5% 又は 1% であることが多い) において検定する。この検定手法では対立仮説が成り立つならば定常性を認めることが可能である。混乱を招かないために強調するが、この検定における帰無仮説は、``単位根を持っている''ことである。これが棄却されれば``定常である''ことを認めることができる。
+    　また上の場合において、元データの一次階差と取っていることが明らかであるが、この検定で定常であると認められた場合、このデータは １次の単位根 があるという。同様に d次の単位根がある とは、d - 1 次までの単位根検定においてすべて 非定常である と判断され、 d 次において初めて 定常である と判断されたことを示している。
+    　DF 検定が AR(1) モデルに対する検定であることにたいして、ADF 検定は AR(n) モデルにまで対象を拡大したものであり、一般式は難解であるため省くが、例えば AR(3) モデルは以下のように示すことが出来る。
     \begin{align}
-    y_t &= \theta_1 * y_{t-1} + \theta_2 * y_{t-2} + \theta_3 * y_{t-3} + \epsilon_t \ where \ \epsilon_t \sim iid(0,\sigma^2) \\
-    y_t - y_{t-1} &= (\theta_1 - 1) y_{t-1} + \theta_2 * y_{t-2} + \theta_3 * y_{t-3} + \epsilon_t \\
-    \Delta y_t &= (\theta_1 + \theta_2 + \theta_3 - 1) * y_{t-1} \nonumber \\
- &+ (\theta_2 + \theta_3) * (y_{t-2} - y_{t-1}) + \theta_3 * (y_{t-3} - y_{t-2}) + \epsilon_t \nonumber \\
- &= (\theta_1 + \theta_2 + \theta_3 - 1) * y_{t-1} + (\theta_2 + \theta_3) * \Delta y_{t-1} + \theta_3 * \Delta y_{t-2} + \epsilon_t
+    y_t &= \theta_1 y_{t-1} + \theta_2 y_{t-2} + \theta_3  y_{t-3} + \epsilon_t \ where \ \epsilon_t \sim iid(0,\sigma^2) \\
+    y_t - y_{t-1} &= (\theta_1 - 1) y_{t-1} + \theta_2  y_{t-2} + \theta_3  y_{t-3} + \epsilon_t \\
+    \Delta y_t &= (\theta_1 + \theta_2 + \theta_3 - 1)  y_{t-1} \nonumber \\
+ &+ (\theta_2 + \theta_3) (y_{t-2} - y_{t-1}) + \theta_3 (y_{t-3} - y_{t-2}) + \epsilon_t \nonumber \\
+ &= (\theta_1 + \theta_2 + \theta_3 - 1) y_{t-1} + (\theta_2 + \theta_3) * \Delta y_{t-1} + \theta_3 \Delta y_{t-2} + \epsilon_t
     \end{align}
-    これより $\pi = (\theta_1 + \theta_2 + \theta_3 - 1)$ とおいて DF 検定と同様に t 検定を行う。
-    尚この検定にはいくつかの追加要素として、定常過程にある時系列データの平均値を考えるパターンや、時系列データに傾きがある場合を考慮したパターンがある。これらは人為的にデータを確認することで決定するが、 R 言語や Python などの ADF 検定ではすべてのパターンを一度に実行している場合がある。これは ADF 検定そのものは計算コストが低いため、すべてのパターンを網羅しても問題がないためである。
+    　これより $\pi = (\theta_1 + \theta_2 + \theta_3 - 1)$ とおいて DF 検定と同様に t 検定を行う。
+    　尚この検定にはいくつかの追加要素として、定常過程にある時系列データの平均値を考えるパターンや、時系列データに傾きがある場合を考慮したパターンがある。これらは人為的にデータを確認することで決定するが、 R 言語や Python などの ADF 検定ではすべてのパターンを一度に実行している場合がある。これは ADF 検定そのものは計算コストが低いため、すべてのパターンを網羅しても問題がないためである。
 *** KPSS 検定
     　KPSS 検定 (Kwiatkowski-Phillips-Schmidt-Shin test) とは先述の ADF 検定に対して帰無仮説と対立仮説を反転させたものとイメージすることが出来る。この検定においては以下の式を中心に展開する。
     \begin{align}
@@ -517,27 +517,85 @@
     \begin{align}
     Y_t = \hat{\mu} + \hat{\epsilon_t}
     \end{align}
-    　ここで仮説検定を行う。帰無仮説は 定常過程を示している式(15)であり、つまりは式(14) における $\sigma_{\upsilon}^2 = 0$ である。対立仮説はこの逆であり、非定常であること、つまり $\sigma_{\upsilon}^2$ である。
+    　ここで仮説検定を行う。帰無仮説は 定常過程を示している式(15)であり、つまりは式(14) における $\sigma_{\upsilon}^2 = 0$ である。対立仮説はこの逆であり、非定常であること、つまり $\sigma_{\upsilon}^2 > 0$ である。
     \begin{align}
     H_0 \ :\ \sigma_{\upsilon}^2 = 0 \\
     H_0 \ :\ \sigma_{\upsilon}^2 > 0
     \end{align}
     　検定は以下の式を用いて行う。
     \begin{align}
-    KPSS &= 1/T^2 * (\Sigma^{T}_{t = 1}S_t^2)/ \hat{\sigma^2_\infty} \nonumber \\ 
+    KPSS &= 1/T^2 (\Sigma^{T}_{t = 1}S_t^2)/ \hat{\sigma^2_\infty} \nonumber \\ 
     &where\  S_t = \Sigma_{s=1}^t \hat{e_s} 
     \end{align}
     
-    上式における $\hat{\sigma^2_\infty}$ とは $\epsilon_t$ の長期変動に関する HAC 推定量 \footnote{特に Newey-West 推定量を用いられることが多い} である。
-    以下に $\sigma^2_\infty$ の例を示す。cite:STAN:STAN272
+    　また上式における $\hat{\sigma^2_\infty}$ とは $\epsilon_t$ の長期変動に関する HAC 推定量 \footnote{特に Newey-West 推定量を用いられることが多い} である。
+    　以下に $\sigma^2_\infty$ の例を示す。cite:STAN:STAN272
     \begin{align}
-    \sigma^2_\infty = \lim_{T \rightarrow \infty} (1/T * E((\Sigma_{t=1}^T \epsilon_t)^2))
+    \sigma^2_\infty = \lim_{T \rightarrow \infty} (1/T E((\Sigma_{t=1}^T \epsilon_t)^2))
     \end{align}
-    ADF 検定あったようにこちらにもいくつかのパターンがあり、トレンド定常の場合などの場合に合わせた形に 式(14) が存在し、それに伴って仮説検定の内容に多少の変化がある。
+    　ADF 検定あったようにこちらにもいくつかのパターンがあり、トレンド定常の場合などの場合に合わせた形に 式(14) が存在し、それに伴って仮説検定の内容に多少の変化がある。
+    実装においては HAC 推定量を実装することができなかったため、KPSS検定も実装することができなかった。
 ** AR モデル
+   　AR(p) モデル (自己回帰モデル) は以下の式で表すことが出来るモデルである。重回帰モデルが説明変数の線型結合を用いて関心のある変数を予測していること対して、自己回帰モデルは説明変数を過去の観測値に置き換えたものであると言える。
+   \begin{align}
+   Y_t &= c + \phi_1  Y_{t-1} +\phi Y_{t-2} + \cdots + \phi_p  Y_{t-p} + \epsilon_t \nonumber \\
+   &= c + \Sigma_{i=1}^{p} (\phi_i  Y_{t-i}) +\epsilon_t  \nonumber \\
+   &where \  c \ is\  constant \ \nonumber \\ 
+   &\ \ \ \ \ \ \ \ \ \ \epsilon \sim iid(0, \sigma^2)
+   \end{align}
    
 ** MA モデル
+   　MA(q) モデル (移動平均モデル) は以下の式で表すことが出来るモデルである。同様に重回帰モデルの説明変数を過去のノイズの重みに置き換えたものであると言える。これとよく似たものに移動平均という手法があるが、移動平均は過去の値のサイクルを推定するために用いられ、MA(q) モデルは将来の値を予測するために用いられる。\footnote{移動平均とMAモデルは正確には別のものであり、混同されるべきではない。MAモデル自体は有限インパルス応答に近い発想である。cite:2012カルマンフィルタの基礎}
 
+   \begin{align}
+   Y_t &= c + \epsilon_t + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} + \cdots + \theta_1 \epsilon_{t-q}   \nonumber \\
+   &= c + \epsilon_t + \Sigma_{i=1}^{q} (\theta_i \epsilon_{t-i})  \nonumber \\
+   \end{align}
+** ACF と PACF
+   ARMA モデルにおいて\footnote{ACF, PACFは定常過程であるデータに適用される}、AR(p), MA(q) の p, q の値を決定する際の指標となるものに、ACF、PACFがある。この２つはグラフによって視覚化され、この２つのグラフから p, q の値は手動で決定される。\footnote{R言語における auto.arima 関数などはこのような手間なしでモデルを決定することが出来るが、これは p, q などの値を元データにかかわらず適当に複数定めモデルを作成し、AICなどを用いて最も良いモデルを選択しているからである。}
+*** ACF
+    　ACF (autocorrelation function) は自己相関係数とも呼ばれ、元データとある時点分だけずらしたデータとの相関係数を計算する。つまり以下の式を計算することになる。尚、$t-s$ はそのずらした量(ラグと呼ぶ)である。またこの場合に求まる値を、$t-s$ 次のACFと呼ぶことがある。
+    \begin{align}
+    \rho(s,t) &= (E((Y_t - \mu_t)(Y_s-\mu_s)))/(\sigma_{Y_t}\sigma_{Y_s}) \nonumber \\
+    &= (E((Y_t - \mu_t)(Y_s-\mu_s)))/\sigma^2 \nonumber \\
+    &= Cov(Y_t, Y_s)/\sigma^2
+    \end{align}
+    　上式では $\sigma_t\sigma_s = \sigma^2$ が成り立っている。これは定常過程を持つ時系列データの分散が時点に依存しないためである。
+*** PACF
+    　PACF (partical autocorrelation function) は偏自己相関とも呼ばれ、ある時点とそこからある時点分だけ離れた時点の二点間のみの相関関係である。一般式は複雑であるため、二次、三次の PACF の式を示す。尚、一次の PACF は 一次の ACF に等しい。計算の都合上、k次の PACF を $\phi(k, k)$ と表す。
+    \begin{align}
+    \phi(2, 2) &= Cov(Y_t,Y_{t-2}|Y_{t-1})/\sigma_{Y_t|Y_{t-1}}\sigma_{Y_{t-2}|Y_{t-1}}) \\
+    \phi(3, 3) &= Cov(Y_t,Y_{t-3}|Y_{t-1},Y_{t-2})/(\sigma_{Y_t|Y_{t-1},Y_{t-2}}\sigma_{Y_{t-3}|Y_{t-1},Y_{y-2}})
+    \end{align}
+    　このように式がラグごとに異なるため、実装上計算には以下の行列式を用いた Durbin-Levinson recursion が用いられることが多い。尚以下の式における $\rho_s$ とは ACF $\rho(s, t)$ を示している。
+    \begin{align}
+    \begin{equation}
+    \left(\begin{array}{ccccc}
+    \rho(0) & \rho(1) & \rho(2) & \cdots & \rho(k-1) \\
+    \rho(1) & \rho(0) & \rho(1) & \cdots & \rho(k-2) \\
+    \rho(2) & \rho(1) & \rho(0) & \cdots & \rho(k-3) \\ 
+    \vdots  & \vdots  & \vdots  & \ddtos & \vdots \\
+    \rho(k-1) & \rho(k-2) & \rho(k-3) & \cdots & \rho(0)
+    \end{array}\right)\left(
+    \begin{array}{c}
+    \phi(k, 1) \\
+    \phi(k, 2) \\
+    \phi(k, 3) \\
+    \vdots \\
+    \phi(k, k) 
+    \end{array}\right)=\left(\begin{array}{c}
+    \rho(1) \\
+    \rho(2) \\
+    \rho(3) \\
+    \vdots \\
+    \rho(k) \end{array}\right)
+    \end{equation}
+    \end{align}
+    　[[*p, q の決定法]] p, q の決定法 に移る前に、なぜ $\phi(k, k)$ という形で PACF の値を表したのかについて簡単に説明する。
+    
+    
+*** p, q の決定法
+    
 ** 係数推定
 *** 対数尤度
 *** AIC
@@ -558,32 +616,31 @@
 ** 実験方法
 ** 実験結果
 ** 考察
-* まとめと今後の課題
-  ゲームエンジン・グラフィクエンジンの開発（GPU）、ゲーム画面をデータベースに保存した上で、解析を行う。（ゲームの進行ログではなく、一般的にユーザが見ることになるゲーム画面の遷移から強化学習を行い、ゲームAIを作成する。）データベースとGPU計算技術は学ぶことができた。時系列解析について入門することができた。ゲームAIの入門については昨年度 Common Lisp を用いて学習済みである。
+* まとめと今後の 課題
+  ゲームエンジン・グラフィクエンジンの開発（GPU）、ゲーム画面をデータベースに保存した上で、解析を行う。（ゲームの進行ログではなく、一般的にユーザが見ることになるゲーム画面の遷移から強化学習を行い、ゲームAIを作成する。）データベースとGPU計算技術は学ぶことができた。時系列解析について入門することができた。ゲームAIの入門については昨年度 Common Lisp を用いて学習済みである。  
 * 付録
 ** このレポートにおける数式について
-   このレポートにおける数式表現といくつかの基本的な用語の定義を以下に例と共に示す。
+   　このレポートにおける数式表現といくつかの基本的な用語の定義を以下に例と共に示す。
 *** 独立同時分布と変数の補足
     \begin{align}
     y_t = \beta t + \epsilon_t \ where \ \epsilon_t \sim iid(0, \sigma^2)
     \end{align}
-    　この式における $where$ とは左式における変数の補足を行うことを意味しており、この場合で $\epsilon_t$ の意味を補足している。$iid(\mu, \sigma^2)$ とは 独立同時分布 (independent and identically distributed) を意味しており、この確率変数は他の確率変数と同一の分布を持ち、且つそれぞれが独立していることを示している。また独立同時分布において共分散、相関係数は 0 である。本レポートにおいてこの式は、平均 $\mu$ 、 分散 $\sigma^2$ に従う独立同時分布という意味を持っている。
+    　この式における $where$ とは左式における変数の補足を行うことを意味しており、この場合で $\epsilon_t$ の意味を補足している。$iid(\mu, \sigma^2)$ とは 独立同時分布 (independent and identically distributed) を意味しており、この確率変数は他の確率変数と同一の分布を持ち、且つそれぞれが独立していることを示している。また独立同時分布において共分散、相関係数は 0 である。本レポートにおいてこの式は、平均 $\mu$ 、 分散 $\sigma^2$ に従う \footnote{$a \sim b$ とは、 a は b という分布に従う という意味である} 独立同時分布という意味を持っている。
     　これと同様の概念にホワイトノイズというものがあるため、混乱を避けるためこちらも補足を行う。
-    　ホワイトノイズ $\epsilon_t - W.N(0, \sigma^2)$ は以下の性質を持っている。
+    　ホワイトノイズ $\epsilon_t \sim W.N(0, \sigma^2)$ は以下の性質を持っている。
     - $E(E_t) = 0$ 
       　平均は0
     - $Var(E_t) < infinity$ 
       　分散は発散しない
     - $Cor(E_t, E_s) = 0$ 
-      　相関 (correlation) $\footnote{r_{e_t,e_s} と表されることもある}$ 関係はない 
-    　ホワイトノイズと独立同時分布の関係は、ホワイトノイズには必ずしも独立性があるわけではないという意味で独立同時分布のほうがより``強固''であると言える。　
-
+      　相関 (correlation) \footnote{$r_{e_t,e_s}$ と表されることもある} 関係はない 
+    　ホワイトノイズと独立同時分布の関係は、ホワイトノイズには必ずしも独立性があるわけではないという意味で、独立同時分布のほうがより``強固''であると言える。　
 
 *** 標準誤差と標準偏差
     \begin{align}
     \hat{\pi}/ se(\hat{\pi})
     \end{align}
-    　この式における $se(\hat{\pi})$ とは $\hat{\pi}$ の標準誤差を示している。標準誤差とは母集団からある標本を選んだ際にどの程度のばらつきが生じるかを示す指標であり、標本数が十分多いとき 母集団 の標準偏差 $\sigma$ と 標本 の標準偏差 $\hat{s}$ 、標本数 $n$ を用いて
+    　この式における $se(\hat{\pi})$ とは $\hat{\pi}$ の標準誤差を示している。標準誤差とは母集団からある標本を選んだ際にどの程度のばらつきが生じるかを示す指標であり、母集団の要素数が十分多いとき 母集団 の標準偏差 $\sigma$ と 標本 の標準偏差 $\hat{s}$ 、標本数 $n$ を用いて
     \begin{align}
     se(\hat{\pi}) &= \sigma / \sqrt{n} \\
     &= \hat{s} / \sqrt{n} 
@@ -593,5 +650,4 @@
 
 \printbibliography
 ** COMMENT トレンド定常
-
 
