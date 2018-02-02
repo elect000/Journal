@@ -45,6 +45,30 @@
       \field{volume}{290}
       \field{year}{2017}
     \endentry
+    \entry{hedibert}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=3dafa1cca24fef2b7d7d928cdbe30546}{%
+           family={Hedibert\bibnamedelimb Freitas\bibnamedelima Lopes},
+           familyi={H\bibinitperiod\bibinitdelim F\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={PhD},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{3dafa1cca24fef2b7d7d928cdbe30546}
+      \strng{fullhash}{3dafa1cca24fef2b7d7d928cdbe30546}
+      \strng{bibnamehash}{3dafa1cca24fef2b7d7d928cdbe30546}
+      \strng{authorbibnamehash}{3dafa1cca24fef2b7d7d928cdbe30546}
+      \strng{authornamehash}{3dafa1cca24fef2b7d7d928cdbe30546}
+      \strng{authorfullhash}{3dafa1cca24fef2b7d7d928cdbe30546}
+      \field{sortinit}{H}
+      \field{sortinithash}{2f664b453ec75da1fe3804ca92633405}
+      \field{labelnamesource}{author}
+      \verb{urlraw}
+      \verb http://hedibert.org/wp-content/uploads/2015/04/DT-or-ST.pdf
+      \endverb
+      \verb{url}
+      \verb http://hedibert.org/wp-content/uploads/2015/04/DT-or-ST.pdf
+      \endverb
+    \endentry
     \entry{Brave}{book}{}
       \name{author}{1}{}{%
         {{hash=810934035548cd2c9ae98d2af6cca2a9}{%
@@ -69,6 +93,56 @@
       \field{subtitle}{Learn the Ultimate Language and Become a Better Programmer}
       \field{title}{Clojure for the Brave and True}
     \endentry
+    \entry{STAN:STAN272}{article}{}
+      \name{author}{3}{}{%
+        {{hash=f0f702bc9ebac6cad9f111f848f9e933}{%
+           family={Hobijn},
+           familyi={H\bibinitperiod},
+           given={Bart},
+           giveni={B\bibinitperiod}}}%
+        {{hash=4bbf24efc66271ac9e91d941aef2ce2f}{%
+           family={Franses},
+           familyi={F\bibinitperiod},
+           given={Philip\bibnamedelima Hans},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=0c09bc3727b5a1d1a239489d32b0c065}{%
+           family={Ooms},
+           familyi={O\bibinitperiod},
+           given={Marius},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Blackwell Publishing}%
+      }
+      \strng{namehash}{255b457bdff61522543b4679ba844b09}
+      \strng{fullhash}{255b457bdff61522543b4679ba844b09}
+      \strng{bibnamehash}{255b457bdff61522543b4679ba844b09}
+      \strng{authorbibnamehash}{255b457bdff61522543b4679ba844b09}
+      \strng{authornamehash}{255b457bdff61522543b4679ba844b09}
+      \strng{authorfullhash}{255b457bdff61522543b4679ba844b09}
+      \field{sortinit}{H}
+      \field{sortinithash}{2f664b453ec75da1fe3804ca92633405}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1467-9574}
+      \field{journaltitle}{Statistica Neerlandica}
+      \field{number}{4}
+      \field{title}{Generalizations of the KPSS-test for stationarity}
+      \field{volume}{58}
+      \field{year}{2004}
+      \field{pages}{483\bibrangedash 502}
+      \range{pages}{20}
+      \verb{doi}
+      \verb 10.1111/j.1467-9574.2004.00272.x
+      \endverb
+      \verb{urlraw}
+      \verb http://dx.doi.org/10.1111/j.1467-9574.2004.00272.x
+      \endverb
+      \verb{url}
+      \verb http://dx.doi.org/10.1111/j.1467-9574.2004.00272.x
+      \endverb
+      \keyw{stationarity test,rate of consistency,long run variance,bandwidth selection,time series,heteroskedasticity and autocorrelation consistent covariance estimation,Choi's test,Leybourne and McCabe's test}
+    \endentry
     \entry{high-performance}{book}{}
       \name{author}{1}{}{%
         {{hash=3f91a0f60f2d6b597c2edf732f01b199}{%
@@ -91,6 +165,29 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Clojure High Performance Programing}
+    \endentry
+    \entry{otext}{book}{}
+      \name{author}{1}{}{%
+        {{hash=e2dc32e07724960d31381de104b86919}{%
+           family={Rob\bibnamedelimb J\bibnamedelima Hyndman},
+           familyi={R\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim H\bibinitperiod},
+           given={George\bibnamedelima Athanasopoulos},
+           giveni={G\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {OTexts(Octover 17, 2013)}%
+      }
+      \strng{namehash}{e2dc32e07724960d31381de104b86919}
+      \strng{fullhash}{e2dc32e07724960d31381de104b86919}
+      \strng{bibnamehash}{e2dc32e07724960d31381de104b86919}
+      \strng{authorbibnamehash}{e2dc32e07724960d31381de104b86919}
+      \strng{authornamehash}{e2dc32e07724960d31381de104b86919}
+      \strng{authorfullhash}{e2dc32e07724960d31381de104b86919}
+      \field{sortinit}{R}
+      \field{sortinithash}{c15bc8eb6936bc6b3c8baa9e8575af53}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Forecasting: principles and practice}
     \endentry
     \entry{OpenCL}{book}{}
       \name{author}{1}{}{%
