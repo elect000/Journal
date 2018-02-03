@@ -677,16 +677,59 @@
 ** Clojure によるバックエンド開発
    　バックエンド開発は [[http://www.luminusweb.net/][Luminus Framework]] を用いて行った。その際 Web API としての動作を確認するために [[https://swagger.io/swagger-ui/][Swagger UI]] を用いた。
 *** Luminus Framework
-    　Luminus Framework とは Clojure の Web 開発に関するライブラリを統合したフレームワークである。ライブラリへのアクセスが極めて単純であり、それぞれのライブラリを好きなライブラリへ置換することも容易であるため、極めて自由度の高いフレームワークとなっている。そういった意味では Luminus はフレームワークと言うよりも推奨ライブラリのライブラリと言った方が近いのかも知れない。また様々なデータベースへのアクセスもサポート \footnote{OpenTSDBへの接続に関するサポートはなかったため、この部分の一部を自作する必要があった} されており、本演習ではSQLとして PostgreSQL を用いた。
+    　Luminus Framework とは Clojure の Web 開発に関するライブラリを統合したフレームワークである。ライブラリへのアクセスが極めて単純であり、それぞれのライブラリを好きなライブラリへ置換することも容易であるため、極めて自由度の高いフレームワークとなっている。そういった意味では Luminus はフレームワークと言うよりも推奨ライブラリのライブラリと言った方が近いのかも知れない。また様々なデータベースへのアクセスもサポート \footnote{OpenTSDBへの接続に関するサポートはなかったため、この部分の一部を自作する必要があった} されており、本演習ではSQLとして PostgreSQL を用いた。また Luminus には教科書とも言える書籍 cite:luminus があり、これをチュートリアルとして活用することが出来る。
 *** Swagger UI
     　Swagger UI とは [[https://swagger.io/tools/][Swagger Tools]] と呼ばれる RESTful API を作成するための支援ツール群の一つであり、ブラウザから API の動作を確認することが出来る。本演習では Swagger Tools の一部である Swagger UI のみを用いているが、これは \textcircled{\scriptsize 1} 関数型言語の特性の一つとして、データの源泉からデータの変換が終了するまでをひと続きに記述することが容易であるということから、サーバとクライアントのやり取りを行う部分のみを独立して記述することが効率的でないと判断したため \textcircled{\scriptsize 2} Clojure の REPL\footnote{Read-Eval-Print Loop 書いたコードを評価することでそれを反映することが出来る} 上で開発を行っているためブラウザからAPIの確認を行う以上の高機能を求めていないため \textcircled{\scriptsize 3} Luminus に含まれるライブラリである [[https://github.com/metosin/compojure-api][Compojure-api]] のサンプルでは Swagger UI を API の確認以上の目的で使用していないためである。
-    #+CAPTION: Swagger UI の利用例
+*** COMMENT  Swagger UI の利用例 image
     
 ** ClojureScript によるフロントエンド開発
+   　フロントエンド開発に関しては Luminus Framework ある機能に加え、 [[https://reactjs.org/][React.js]] の ClojureScript ラッパーである [[https://reagent-project.github.io/][Reagent]] 、React に特化された CSS フレームワークである [[http://www.material-ui.com/#/][Material UI]] を用いて作成した。
 *** 基本的な開発
+    　Luminus Framework には Reagent を追加するオプションがあり、これを中心にフロントエンド側の開発を行った。またリクエスト処理などは Ajax を用いて実装した。
 *** Reagent
-*** core.async による非同期処理
-* MKKL の開発
+    　Reagent は React.js の ClojureScript ラッパーである。React.js とは UI を作成するための JavaScript ライブラリであり、ボタンやスライダーなどのコンポーネントを簡単に作成することが出来る。Reagent では HTML との連携を非常に簡単に行えるようになっており非常に見やすいシンタックスを提供する。以下に実際に実装に用いた例を紹介する。
+
+   \captionof{listing}{login-form関数}
+    #+BEGIN_SRC clojure
+(defn login-form []
+  (let [fields (atom {}) ;; 局所変数
+        error (atom nil)] 
+    (fn [] ;; 描画時に呼び出される無名関数として定義
+      [c/modal ;; 自作関数であるモーダルウィンドウのコンポーネント呼び出し
+       [:div "MLLK Login"] ;; モーダルのタイトル <div> 要素として記述
+       [:div               ;; モーダルの内容
+        [:div.well.well-sm ;; well well-sm は bootstrap のクラス
+         [:strong "* required fields"]]
+        [c/text-input "name" :name "enter a pass user name" fields] ;; 自作のテキストフィールドの呼び出し
+        (when-let [error- (:name @error)]
+          [:div.alert.alert-danger error-]) ;; 名前に関するエラーを表示
+        [c/password-input "password" :pass "enter a password" fields]
+        (when-let [error- (:pass @error)]
+          [:div.alert.alert-danger error-])
+        (when-let [error- (:server-error @error)]
+          [:div.alert.alert-danger error-])]
+       [:div ;; <div><button type="button" class= "btn btn-primary" ...>...</button><button ...>...</button><div>
+        [:button.btn.btn-primary
+         {:on-click #(login! fields error)} ;; ボタンクリック時の動作を指定 (自作の関数 login! を呼び出している)
+         "Login"]
+        [:button.btn.btn-danger
+         {:on-click #(session/remove! :modal)} 
+         "Cancel"]]])))
+    #+END_SRC
+
+    　一見すると非常に入り組んだ構造に見えるかも知れないが、それは HTML を記述している中に JavaScript を直接埋め込んでいるような記述をしているためである。しかし HTML と JavaScript 部をまとめて記述することで どこに何があるのか という疑問を持たずに済む。また細かいパーツに関数として分割することが出来るため \footnote{正確には関数が評価されるタイミングを考慮する必要がある} 上例のように ログインフォームのみを独立して記述をすれば全体として大きな構造が必要となっても小さな構造体に問題を分割することが出来る。
+**** COMMENT ログインウィンドウの画像
+
+* MLLK の開発
+  　本演習では紆余曲折があったものの最終的には MLLK (Machine Learning Learning Kit) という Web アプリケーションのベータ版を開発した。完成まで導くことができなかった原因は、公開に足る性能を達成できなかったこと、アプリケーションの安全性が確立できなかったこと、データベースサーバなどの環境が特別であったため、公開可能なサーバを調達できなかったことである。
+** ARIMA モデルライブラリ
+   　 [[*ARIMA モデルによる時系列分析]] ARIMA モデルによる時系列分析 に従ってそれぞれの関数を実装した。
+** データベース設計
+   　以下の図に従ってデータベースを作成した。
+** バックエンド開発
+   　あ
+** フロントエンド開発
+   　あ
 * 発展 : ARIMA 推定 と Random Forest による予測
 ** 概要
 ** 実験方法
