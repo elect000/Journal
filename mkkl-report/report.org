@@ -13,6 +13,7 @@
 #+LATEX_CLASS: koma-article
 
 #+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER: \usepackage{pdfpages}
 #+LATEX_HEADER: \usepackage{biblatex}
 #+LATEX_HEADER: \addbibresource{reference.bib}
 #+LATEX_HEADER_EXTRA:
@@ -185,7 +186,7 @@
     #+ATTR_LATEX: :width 8cm
     [[./zknamespace.jpg]]
 
-\newline
+    #+LATEX: \newpage
 
 *** OpenTSDB
     OpenTSDB とは HBase をホストとした $\footnote {正確には Google の \href {https://cloud.google.com/bigtable/}{BigTable} もホストとなりうる}$ 時系列データベースで、その構成は\textcircled{\scriptsize 1} 時系列デーモン(以降 TSD と呼称する) \textcircled{\scriptsize 2} コマンドラインユーティリティ、の2つである。特徴としては TSD にマスター・スレーブといった上下関係がないこと、HBase などのホストに各アプリケーションが直接触れる必要がないこと、標準的に保存されているデータをブラウザから視覚的に確認することができることなどが挙げられる。
@@ -218,7 +219,7 @@
     #+RESULTS:
     [[file:hoge3.png]]
 
-    \newpage
+    #+LATEX: \newpage
 
     　OpenTSDB の論理モデルは Metric と呼ばれるその時系列データのタイトルとも言える概念が最も外側に位置しており、この中にテーブルに近い構造が一つ含まれていると考えることが出来る。このテーブルの行キーはソートされたタイムスタンプであり、時系列データベースの要である。テーブルの列キーはタグと呼ばれるキーバリュー形式の識別子が0以上割り当てられており、これによって欲しいデータの絞り込みを行うことができる。
 
@@ -313,7 +314,7 @@
    #+LATEX: \newpage
    残念ながら本演習では成果物を稼働させるサーバをどのように扱うかについて協議が不足しており、必要とされるライブラリがその環境で入手することが出来るか不明であったため、実装に組み込ませることができなかったものの、実行例の一部をここで紹介することとする。
 
-   \captionof{listing}{test-Neanderthal.clj}
+   #+LATEX: \captionof{listing}{test-Neanderthal.clj}
    #+BEGIN_SRC clojure
 (ns test-neanderthal.core
   (:require
@@ -396,7 +397,7 @@
    #+END_SRC
 
    
-   　5行目までの内容は依存関係の解決である。 Sample1 において単純な行列の足し算を行っており、 Sample2 は QR 分解を用いて $Ax = b$ の解を求めている。そして \verb|Sample2 ~ another solution ~| はこれを存在しているライブラリ関数を用いて解いたものである。両者の速度差はこのサイズの行列演算であればほぼないが、大規模サイズの行列であった場合は後者のほうが圧倒的に速い。後者も前者もほぼ直接 Fortran のライブラリである \href{http://www.netlib.org/lapack/}{LAPACK} $\footnote{\href{http://www.netlib.org/lapack/}{Linear\ Algebra\ PACKage}}$ を触っているため、計算途中で結果を取り出している前者のほうが効率が悪いためである。
+   　5行目までの内容は依存関係の解決である。 Sample1 において単純な行列の足し算を行っており、 Sample2 は QR 分解を用いて $Ax = b$ の解を求めている。そして Sample2 \sim another solution \sim はこれを存在しているライブラリ関数を用いて解いたものである。両者の速度差はこのサイズの行列演算であればほぼないが、大規模サイズの行列であった場合は後者のほうが圧倒的に速い。後者も前者もほぼ直接 Fortran のライブラリである \href{http://www.netlib.org/lapack/}{LAPACK} $\footnote{\href{http://www.netlib.org/lapack/}{Linear\ Algebra\ PACKage}}$ を触っているため、計算途中で結果を取り出している前者のほうが効率が悪いためである。
    　このコードからわかるように、このライブラリが返す値は必ずしも求めている・求まった解答の形を示していない。この理由は Intel MKL 内のソースコードが与えられたデータのメモリに解答を書き込む性質があるためである。この破壊的代入を行う性質は高速化に大きな貢献をしているとともに、高い副作用と難解さを招いている原因であると考えられるが、このライブラリを利用するためには Intel MKL のドキュメントを精読することや、内部の Fortran による実装を眺める他にない。
    
 ** Clojure.core.matrix
@@ -451,7 +452,7 @@
     - $Var(Y_t) = \gamma_0$ 
       　分散 (variance) は 時点 t に依存しない
     - $Cov(Y_t, Y_{t-j}) = \gamma_j$ 
-      　共分散 (covariance) \footnote{$\sigma_{Y_t Y_{t-j}}$と表すこともある} は 時点 t に依存しない
+      　共分散 (covariance) $$\footnote{$\sigma_{Y_t Y_{t-j}}$と表すこともある}$$ は 時点 t に依存しない
 
     　更に $E(Y_t) = \mu \land Cov(Y_t, Y_{t-j}) = \gamma_j$ のみである場合を特に``弱定常である''という。
 
@@ -468,7 +469,7 @@
     #+ATTR_LATEX: :width 16cm
     [[./hedibert.png]]
 
-    \newpage
+    #+LATEX: \newpage
 *** ADF 検定
     　ADF 検定 (Augumented Dickey-Fuller test) は DF 検定 (Dickey-Fuller test) の拡張である。
     　DF 検定とは $Y_t$ について自己回帰モデル AR(1) を作成し以下の条件を用いて仮説検定を行う手法である。
@@ -571,7 +572,6 @@
     \phi(3, 3) &= Cov(Y_t,Y_{t-3}|Y_{t-1},Y_{t-2})/(\sigma_{Y_t|Y_{t-1},Y_{t-2}}\sigma_{Y_{t-3}|Y_{t-1},Y_{y-2}})
     \end{align}
     　このように式がラグごとに異なるため、実装上計算には以下の行列式を用いた Durbin-Levinson recursion が用いられることが多い。尚以下の式における $\rho_s$ とは 自己相関 $\rho(s, t)$ を示している。
-    \begin{align}
     \begin{equation}
     \left(\begin{array}{ccccc}
     \rho(0) & \rho(1) & \rho(2) & \cdots & \rho(k-1) \\
@@ -593,7 +593,6 @@
     \vdots \\
     \rho(k) \end{array}\right)
     \end{equation}
-    \end{align}
     　偏自己相関 の値 $\phi(i, j)$ はARモデルに似た回帰式を得られる。以下の場合は $\phi(2,2)$ についての例である。
     \begin{align}
     \hat{y_t} &= \phi(2,1) \hat{y_{t-1}} + \phi(2,2)\hat{y_{t-2}} + \epsilon_t \\
@@ -613,7 +612,7 @@
     　グラフ A に着目すると、自己相関 の 1 次までの値が閾値を大きく超えていることがわかる。 自己相関 はラグｋの共分散であり、偏自己相関 と違って 自己相関 はラグ k-1 やそれ未満の値の影響を考慮していない。よってノイズの重みを示している MA(q) モデルの、 q の値が決まると考えることができ、この例で言うならば $q = 1$ であると考えることが出来る。
     　同様にグラフ B に着目すると、偏自己相関 の 2 次までの値が閾値を大きく超えていることがわかる。偏自己相関 で説明したように、偏自己相関 の値は AR モデルに非常に近い形で用いることができ、このことから AR(p) モデルの p の値が決まると考えることができることがわかり、 $p = 2$ がふさわしいことがわかるだろう。\footnote{詳しい証明について調べたものの、発見ができなかったため 引用を行ったサイト cite:stat510 に書かれた内容を元に記述した}
     　尚この p, q の値は観測者によって異なることがあるため、完全な正解があるわけではない。
-    　MA モデルにおける PACF 、 AR モデルにおける ACF のグラフは先細りの形を示している。これは上に示した 2 つのグラフは極めて理想的な MA / AR モデルを示していることを意味している。ARMA モデルの場合は ACF、PACF は共に先細りの形ではないため、この2つのグラフを見て係数 p, q を決定しなければならない。ところが AR モデルと MAモデルを同時に用いる場合、お互いの影響を打ち消し合ってしまう可能性があり、この係数決定は慎重に行わなければならない。ここで階差の次数 d も合わせた詳しい係数の決定基準と性質を以下に示す。cite:acf-pacf 尚ここで用いる``カットオフ''とは、グラフAの ACF グラフにおける 0 \verb|~| 2次の自己相関 から ３次の自己相関 への変化を意味する。
+    　MA モデルにおける PACF 、 AR モデルにおける ACF のグラフは先細りの形を示している。これは上に示した 2 つのグラフは極めて理想的な MA / AR モデルを示していることを意味している。ARMA モデルの場合は ACF、PACF は共に先細りの形ではないため、この2つのグラフを見て係数 p, q を決定しなければならない。ところが AR モデルと MAモデルを同時に用いる場合、お互いの影響を打ち消し合ってしまう可能性があり、この係数決定は慎重に行わなければならない。ここで階差の次数 d も合わせた詳しい係数の決定基準と性質を以下に示す。cite:acf-pacf 尚ここで用いる``カットオフ''とは、グラフAの ACF グラフにおける 0 \sim 2次の自己相関 から ３次の自己相関 への変化を意味する。
     1. その系列の 自己相関 が高い場合にはより高い階差を取る必要がある
     2. 1 次の 自己相関 が０以下の場合、或いは 自己相関 がすべて小さくパターンが見られない場合には、それ以上の階差を取る必要はない
        　１次の 自己相関 が -0.5 以下の値を取っているならば、階差を取りすぎている可能性がある
@@ -654,7 +653,7 @@
     \end{align}
     　尚、Lとは対数尤度である。AIC を最小化させることがモデルの適合度を上げることになる。
 ** SARIMA モデルについて
-   　本演習においては SARIMA (seasonal arima) モデルを作成することが目標であったが、現実のデータにおいて等間隔で周期を持ったものが少ないことが実装中に判明した。例えば、月単位のデータは１年周期($=12ヶ月周期$)で階差を取ることが出来るが、週単位のデータは１年周期($=52.1429$)で階差を取ることができない。週単位のデータを近似的に１年周期で階差を取る、つまり数年ごとに調整を入れる案も考え実験をしたものの、予測を行った際における調整した分の補完が困難を極めたため実装を中断した。
+   　本演習においては SARIMA (seasonal arima) モデルを作成することが目標であったが、現実のデータにおいて等間隔で周期を持ったものが少ないことが実装中に判明した。例えば、月単位のデータは１年周期(=12ヶ月周期)で階差を取ることが出来るが、週単位のデータは１年周期($=52.1429$)で階差を取ることができない。週単位のデータを近似的に１年周期で階差を取る、つまり数年ごとに調整を入れる案も考え実験をしたものの、予測を行った際における調整した分の補完が困難を極めたため実装を中断した。
    　しかしながら季節階差を取る、という発想自体は間違いではない。具体的にどのような式に基づいて SARIMA モデルが作成されているかを $SARIMA(1,1,1)(1,1,1)_12$ を用いて説明する。尚説明の簡略化のため定数項は無視している。\footnote{SARIMA(非季節部分のパラメータp, d, q)(季節部分のパラメータP, D, Q)_{季節階差のラグ}}
    \begin{align}
    (1-\phi_1 B)(1-\phi'_1B^{12})(1-B)(1-B^{12})Y_t = (1+\theta_1B)(1+\theta'_1B^{12})\epsilon_t
@@ -681,12 +680,16 @@
 *** Swagger UI
     　Swagger UI とは [[https://swagger.io/tools/][Swagger Tools]] と呼ばれる RESTful API を作成するための支援ツール群の一つであり、ブラウザから API の動作を確認することが出来る。本演習では Swagger Tools の一部である Swagger UI のみを用いているが、これは \textcircled{\scriptsize 1} 関数型言語の特性の一つとして、データの源泉からデータの変換が終了するまでをひと続きに記述することが容易であるということから、サーバとクライアントのやり取りを行う部分のみを独立して記述することが効率的でないと判断したため \textcircled{\scriptsize 2} Clojure の REPL\footnote{Read-Eval-Print Loop 書いたコードを評価することでそれを反映することが出来る} 上で開発を行っているためブラウザからAPIの確認を行う以上の高機能を求めていないため \textcircled{\scriptsize 3} Luminus に含まれるライブラリである [[https://github.com/metosin/compojure-api][Compojure-api]] のサンプルでは Swagger UI を API の確認以上の目的で使用していないためである。
     　以下に実際に実装で用いた画面例を示す。
-    #+CAPTION: Swagger UI の利用例
+    #+CAPTION: Swagger UI の利用例\textcircled{\scriptsize 1}
     #+ATTR_LATEX: :width 15cm
     [[./swagger-ui-view.PNG]]
     
     　default という部分に含まれる POST メソッドは上から順に\textcircled{\scriptsize 1}ユーザ登録\textcircled{\scriptsize 2}ログイン認証\textcircled{\scriptsize 3}ログアウト、を意味している。これらの項目をクリックすることで必要なクエリやリクエストボディを入力することが出来る欄を開くことが出来る。開発者はここにテストとしてクエリを書き込むことでコードの妥当性を確かめることが出来る。
-    
+
+        #+CAPTION: Swagger UI の利用例\textcircled{\scriptsize 1}
+        #+ATTR_LATEX: :width 15cm
+        [[./swagger-ui-view2.PNG]]
+
 ** ClojureScript によるフロントエンド開発
    　フロントエンド開発に関しては Luminus Framework ある機能に加え、 [[https://reactjs.org/][React.js]] の ClojureScript ラッパーである [[https://reagent-project.github.io/][Reagent]] 、React に特化された CSS フレームワークである [[http://www.material-ui.com/#/][Material UI]] を用いて作成した。
 *** 基本的な開発
@@ -694,7 +697,7 @@
 *** Reagent
     　Reagent は React.js の ClojureScript ラッパーである。React.js とは UI を作成するための JavaScript ライブラリであり、ボタンやスライダーなどのコンポーネントを簡単に作成することが出来る。Reagent では HTML との連携を非常に簡単に行えるようになっており非常に見やすいシンタックスを提供する。以下に実際に実装に用いた例を紹介する。
 
-   \captionof{listing}{login-form関数}
+    #+LATEX: \captionof{listing}{login-form関数}
     #+BEGIN_SRC clojure
 (defn login-form []
   (let [fields (atom {}) ;; 局所変数
@@ -723,6 +726,11 @@
     #+END_SRC
 
     　一見すると非常に入り組んだ構造に見えるかも知れないが、それは HTML を記述している中に JavaScript を直接埋め込んでいるような記述をしているためである。しかし HTML と JavaScript 部をまとめて記述することで どこに何があるのか という疑問を持たずに済む。また細かいパーツに関数として分割することが出来るため \footnote{正確には関数が評価されるタイミングを考慮する必要がある} 上例のように ログインフォームのみを独立して記述をすれば全体として大きな構造が必要となっても小さな構造体に問題を分割することが出来る。
+    　以下がこのソースコードを中心にして作成された login-form である。
+    #+CAPTION: login-form
+    #+ATTR_LATEX: :width 15cm
+    [[./login-view.PNG]]
+
 **** COMMENT ログインウィンドウの画像
 
 * MLLK の開発
@@ -737,28 +745,57 @@
 *** Postgresql
     　SQL サーバとしては [[https://www.postgresql.org/][Postgresql]] を採用した。
     - USERS
-      　ユーザに関するデータを保存している。name はユーザの名前、pass は暗号化済みのパスワード、last_login は最後のログイン時間、 api_key は ユーザが持つ Quandl のAPIキーである。admin は管理者権限で本演習ではすべてのユーザが偽にセットされている。id は主キーであり、これは他のテーブルにも共通している。
+      　ユーザに関するデータを保存している。name はユーザの名前、pass は暗号化済みのパスワード、last\_login は最後のログイン時間、 api\_key は ユーザが持つ Quandl のAPIキーである。admin は管理者権限で本演習ではすべてのユーザが偽にセットされている。id は主キーであり、これは他のテーブルにも共通している。
     - LOG
       　ユーザが行った情報をまとめるためのテーブルであるが、今回は実際にテーブルの作成のみで実際にテーブルを動かすことはできなかった。query と success はログインなどのクエリと対応付けられた 番号 が、 date にはそのクエリが送られた日時が当てはまる。IP にはユーザがアクセスした端末の IP アドレスが当てはまる。
     - TSDATA 
       　例えば ``NIKKEI/INDEX'' のような時系列データの名称を保存するためのテーブルである。name はその時系列データの名前である。freq はデータの時間的頻度を指定しているが、出来る限り等間隔な時間間隔のデータで、ARIMA モデルの規格化などもあり今回はすべて週ごとを示す ``weekly'' がセットされている。
-    - TSDATA_CHILDREN
-      　``close-price'' のような TSDATA テーブル で扱うべきではない細かいデータ区分を保存するためのテーブルである。name はその区分を示す名前である。ここにある name と parent_name を用いて OpenTSDB の Metric TSData に保存された時系列データへのアクセスを行う。\footnote{TSDATAの Metric 名は TSDATAテーブルの name , タグの value が TSDATA_CHILDREN テーブルの name に対応している。}
-    - ALLOWED_DATA
+    - TSDATA\_CHILDREN
+      　``close-price'' のような TSDATA テーブル で扱うべきではない細かいデータ区分を保存するためのテーブルである。name はその区分を示す名前である。ここにある name と parent\_name を用いて OpenTSDB の Metric TSData に保存された時系列データへのアクセスを行う。\footnote{TSDATAの Metric 名は TSDATAテーブルの name , タグの value が TSDATA\_CHILDREN テーブルの name に対応している。}
+    - ALLOWED\_DATA
       　ユーザごとに扱えるデータに制限をかけるためのテーブルである。これは Quandl がAPIキーを登録せずともある上限まではデータを入手できるという機能に即するために作成した。
     - EXPERIENCE
-      　ユーザの実験データを保存するが、本演習では機能の実装が完了できなかったためテーブルのみの実装になった。 date は実行日時、data_key は OpenTSDB の Metric EXData にある タグの value の値である。 param には行った機械学習の種類やパラメータが含まれた JSON が当てはまる。
+      　ユーザの実験データを保存するが、本演習では機能の実装が完了できなかったためテーブルのみの実装になった。 date は実行日時、data\_key は OpenTSDB の Metric EXData にある タグの value の値である。 param には行った機械学習の種類やパラメータが含まれた JSON が当てはまる。
 *** OpenTSDB
-    　時系列データに関しては [[#ARIMA モデルによる時系列分析]] ARIMA モデルによる時系列分析 にあるとおり、 OpenTSDB を用いた。
+    　時系列データに関しては [[*ARIMA モデルによる時系列分析]] ARIMA モデルによる時系列分析 にあるとおり、 OpenTSDB を用いた。
     - TSData
       　実際の時系列データを保存するためのデータベースである。本演習ではデータの入手元は [[https://www.quandl.com/][Quandl.com]] のみであった。Metrics には ``NIKKEI/INDEX'' のような 時系列データの名称が当てはまり、タグの key は本演習では混乱を避けるために ``type'' に統一されており、そしてタグの value は ``close-price'' などの時系列データ内のカテゴリが当てはめられている。
     - EXData
-      　本演習では実装が終わらず実際に稼働させることはできなかった。Metrics には Postgresql の USERS テーブルの name が当てはまり、タグの key には ``key'' が、 value には　Postgresql の EXPERIENCE の data_key が当てはまる。
+      　本演習では実装が終わらず実際に稼働させることはできなかった。Metrics には Postgresql の USERS テーブルの name が当てはまり、タグの key には ``key'' が、 value には　Postgresql の EXPERIENCE の data\_key が当てはまる。
 
 ** バックエンド開発
-   　バックエンドは [[*Clojure/ClojureScript を用いた Web 開発]] にあるように、 Luminus Framework を中心に開発を行った。作成した ARIMA モデル やそれに関するライブラリや OpenTSDB を用いるための簡易的なAPI などは別個依存関係に加えた。
+   　バックエンドは [[*Clojure/ClojureScript を用いた Web 開発]] にあるように、 Luminus Framework を中心に開発を行った。作成した ARIMA モデル やそれに関するライブラリや OpenTSDB を用いるための簡易的なAPI などは別個依存関係に加えた。フロントエンドも含めた\footnote{バックエンドとフロントエンドは同一のプロジェクトとして作成されている}具体的な依存関係は 開発を行っている git @ MokkeMeguru/MLLK にある [[https://github.com/MokkeMeguru/MLLK/blob/master/project.clj][project.clj]] にある。
 ** フロントエンド開発
-   　
+   　フロントエンドの開発もバックエンド同様 Luminus を用いて行った。以下に実際の画面をユーザが利用する場面を想定して説明する。
+   　まずユーザはホームとなるページにアクセスし、ユーザ登録画面へと遷移する。
+   #+CAPTION: ユーザ登録画面
+   #+ATTR_LATEX: :width 8cm
+   [[./register.PNG]]
+   
+   　或いは既にユーザ登録が済んでいるユーザは名前とパスワードを入力しログインすることが出来る。この画面は既に [[ClojureScript によるフロントエンド開発]] ClojureScript によるフロントエンド開発 で紹介済みであるため省略する。
+   　次にユーザは実際に ARIMA モデルを (或いは開発が終了した場合にはそれらの手法を) 実行するためにこれらを行う画面へ遷移する。
+   #+CAPTION: 統計・機械学習手法選択画面
+   #+ATTR_LATEX: :width 8cm
+   [[./ml-view.PNG]]
+
+   　ここで機械学習手法を青枠右側にあるメニューアイコンから呼び出し選択を行う。次に青枠左側にあるメニューアイコンを選択すると以下のようになる。
+
+   #+CAPTION: パラメータ設定画面
+   #+ATTR_LATEX: :width 8cm   
+   [[./settings-view.PNG]]
+
+   　パラメータを選択する画面である。上にある``DATA''などと書かれているボタンはそれぞれのパラメータを入力する画面へ遷移する （現在は``ARIMA''ボタンを選択した状態）。はじめに大まかな説明がつき、その下に詳しい説明へのリンク (正確な理論が書き上がり次第組み込まれる) 、そしてパラメータの入力欄が続いていく。ユーザはこれらの必要な項目の入力が済ませ実行ボタンである``run''ボタンを押す。
+
+   #+CAPTION: パラメータ入力欄と実行ボタン、説明ページへのリンク
+   #+ATTR_LATEX: :widht 8cm
+   [[./settings-view2.PNG]]
+   
+   　実行することでユーザは以下のような画面を得る。
+   #+CAPTION: 実行結果画面
+   #+ATTR_LATEX: :width 8cm
+   [[./arima-view.PNG]]
+
+   　尚 2018年1月18日時点 で出力可能な内容を印刷した pdf を [[付録]] 付録に追記する。
 * 発展 : ARIMA 推定 と Random Forest による予測
 ** 概要
 ** 実験方法
@@ -781,7 +818,7 @@
     - $Var(E_t) < infinity$ 
       　分散は発散しない
     - $Cor(E_t, E_s) = 0$ 
-      　相関 (correlation) \footnote{$r_{e_t,e_s}$ と表されることもある} 関係はない 
+      　相関 (correlation) $$\footnote{$r_{e_t, e_s}$ と表されることもある}$$ 関係はない 
     　ホワイトノイズと独立同時分布の関係は、ホワイトノイズには必ずしも独立性があるわけではないという意味で、独立同時分布のほうがより``強固''であると言える。　
 
 *** 標準誤差
@@ -789,7 +826,7 @@
     \hat{\pi}/ se(\hat{\pi})
     \end{align}
     　この式における $se(\hat{\pi})$ とは $\hat{\pi}$ についての標準誤差を示している。ここで用いる標準誤差とは最小二乗法で求められる解ベクトル $\hat{\beta}$ の要素 $\hat{\beta_i} = \hat{\pi}$ についての誤差、最小二乗推定量 $\hat{\beta_i}$ に関する標準誤差である。これは回帰の標準誤差とは異なることに注意しなければならない。以下に回帰に関する標準誤差を示し、その後最小二乗推定量 $\hat{\beta_i}$ に関する標準誤差を示す。
-    　例として以下の式を真のモデルとする。但し $u$ は誤差項であり、平均 $0$ 分散 $\sigma^2$ である独立同時分布に従う要素を持つベクトルであるとする。\footnote{X, \betaに定数項は含まれているものとする}
+    　例として以下の式を真のモデルとする。但し $u$ は誤差項であり、平均 $0$ 分散 $\sigma^2$ である独立同時分布に従う要素を持つベクトルであるとする。\footnote{X, $\beta$に定数項は含まれているものとする}
     \begin{align}
     \bm{y} &= \bm{X} \hat{\beta} + \bm{u} \nonumber \\
            &\ where \ \bm{y},\  \bm{u}\ is \ n * 1 \ vector  \nonumber \\
@@ -812,13 +849,19 @@
     \begin{align}
     s^2  = SSR / (n - p)
     \end{align}
-    　となる。さらにこれを用いることで、最小二乗推定量 \hat{\beta_i} に関する標準誤差は、
+    　となる。さらにこれを用いることで、最小二乗推定量 $\hat{\beta_i}$ に関する標準誤差は、
     \begin{align}
     s.e.(\hat{\beta_i}) &= \sqrt{s^2/S_{XX}^j} \nonumber \\
     &where\ S_{xx}^j = ((X'X)^{-1})_{jj}
     \end{align}
     　となる。尚 $S_{xx}^j$ とは $x_j$ から他の変数の影響を取り除いた $x_j$ に固有の平方和である。
 
-\printbibliography
+    
+** 出力結果
+   #+LATEX: \includepdf[lastpage=3]{./result.pdf}
+
+#+LATEX: \printbibliography
 ** COMMENT トレンド定常
    
+
+

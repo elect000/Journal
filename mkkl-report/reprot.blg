@@ -1,5 +1,0 @@
-[0] Config.pm:302> INFO - This is Biber 2.10
-[2] Config.pm:305> INFO - Logfile is 'reprot.blg'
-[25] biber:313> INFO - === 木  2月  1, 2018, 23:51:24
-[84] Utils.pm:209> ERROR - Cannot find control file 'reprot.bcf'! - did you pass the "backend=biber" option to BibLaTeX?
-[85] Biber.pm:114> INFO - ERRORS: 1

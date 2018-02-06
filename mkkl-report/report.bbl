@@ -19,6 +19,47 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
+    \entry{log-likelihood}{misc}{}
+      \list{institution}{1}{%
+        {Queen Mary : University of London}%
+      }
+      \field{sortinit}{6}
+      \field{sortinithash}{02bbed3ed82f61ae046619460488516d}
+      \field{labeltitlesource}{title}
+      \field{title}{6.3.3 Parameter Estimation}
+      \verb{urlraw}
+      \verb http://www.maths.qmul.ac.uk/~bb/TimeSeries/TS_Chapter6_3_3.pdf
+      \endverb
+      \verb{url}
+      \verb http://www.maths.qmul.ac.uk/~bb/TimeSeries/TS_Chapter6_3_3.pdf
+      \endverb
+    \endentry
+    \entry{nelder-mead}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=f33510f68f461a8bfc76644a4b7dc6a4}{%
+           family={Cantarella},
+           familyi={C\bibinitperiod},
+           given={Jason},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{f33510f68f461a8bfc76644a4b7dc6a4}
+      \strng{fullhash}{f33510f68f461a8bfc76644a4b7dc6a4}
+      \strng{bibnamehash}{f33510f68f461a8bfc76644a4b7dc6a4}
+      \strng{authorbibnamehash}{f33510f68f461a8bfc76644a4b7dc6a4}
+      \strng{authornamehash}{f33510f68f461a8bfc76644a4b7dc6a4}
+      \strng{authorfullhash}{f33510f68f461a8bfc76644a4b7dc6a4}
+      \field{sortinit}{C}
+      \field{sortinithash}{095692fd22cc3c74d7fe223d02314dbd}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Nelder-Mead Method}
+      \verb{urlraw}
+      \verb http://www.jasoncantarella.com/downloads/NelderMeadProof.pdf
+      \endverb
+      \verb{url}
+      \verb http://www.jasoncantarella.com/downloads/NelderMeadProof.pdf
+      \endverb
+    \endentry
     \entry{graphite-oreilly}{book}{}
       \name{author}{1}{}{%
         {{hash=30e1a7ee5e045a6742eb249886efa028}{%
@@ -44,6 +85,27 @@
       \field{title}{Monitoring with Graphite}
       \field{volume}{290}
       \field{year}{2017}
+    \endentry
+    \entry{data-science}{book}{}
+      \name{author}{1}{}{%
+        {{hash=0aa9a6f7a47e9fb793e5bc27d312bf1c}{%
+           family={Garner},
+           familyi={G\bibinitperiod},
+           given={Henry},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{0aa9a6f7a47e9fb793e5bc27d312bf1c}
+      \strng{fullhash}{0aa9a6f7a47e9fb793e5bc27d312bf1c}
+      \strng{bibnamehash}{0aa9a6f7a47e9fb793e5bc27d312bf1c}
+      \strng{authorbibnamehash}{0aa9a6f7a47e9fb793e5bc27d312bf1c}
+      \strng{authornamehash}{0aa9a6f7a47e9fb793e5bc27d312bf1c}
+      \strng{authorfullhash}{0aa9a6f7a47e9fb793e5bc27d312bf1c}
+      \field{sortinit}{G}
+      \field{sortinithash}{618d986594b7198ba52cf8b00d348f3f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Packet Publishing}
+      \field{title}{Clojure for Data Science}
     \endentry
     \entry{hedibert}{misc}{}
       \name{author}{1}{}{%
@@ -166,6 +228,35 @@
       \field{labeltitlesource}{title}
       \field{title}{Clojure High Performance Programing}
     \endentry
+    \entry{acf-pacf}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=7a83ef281b6fce63fd50696cdaa9ff8b}{%
+           family={Nau},
+           familyi={N\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Duke University}%
+      }
+      \strng{namehash}{7a83ef281b6fce63fd50696cdaa9ff8b}
+      \strng{fullhash}{7a83ef281b6fce63fd50696cdaa9ff8b}
+      \strng{bibnamehash}{7a83ef281b6fce63fd50696cdaa9ff8b}
+      \strng{authorbibnamehash}{7a83ef281b6fce63fd50696cdaa9ff8b}
+      \strng{authornamehash}{7a83ef281b6fce63fd50696cdaa9ff8b}
+      \strng{authorfullhash}{7a83ef281b6fce63fd50696cdaa9ff8b}
+      \field{sortinit}{N}
+      \field{sortinithash}{1163c28585427c673ad5a010cbf82f52}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Identifying the numbers of AR or MA terms in an ARIMA model}
+      \verb{urlraw}
+      \verb http://people.duke.edu/~rnau/411home.htm
+      \endverb
+      \verb{url}
+      \verb http://people.duke.edu/~rnau/411home.htm
+      \endverb
+    \endentry
     \entry{otext}{book}{}
       \name{author}{1}{}{%
         {{hash=e2dc32e07724960d31381de104b86919}{%
@@ -214,6 +305,45 @@
       \field{subtitle}{How to Accelerate Graphics and Computaion}
       \field{title}{OpenCL in Action}
       \field{year}{2011}
+    \endentry
+    \entry{luminus}{book}{}
+      \name{author}{1}{}{%
+        {{hash=877880ad78210d0b0e44c126b4659972}{%
+           family={Sotnikov},
+           familyi={S\bibinitperiod},
+           given={Dmitri},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Pragmatic Bookshelf}%
+      }
+      \strng{namehash}{877880ad78210d0b0e44c126b4659972}
+      \strng{fullhash}{877880ad78210d0b0e44c126b4659972}
+      \strng{bibnamehash}{877880ad78210d0b0e44c126b4659972}
+      \strng{authorbibnamehash}{877880ad78210d0b0e44c126b4659972}
+      \strng{authornamehash}{877880ad78210d0b0e44c126b4659972}
+      \strng{authorfullhash}{877880ad78210d0b0e44c126b4659972}
+      \field{sortinit}{S}
+      \field{sortinithash}{3c1547c63380458f8ca90e40ed14b83e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{subtitle}{Build Bulletproof Web Apps with Less Code}
+      \field{title}{Web Development with Clojure, Second Edition}
+    \endentry
+    \entry{stat510}{misc}{}
+      \list{institution}{1}{%
+        {Penn State Eberly College of Science}%
+      }
+      \field{sortinit}{S}
+      \field{sortinithash}{3c1547c63380458f8ca90e40ed14b83e}
+      \field{labeltitlesource}{title}
+      \field{title}{STAT 510}
+      \verb{urlraw}
+      \verb https://onlinecourses.science.psu.edu/stat510/node/33
+      \endverb
+      \verb{url}
+      \verb https://onlinecourses.science.psu.edu/stat510/node/33
+      \endverb
     \endentry
     \entry{hbase-reference}{manual}{}
       \list{organization}{1}{%
