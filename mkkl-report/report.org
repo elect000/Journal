@@ -252,7 +252,7 @@
     #+ATTR_LATEX: :environment tabular :align |c|l|
     |------------------+------------------------------------------------------------|
     | 前提条件         | \cdot http: //localhost:4242 に対して OpenTSDB が開いている |
-    | クエリ内容       | 1年前から現在までの Metric nikkei-index における           |
+    | クエリ内容       | 1年前から現在までの Metric nikkei-index における          |
     |                  | 　タグについてkeyが ``type'' 、valueが ``close-price''     |
     |                  | 　であるデータを要求する                                   |
     |------------------+------------------------------------------------------------|
@@ -276,7 +276,7 @@
     #+ATTR_LATEX: :environment tabular :align |c|l|
     |------------+-------------------------------------------------------------|
     | 前提条件   | \cdot http: //localhost:4242 に対して OpenTSDB が開いている |
-    | クエリ内容 | \cdot Metric ``nikkei-index'' の、                          |
+    | クエリ内容 | \cdot Metric ``nikkei-index'' の、                         |
     |            | 　タグが、key は``type''、value は``close-price'' である    |
     |            | 　UnixTime が 1517055464 である時間に、                     |
     |            | 　12000 という値を保存する                                  |
@@ -418,10 +418,10 @@
 ** BackShift記法
    　BackShift記法とは、記号 ``B'' という演算子を用いた時系列データを表現するための手法であり、以下のような使われ方をする。cite:otext
    \begin{align}
-   (1-B)Y_t &=& 1  Y_t - B  Y_t = Y_t - Y_{t-1} \\
-   (1-B)^2 Y_t &=& (1-B)  (1-B) Y_t \\
-   (1-B^k) Y_t &=& Y_t - B^k  Y_t \nonumber \\
-   &=& Y_t - Y_{t-k}
+   (1-B)Y_t &= 1  Y_t - B  Y_t = Y_t - Y_{t-1} \\
+   (1-B)^2 Y_t &= (1-B)  (1-B) Y_t \\
+   (1-B^k) Y_t &= Y_t - B^k  Y_t \nonumber \\
+   &= Y_t - Y_{t-k}
    \end{align}
    　但し $Y_t$ は時系列データを表しており、また今後の説明のため、tが大きいほど最近のデータであるものとする。
    　式(1) は一次階差を表しており、後述する AR モデルでは AR(1) の場合に用いられる。式(2) は二次階差を表しており、同様に AR(2) の場合に用いられる。式(3) はある区間を開けて階差を取っており、これは季節階差を取る際等に用いられる。季節階差という考え方から一旦離れてわかりやすい例を挙げるとすれば、時系列データが月単位のデータであった場合、昨年と今年の差分を取る場合には、 $(1-B^{12})Y_t$ という形をとることになる。
@@ -471,8 +471,8 @@
     \newpage
 *** ADF 検定
     　ADF 検定 (Augumented Dickey-Fuller test) は DF 検定 (Dickey-Fuller test) の拡張である。
-    　DF 検定とは $y_t$ について自己回帰モデル AR(1) を作成し以下の条件を用いて仮説検定を行う手法である。
-    　AR(1)モデル $y_t = \theta y_{t-1} + \epsilon_t \  where \ \epsilon_t \sim iid(0, \sigma^2)$ とする。（AR モデルそのものについては [[*AR モデル]] AR モデル で解説を行う）
+    　DF 検定とは $Y_t$ について自己回帰モデル AR(1) を作成し以下の条件を用いて仮説検定を行う手法である。
+    　AR(1)モデル $Y_t = \theta Y_{t-1} + \epsilon_t \  where \ \epsilon_t \sim iid(0, \sigma^2)$ とする。（AR モデルそのものについては [[*AR モデル]] AR モデル で解説を行う）
     　単位根を持っていることを帰無仮説とし、定常であることを対立仮説であるとする。
     　つまり、帰無仮説 $H_0$ と対立仮説 $H_A$ は以下のように定義できる
     \begin{align}
@@ -481,7 +481,7 @@
     \end{align}
     　ここからモデルを変形し、以下の式を立てる。
     \begin{align}
-    \Delta y_t = (\theta - 1) y_{t-1} + \epsilon_t   
+    \Delta Y_t = (\theta - 1) y_{t-1} + \epsilon_t   
     \end{align}
     　上式において、$\pi = (\theta - 1)$ と置換した場合、帰無仮説と対立仮説は以下のように更新される。
     \begin{align}
@@ -497,11 +497,11 @@
     　また上の場合において、元データの一次階差と取っていることが明らかであるが、この検定で定常であると認められた場合、このデータは １次の単位根 があるという。同様に d次の単位根がある とは、d - 1 次までの単位根検定においてすべて 非定常である と判断され、 d 次において初めて 定常である と判断されたことを示している。
     　DF 検定が AR(1) モデルに対する検定であることにたいして、ADF 検定は AR(n) モデルにまで対象を拡大したものであり、一般式は難解であるため省くが、例えば AR(3) モデルは以下のように示すことが出来る。
     \begin{align}
-    y_t &= \theta_1 y_{t-1} + \theta_2 y_{t-2} + \theta_3  y_{t-3} + \epsilon_t \ where \ \epsilon_t \sim iid(0,\sigma^2) \\
-    y_t - y_{t-1} &= (\theta_1 - 1) y_{t-1} + \theta_2  y_{t-2} + \theta_3  y_{t-3} + \epsilon_t \\
-    \Delta y_t &= (\theta_1 + \theta_2 + \theta_3 - 1)  y_{t-1} \nonumber \\
- &+ (\theta_2 + \theta_3) (y_{t-2} - y_{t-1}) + \theta_3 (y_{t-3} - y_{t-2}) + \epsilon_t \nonumber \\
- &= (\theta_1 + \theta_2 + \theta_3 - 1) y_{t-1} + (\theta_2 + \theta_3) * \Delta y_{t-1} + \theta_3 \Delta y_{t-2} + \epsilon_t
+    Y_t &= \theta_1 Y_{t-1} + \theta_2 Y_{t-2} + \theta_3  Y_{t-3} + \epsilon_t \ where \ \epsilon_t \sim iid(0,\sigma^2) \\
+    Y_t - Y_{t-1} &= (\theta_1 - 1) Y_{t-1} + \theta_2  Y_{t-2} + \theta_3  Y_{t-3} + \epsilon_t \\
+    \Delta Y_t &= (\theta_1 + \theta_2 + \theta_3 - 1)  Y_{t-1} \nonumber \\
+ &+ (\theta_2 + \theta_3) (Y_{t-2} - Y_{t-1}) + \theta_3 (Y_{t-3} - Y_{t-2}) + \epsilon_t \nonumber \\
+ &= (\theta_1 + \theta_2 + \theta_3 - 1) Y_{t-1} + (\theta_2 + \theta_3) * \Delta Y_{t-1} + \theta_3 \Delta Y_{t-2} + \epsilon_t
     \end{align}
     　これより $\pi = (\theta_1 + \theta_2 + \theta_3 - 1)$ とおいて DF 検定と同様に t 検定を行う。
     　尚この検定にはいくつかの追加要素として、定常過程にある時系列データの平均値を考えるパターンや、時系列データに傾きがある場合を考慮したパターンがある。これらは人為的にデータを確認することで決定するが、 R 言語や Python などの ADF 検定ではすべてのパターンを一度に実行している場合がある。これは ADF 検定そのものは計算コストが低いため、すべてのパターンを網羅しても問題がないためである。
@@ -680,7 +680,12 @@
     　Luminus Framework とは Clojure の Web 開発に関するライブラリを統合したフレームワークである。ライブラリへのアクセスが極めて単純であり、それぞれのライブラリを好きなライブラリへ置換することも容易であるため、極めて自由度の高いフレームワークとなっている。そういった意味では Luminus はフレームワークと言うよりも推奨ライブラリのライブラリと言った方が近いのかも知れない。また様々なデータベースへのアクセスもサポート \footnote{OpenTSDBへの接続に関するサポートはなかったため、この部分の一部を自作する必要があった} されており、本演習ではSQLとして PostgreSQL を用いた。また Luminus には教科書とも言える書籍 cite:luminus があり、これをチュートリアルとして活用することが出来る。
 *** Swagger UI
     　Swagger UI とは [[https://swagger.io/tools/][Swagger Tools]] と呼ばれる RESTful API を作成するための支援ツール群の一つであり、ブラウザから API の動作を確認することが出来る。本演習では Swagger Tools の一部である Swagger UI のみを用いているが、これは \textcircled{\scriptsize 1} 関数型言語の特性の一つとして、データの源泉からデータの変換が終了するまでをひと続きに記述することが容易であるということから、サーバとクライアントのやり取りを行う部分のみを独立して記述することが効率的でないと判断したため \textcircled{\scriptsize 2} Clojure の REPL\footnote{Read-Eval-Print Loop 書いたコードを評価することでそれを反映することが出来る} 上で開発を行っているためブラウザからAPIの確認を行う以上の高機能を求めていないため \textcircled{\scriptsize 3} Luminus に含まれるライブラリである [[https://github.com/metosin/compojure-api][Compojure-api]] のサンプルでは Swagger UI を API の確認以上の目的で使用していないためである。
-*** COMMENT  Swagger UI の利用例 image
+    　以下に実際に実装で用いた画面例を示す。
+    #+CAPTION: Swagger UI の利用例
+    #+ATTR_LATEX: :width 15cm
+    [[./swagger-ui-view.PNG]]
+    
+    　default という部分に含まれる POST メソッドは上から順に\textcircled{\scriptsize 1}ユーザ登録\textcircled{\scriptsize 2}ログイン認証\textcircled{\scriptsize 3}ログアウト、を意味している。これらの項目をクリックすることで必要なクエリやリクエストボディを入力することが出来る欄を開くことが出来る。開発者はここにテストとしてクエリを書き込むことでコードの妥当性を確かめることが出来る。
     
 ** ClojureScript によるフロントエンド開発
    　フロントエンド開発に関しては Luminus Framework ある機能に加え、 [[https://reactjs.org/][React.js]] の ClojureScript ラッパーである [[https://reagent-project.github.io/][Reagent]] 、React に特化された CSS フレームワークである [[http://www.material-ui.com/#/][Material UI]] を用いて作成した。
@@ -725,11 +730,35 @@
 ** ARIMA モデルライブラリ
    　 [[*ARIMA モデルによる時系列分析]] ARIMA モデルによる時系列分析 に従ってそれぞれの関数を実装した。
 ** データベース設計
-   　以下の図に従ってデータベースを作成した。
+   　以下の図に従ってデータベースを作成した。以降にそれぞれのテーブルについて説明する。
+   #+CAPTION: データベースの設計図
+   #+ATTR_LATEX: :width 15cm
+   [[./fool-diagram.png]]
+*** Postgresql
+    　SQL サーバとしては [[https://www.postgresql.org/][Postgresql]] を採用した。
+    - USERS
+      　ユーザに関するデータを保存している。name はユーザの名前、pass は暗号化済みのパスワード、last_login は最後のログイン時間、 api_key は ユーザが持つ Quandl のAPIキーである。admin は管理者権限で本演習ではすべてのユーザが偽にセットされている。id は主キーであり、これは他のテーブルにも共通している。
+    - LOG
+      　ユーザが行った情報をまとめるためのテーブルであるが、今回は実際にテーブルの作成のみで実際にテーブルを動かすことはできなかった。query と success はログインなどのクエリと対応付けられた 番号 が、 date にはそのクエリが送られた日時が当てはまる。IP にはユーザがアクセスした端末の IP アドレスが当てはまる。
+    - TSDATA 
+      　例えば ``NIKKEI/INDEX'' のような時系列データの名称を保存するためのテーブルである。name はその時系列データの名前である。freq はデータの時間的頻度を指定しているが、出来る限り等間隔な時間間隔のデータで、ARIMA モデルの規格化などもあり今回はすべて週ごとを示す ``weekly'' がセットされている。
+    - TSDATA_CHILDREN
+      　``close-price'' のような TSDATA テーブル で扱うべきではない細かいデータ区分を保存するためのテーブルである。name はその区分を示す名前である。ここにある name と parent_name を用いて OpenTSDB の Metric TSData に保存された時系列データへのアクセスを行う。\footnote{TSDATAの Metric 名は TSDATAテーブルの name , タグの value が TSDATA_CHILDREN テーブルの name に対応している。}
+    - ALLOWED_DATA
+      　ユーザごとに扱えるデータに制限をかけるためのテーブルである。これは Quandl がAPIキーを登録せずともある上限まではデータを入手できるという機能に即するために作成した。
+    - EXPERIENCE
+      　ユーザの実験データを保存するが、本演習では機能の実装が完了できなかったためテーブルのみの実装になった。 date は実行日時、data_key は OpenTSDB の Metric EXData にある タグの value の値である。 param には行った機械学習の種類やパラメータが含まれた JSON が当てはまる。
+*** OpenTSDB
+    　時系列データに関しては [[#ARIMA モデルによる時系列分析]] ARIMA モデルによる時系列分析 にあるとおり、 OpenTSDB を用いた。
+    - TSData
+      　実際の時系列データを保存するためのデータベースである。本演習ではデータの入手元は [[https://www.quandl.com/][Quandl.com]] のみであった。Metrics には ``NIKKEI/INDEX'' のような 時系列データの名称が当てはまり、タグの key は本演習では混乱を避けるために ``type'' に統一されており、そしてタグの value は ``close-price'' などの時系列データ内のカテゴリが当てはめられている。
+    - EXData
+      　本演習では実装が終わらず実際に稼働させることはできなかった。Metrics には Postgresql の USERS テーブルの name が当てはまり、タグの key には ``key'' が、 value には　Postgresql の EXPERIENCE の data_key が当てはまる。
+
 ** バックエンド開発
-   　あ
+   　バックエンドは [[*Clojure/ClojureScript を用いた Web 開発]] にあるように、 Luminus Framework を中心に開発を行った。作成した ARIMA モデル やそれに関するライブラリや OpenTSDB を用いるための簡易的なAPI などは別個依存関係に加えた。
 ** フロントエンド開発
-   　あ
+   　
 * 発展 : ARIMA 推定 と Random Forest による予測
 ** 概要
 ** 実験方法
@@ -742,9 +771,9 @@
    　このレポートにおける数式表現といくつかの基本的な用語の定義を以下に例と共に示す。
 *** 独立同時分布と変数の補足
     \begin{align}
-    y_t = \beta t + \epsilon_t \ where \ \epsilon_t \sim iid(0, \sigma^2)
+    Y_t = \beta t + \epsilon_t \ where \ \epsilon_t \sim iid(0, \sigma^2)
     \end{align}
-    　この式における $where$ とは左式における変数の補足を行うことを意味しており、この場合で $\epsilon_t$ の意味を補足している。$iid(\mu, \sigma^2)$ とは 独立同時分布 (independent and identically distributed) を意味しており、この確率変数は他の確率変数と同一の分布を持ち、且つそれぞれが独立していることを示している。また独立同時分布において共分散、相関係数は 0 である。本レポートにおいてこの式は、平均 $\mu$ 、 分散 $\sigma^2$ に従う \footnote{$a \sim b$ とは、 a は b という分布に従う という意味である} 独立同時分布という意味を持っている。
+    　この式における $where$ とは左式における変数の補足を行うことを意味しており、この場合で $\epsilon_t$ の意味を補足している。$iid(\mu, \sigma^2)$ とは 独立同時分布 (independent and identically distributed) を意味しており、この確率変数は他の確率変数と同一の分布を持ち、且つそれぞれが独立していることを示している。独立同時分布において共分散、相関係数は 0 である。本レポートにおいてこの式は、平均 $\mu$ 、 分散 $\sigma^2$ に従う \footnote{$a \sim b$ とは、 a は b という分布に従う という意味である} 独立同時分布という意味を持っている。
     　これと同様の概念にホワイトノイズというものがあるため、混乱を避けるためこちらも補足を行う。
     　ホワイトノイズ $\epsilon_t \sim W.N(0, \sigma^2)$ は以下の性質を持っている。
     - $E(E_t) = 0$ 
@@ -755,18 +784,41 @@
       　相関 (correlation) \footnote{$r_{e_t,e_s}$ と表されることもある} 関係はない 
     　ホワイトノイズと独立同時分布の関係は、ホワイトノイズには必ずしも独立性があるわけではないという意味で、独立同時分布のほうがより``強固''であると言える。　
 
-*** 標準誤差と標準偏差
+*** 標準誤差
     \begin{align}
     \hat{\pi}/ se(\hat{\pi})
     \end{align}
-    　この式における $se(\hat{\pi})$ とは $\hat{\pi}$ の標準誤差を示している。標準誤差とは母集団からある標本を選んだ際にどの程度のばらつきが生じるかを示す指標であり、母集団の要素数が十分多いとき 母集団 の標準偏差 $\sigma$ と 標本 の標準偏差 $\hat{s}$ 、標本数 $n$ を用いて
+    　この式における $se(\hat{\pi})$ とは $\hat{\pi}$ についての標準誤差を示している。ここで用いる標準誤差とは最小二乗法で求められる解ベクトル $\hat{\beta}$ の要素 $\hat{\beta_i} = \hat{\pi}$ についての誤差、最小二乗推定量 $\hat{\beta_i}$ に関する標準誤差である。これは回帰の標準誤差とは異なることに注意しなければならない。以下に回帰に関する標準誤差を示し、その後最小二乗推定量 $\hat{\beta_i}$ に関する標準誤差を示す。
+    　例として以下の式を真のモデルとする。但し $u$ は誤差項であり、平均 $0$ 分散 $\sigma^2$ である独立同時分布に従う要素を持つベクトルであるとする。\footnote{X, \betaに定数項は含まれているものとする}
     \begin{align}
-    se(\hat{\pi}) &= \sigma / \sqrt{n} \\
-    &= \hat{s} / \sqrt{n} 
+    \bm{y} &= \bm{X} \hat{\beta} + \bm{u} \nonumber \\
+           &\ where \ \bm{y},\  \bm{u}\ is \ n * 1 \ vector  \nonumber \\
+           &\ \ \ \ \ \ X\ is\ n * p\ matrix \nonumber \\
+           &\ \ \ \ \ \ \bm{\beta}\ is\ p * 1\ vector \nonumber \\
+           &\ \ \ \ \ \ \bm{u}\ \sim \ iid(0, \sigma^2 \bm{I}) \nonumber \\
+           &\ \ \ \ \ \ \bm{I}\ is \ n * n \ identity\ matrix
     \end{align}
-    と表すことが出来る。
 
+    　推定量 $\hat{\beta}$ について求まる残差 $\bm{\epsilon}$ は以下のように表すことが出来る。
+    \begin{align}
+    \bm{\epsilon} = \bm{y} - \bm{X}\hat{\beta}
+    \end{align}
+    　これを用いて残差平方和 SSR\footnote{sum of squared residuals} は、
+    \begin{align}
+    SSR &= \bm{\epsilon}' \bm{\epsilon} \nonumber \\
+        &= \bm{y}' \bm{y} - 2 \beta' \bm{X}'y + \beta'\bm{X}'X\beta
+    \end{align}
+    　と表すことが出来る。これを用いて回帰の標準誤差\footnote{standard error of regression}は、
+    \begin{align}
+    s^2  = SSR / (n - p)
+    \end{align}
+    　となる。さらにこれを用いることで、最小二乗推定量 \hat{\beta_i} に関する標準誤差は、
+    \begin{align}
+    s.e.(\hat{\beta_i}) &= \sqrt{s^2/S_{XX}^j} \nonumber \\
+    &where\ S_{xx}^j = ((X'X)^{-1})_{jj}
+    \end{align}
+    　となる。尚 $S_{xx}^j$ とは $x_j$ から他の変数の影響を取り除いた $x_j$ に固有の平方和である。
 
 \printbibliography
 ** COMMENT トレンド定常
-
+   
