@@ -1,6 +1,6 @@
-% Created 2018-02-07 水 05:22
+% Created 2018-02-07 水 07:57
 % Intended LaTeX compiler: pdflatex
-\documentclass[dvipdfmx]{scrartcl}
+\documentclass{scrartcl}
     \usepackage{amsmath, amssymb, bm}
 		\usepackage[utf8]{inputenc}
 		\usepackage[dvipdfmx]{graphicx}
@@ -16,37 +16,37 @@
     \usepackage{pxjahyper}
     \usepackage{caption}
 		\usepackage{pdfpages}
-
 \usepackage{biblatex}
 \addbibresource{reference.bib}
 \author{筑波大学情報学群情報科学類(201611350) 江畑 拓哉}
 \date{\today}
 \title{情報特別演習最終レポート}
 \begin{document}
+
 \maketitle
 \tableofcontents
 
 
 
 \section{概要}
-\label{sec:orgc899663}
+\label{sec:orgcdea368}
 今情報特別演習において私は、機械学習を初学者が学ぶための Web アプリ開発を行った。当初は大規模データベースを用いた機械学習APIを作るという目標であったが、特に機械学習を学んでいくにあたり、これの中身を理解するための初学者向けの解説の供給が少ないと感じたため、開発目標をやや変更した。\(\newline\)\\
 　今回学習した内容は、 \textcircled{\scriptsize1} 大規模データベースの、特に時系列データベースの比較とその利用法 \textcircled{\scriptsize2} 機械学習等を実装する際に重要となる高速計算を JVM 言語内で行う手法 \textcircled{\scriptsize3} 代表的な時系列分析の一つである(S)ARIMA モデル \textcircled{\scriptsize4} 開発言語として取り上げた Clojure/ClojureScript の、言語自体・これを用いたWeb開発手法、の4分野である。\\
 　結果として 時系列データベースとして OpenTSDB を採用し ARIMA モデルとそれに付随する ADF 検定などを実装・解説を作成した。更に JVM 上で高速計算を行うために、\(\href{http://jblas.org/}{jblas}\) や \(\href{https://software.intel.com/en-us/mkl}{Intel \textsuperscript{\textregistered} MATH \ KERNEL \  LIBRARY}\) を用いた GPU 演算 、 OpenCL の利用例を調べ比較し、一部を Web アプリの実装に活用した。そして \(\href{https://clojure.org/}{Clojure}\) という言語を身に着け、Clojure/ClojureScript を用いて JavaScript のライブラリである \(\href{https://reactjs.org/}{React.js}\) などを利用する手法についてまとめ、これらを利用してWebアプリの概形を実装した。\\
 \section{序論}
-\label{sec:org00a3c47}
+\label{sec:org6b92b9c}
 この情報特別演習の初期テーマの決定はグループメンバーからの提案が元であった。その概要は、大規模データベースである \(\href{https://hbase.apache.org/}{Apache \  HBase \textsuperscript{\texttrademark}}\) (以降 ``HBase'' と呼称する) を用いて入力されたデータの因果関係を分析、予測する機械学習APIを作成するというものである。ここから因果関係と相関関係の違いについて学習し、機械学習手法について吟味した結果、ニューラルネットを用いた学習手法と、(S)ARIMA モデルを用いた時系列データ予測と Random Forest を用いた欠損値補完を組み合わせたものの2つの手法が議題に上がったが、後者を選択することになりこれを研究することになった。その中で機械学習を学ぶ際にその内部を知る必要があり、学んでいく際にその資料の供給が少ないことを感じ、その資料も兼ね備えたいと考え、また機械学習結果を視覚的にわかりやすく伝える目的も合わせて、Webアプリという形で開発を行うことに目標を定めた。\\
 \newline\\
 　機械学習という名前は世間に流布しており、それを用いたAPIとして例えば Microsoft Azure の \(\href{https://azure.microsoft.com/ja-jp/services/cognitive-services/computer-vision/}{Computer Vision API}\) 等を上げることができるが、この中身が解説されることはその必要性や機密性の問題から非常に少ない。またPythonやRといった言語やそのライブラリ等に付属している統計処理、機械学習の関数などもその殆どが簡便化されており、例えば \(\href{https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/auto.arima}{auto.arima()}\) 関数などはその中身に踏み込むことなく実行、モデルの比較を行うことができる。これは機械学習の利用者という立場からすれば素晴らしい進歩であると考えられるが、その反面機械学習を学ぶ立場になった場合、その中身を知らない状態でAPIや関数を利用することができるため、手放しに機械学習を理解できたと誤解してしまう可能性がある。\\
 　このため主要な機械学習についてその中身を学習できるツールの作成は、統計や機械学習を学びたいと志している、或いは先述のようなツールの中身について興味を持った者に対して、一定の需要があるのではないかと考えている。\\
 
 \section{時系列データベースの比較と OpenTSDB の利用法}
-\label{sec:orge23892e}
+\label{sec:orga6d806a}
 一般的に時系列データのような、単調増加する要素を持つデータを通常の大規模データベースに保存することはデータの分散という点から問題が発生する。 \cite{hbase-reference} このため時系列データを扱うためのデータベースを考える必要がある。幸いなことに、初期案にあった HBase に対して時系列データを扱うことができるように拡張した \(\href{http://opentsdb.net/}{OpenTSDB}\) というデータベースがある。OpenTSDB は HTTP API として操作が許されており、また保存されているデータを確認することが容易であるように設計されている。今回は HBase を完全分散モードで利用する、というチームメンバーの目標に沿ってこちらのデータベースを採用した。\\
 　他の時系列データベースの提案として考えられるものに、\textcircled{\scriptsize 1} \(\href{https://www.influxdata.com/}{InfluxDB}\) 、\textcircled{\scriptsize 2} \(\href{https://graphiteapp.org/}{Graphite}\) 、 \textcircled{\scriptsize 3} \(\href{https://www.datomic.com/}{Datomic}\) などを挙げることができる。\\
 　この章ではそれぞれのデータベースの特徴と利用法を簡潔にまとめる。\\
 \subsection{InfluxDB}
-\label{sec:orga28bc14}
+\label{sec:orgb09cd48}
 InfluxDB は InfluxData が開発を行っているデータベースであり、高機能なクラウドシステムを有料で使うことができるほか、オープンソースソフトウェアとしての利用も可能である。このデータベースの利点の一つに、利用方法が簡単であることが挙げられる。シングルノードでの利用に関してのみに焦点を絞れば、2017年12月において \(\href{https://www.archlinux.org/}{Arch\ Linux}\) でのインストールは、パッケージのインストールとサービスの起動の \href{https://wiki.archlinux.jp/index.php/InfluxDB}{2つのコマンド} で利用可能になる。またデータベースの読み書きに関しては、SQLに近い記法を用いた HTTP API を用いて行うことができ、今回の演習における開発言語である Clojure で必要な部分に関するラッパーを書くことは非常に簡単であった。また TICK stack と呼ばれる InfluxDB を含む時系列データを扱うための環境を追加でセットアップすればデータのモニタリング、収集、リアルタイム処理をより効率的に行うことができる。本演習の初期目標ではデータの入力をユーザが行うことができる設定になっていたため、悪意あるデータを監視することが容易であるという点、データベースの外側の分野までの広いサポート環境があるという点からこのデータベースは非常に魅力的である。\\
 　このデータベースが扱うデータモデルの概要を以下に示す。\\
 \begin{table}[htbp]
@@ -78,7 +78,7 @@ timestamp (required) & fields (required) & tags (optional)\\
 \end{itemize}
 
 \subsection{Graphite}
-\label{sec:orge6498d3}
+\label{sec:orgccc8eb8}
 Graphite は Python を中心にして書かれた時系列データベースであり、同じく Python の Webフレームワークである Django と組み合わせることが、 Graphite 自身の Web UI コンポーネントが Django であるという点から、非常に容易である。同時に Python は機械学習に関する API・ライブラリ が豊富に存在しているため、本演習が純粋に ``Web APIの作成'' のみの目標であったならば当然こちらを用いて開発を行っていただろう。またデータベースの導入自体も、 Python のパッケージ管理システムである pip を用いて行うことができることから、純粋に Python のみによってすべてを解決することができる。更に Graphite のドキュメントは豊富に存在しており、例えば Monitoring with Graphite \cite{graphite-oreilly} を挙げることができる。\\
 　Graphite の内部について簡単に説明を行うと、主に4つのコンポーネント、Carbon、Whisper、Cario、Djangoを中心に展開する。\\
 \begin{itemize}
@@ -102,7 +102,7 @@ Graphite は Python を中心にして書かれた時系列データベースで
 \end{figure}
 
 \subsection{Datomic}
-\label{sec:org4351178}
+\label{sec:org34c31ad}
  Datomic は他のデータベースとはかけ離れた設計が行われた新しい世代の分散型データベースである。 Clojure の作者である Rich Hickey 氏らが作成し、有料でメンテナンスとアップデートが付属されたクラウドシステムを使うことができる。また一年に限っては無料でこの機能を利用することもできる。これとは別に存在する無料版に関しては分散できるピア数などの制限がかかる。\\
   Datomic には2つの目標「情報を時間によって紐付け蓄積する」 「データベースアプリケーションのモデルをリモートアクセスするものからそれぞれのプログラムの中にあるものとする」\footnote{http://endot.org/notes/2014-01-10-using-datomic-with-riak/} がある。この考え方によって得られた大きな2つの特徴に、\textcircled{\scriptsize 1} Append-Only \textcircled{\scriptsize 2}データベースに独立したクエリーエンジンがある。\\
 　Append-Onlyとはその名の通り、追加のみという意味で言い換えれば変更ができないということを意味する。これは情報を時間に紐付けることによって最新の情報を見ることができるため、情報を``書き換える''必要がなくなったためにできたことであり、トランザクション処理などのデータの管理を容易にすることができる。\\
@@ -140,14 +140,14 @@ Graphite は Python を中心にして書かれた時系列データベースで
 
 \newpage
 \subsection{OpenTSDB}
-\label{sec:org80da862}
-OpenTSDB の特徴の説明、セットアップや利用方法に関して説明を行う前に、その基盤である HBase とその周辺知識について簡単にまとめ、その後 OpenTSDB についての説明を行う。\\
+\label{sec:org8f452b1}
+OpenTSDB の特徴の説明、セットアップや利用方法に関して説明を行う前に、その基盤である HBase とその周辺知識について簡単にまとめ、その後 OpenTSDB についての説明を行う。また OpenTSDB を用いる際に強力な可視化ツールとなる \href{https://grafana.com/}{Grafana} についてもデータベースの中身にデータが入っていることを示すために触れておく。\\
 
 \subsubsection{HBase とその周辺知識}
-\label{sec:org9abe23c}
+\label{sec:org7829c62}
 HBase とは \(\href{http://hadoop.apache.org/}{Apache \textsuperscript{\texttrademark} Hadoop \textsuperscript{\textregistered}}\) (以降 ``Hadoop'' と呼称する) と呼ばれる、大規模データの分散処理フレームワークのためのデータベースである。そして Hadoop の分散サービスを形成するために \(\href{http://zookeeper.apache.org/}{Apache \ Zookeeper \textsuperscript{\texttrademark}}\) (以降 ``Zookeeper'' と呼称する)という管理ツールが使われる。\\
 \subsubsection{HBase}
-\label{sec:org34f3c57}
+\label{sec:org17f9cae}
 HBase は NoSQL の一つである。NoSQL は大別して、\textcircled{\scriptsize 1}キーバリュー型\textcircled{\scriptsize 2}ワイドカラム型\textcircled{\scriptsize 3}ドキュメント型\textcircled{\scriptsize 4}グラフ型、があり HBase はワイドカラム型\footnote{簡単に説明するとデータを行ごとではなく列に対して管理しており特定の列を取り出して処理することに最適化されており、高いパフォーマンスやスケーラビリティを持っている。}に属している。\\
 
 \begin{table}[htbp]
@@ -175,11 +175,11 @@ ID & Name & Email & Birthday & Authorization\\
 \end{figure}
 
 \subsubsection{Hadoop}
-\label{sec:org2ef4051}
+\label{sec:org504badd}
 Hadoop は大規模データセットの分散処理フレームワークである。 Hadoop はモジュール化されているため、そのコンポーネントの殆どを別のソフトウェアに入れ替えることもできる柔軟な設計がされている。今演習では標準的な Hadoop の構成に付随してインストールされる、\textcircled{\scriptsize 1}Hadoop Common \textcircled{\scriptsize 2}Hadoop YARN\footnote{Yet Another Resource Negotiator} \textcircled{\scriptsize 3}Hadoop MapReduce \textcircled{\scriptsize 4}Hadoop Distributed File System (HDFS) をそのまま利用している。\\
 　Common は他のモジュールに利用される基本的なライブラリ群である。 YARN は Hadoop のリソース管理やスケジューリングを行い、 MapReduce は分散処理のためのフレームワークである。 HDFS は分散ファイルシステムで、大容量ファイルを扱うことができる。HDFS は大量の小さなデータを高速に扱うことを不得手としているので、HBase がこの補完を行っている。\\
 \subsubsection{Zookeeper}
-\label{sec:orgd02fa77}
+\label{sec:org8b035c8}
 Zookeeper は Hadoop などにおける、構成情報の管理、分散処理の提供、またグループサービスの提供なども行う、分散アプリケーション全体を管理するツールである。使用用途は多岐にわたり、例えば Hadoop などにおける構成管理、 \href{http://storm.apache.org/}{Apache Storm}\textsuperscript{\texttrademark} \footnote{リアルタイム高速分散処理フレームワーク} における処理の同期などに用いられる。ツリー状の階層化された名前空間を持ち、ノードと呼ばれる要素にサーバなどを割り当てている。高速処理や高い信頼性があるにもかかわらず、非常に簡単な API を持っていることが特徴である。ベンチマークとしては \href{http://zookeeper.apache.org/doc/current/zookeeperOver.html#fg_zkPerfRW}{Zookeeper\ 3.4\ Documentation} に記載されている。\\
 
 
@@ -192,8 +192,14 @@ Zookeeper は Hadoop などにおける、構成情報の管理、分散処理�
 \newpage
 
 \subsubsection{OpenTSDB}
-\label{sec:orgca9944a}
+\label{sec:org7c3560e}
 OpenTSDB とは HBase をホストとした \(\footnote {正確には Google の \href {https://cloud.google.com/bigtable/}{BigTable} もホストとなりうる}\) 時系列データベースで、その構成は\textcircled{\scriptsize 1} 時系列デーモン(以降 TSD と呼称する) \textcircled{\scriptsize 2} コマンドラインユーティリティ、の2つである。特徴としては TSD にマスター・スレーブといった上下関係がないこと、HBase などのホストに各アプリケーションが直接触れる必要がないこと、標準的に保存されているデータをブラウザから視覚的に確認することができることなどが挙げられる。\\
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=15cm]{./hbase-view.PNG}
+\caption{HBase 上の OpenTSDB (tsdb という名前のテーブルがあることが確認できる)}
+\end{figure}
+
 　これによって得られる恩恵として、アプリケーションをチームで開発・維持する際に OpenTSDB を軸にしてデータベース側とアプリケーション側に分割することができるということが考えられる。例えばアプリケーション側はデータベース側の分散等の開発が終わる前に仮設置の HBase に対して OpenTSDB を適用し、アプリケーションをほぼ本環境と同じように動かすことができる。またデータベースの分散数を増やしたい場合は、データベース側にのみ視点を当てて変更を行うことができる。\\
 
 \begin{figure}[htbp]
@@ -215,7 +221,7 @@ OpenTSDB とは HBase をホストとした \(\footnote {正確には Google の
 　OpenTSDB はそのアクセスを HTTP API を用いて行うことができる。以降にその概要をまとめる。\\
 
 \subsubsection{OpenTSDB の HTTP API}
-\label{sec:org4491096}
+\label{sec:org67ce613}
 OpenTSDB を利用するにあたって重要な要素に HTTP API の習得がある。このクエリによってアプリケーション開発者はデータの取得や送信を行うことになる。尚、HTTP API を使わずに Telnet を用いる手段もあるが、どちらも機能として同等であるためここでは HTTP API についての説明のみに留める。\\
 　API は、データの取得に関してはクエリ文字列とボディ部の両方の手段をサポートしており、ボディ部を用いる場合はクエリ文字列を用いるよりも詳細な検索をかけることが出来る。対してデータの送信は PUT メソッドによるボディ部を用いた手段のみが利用できる。 それぞれの具体例を示すと以下のようになる。\\
 
@@ -272,21 +278,30 @@ OpenTSDB を利用するにあたって重要な要素に HTTP API の習得が�
 \end{table}
 
 \newpage
+\subsubsection{Grafana}
+\label{sec:org1439d9c}
+　Grafana は InfluxDB や Graphite 、 OpenTSDB などのデータベースに対してデータを視覚化させるためのツールで、 Web ブラウザから Grafana が開けることになるポート\footnote{標準では3000番}にアクセスすることで、ユーザーフレンドリーなクエリ処理機構を用いてデータベースと通信を行い、得られた結果をグラフや表にすることができる。以下にその例を示す。\\
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=15cm]{./grafana.PNG}
+\caption{Grafana を用いた視覚化の例}
+\end{figure}
+
 \section{Clojure を用いた JVM における高速計算技法}
-\label{sec:org142b1f0}
+\label{sec:org296ddbd}
 本演習の開始時、自分のこれまでのプログラム言語学習経歴 \footnote{昨年の情報特別演習においてはPythonを中心に利用し、授業外で Common Lisp をある程度習得した} から、 Lisp の影響を受けた言語を選択することが最も演習に適していると考えており、更に HBase　を活用することが決定していたため、 \href{https://www.java.com}{Java} に近く Lisp に近い言語として JVM \footnote{Java virtual machine}上で動作する \href{https://clojure.org}{Clojure} を採用した。また演習を勧めていく上でフロントエンドの開発も行う必要が出てきたため、同様のシンタックスを用いる \href{https://clojurescript.org}{ClojureScript} も採用し、この両方の言語を中心に学習した。\\
 　この章ではその内の Clojure における高速計算手法についての学習成果を完結にまとめる。\\
 
 \subsection{Clojure 自身の高速化手法}
-\label{sec:orge0a480a}
+\label{sec:org8c0b689}
 Clojure に GPU ライブラリ等を適用する以前に純粋な Clojure で最適化されたコードを書くことが高速計算を行う際に重要であることは言うまでもない。本演習では Clojure 自身の学習も兼ね Clojure for the Brave and True \cite{Brave} 、Clojure High Performance Programming \cite{high-performance} を教材に Clojure の最適化手法を学習した。具体的な学習内容としてはプログラム設計の見直しや基本的なシンタックスの見直し、効率の良いスレッド化・並列処理、プログラム全体のパフォーマンス測定法(プロファイリング法)などである。成果としてどこまでの性能向上が認められたかを具体的に比較することは難しいが、性格の良いプログラムを書くことが出来るようになったのではないかと考えている。\\
 
 \subsection{ClojureCL}
-\label{sec:org835532e}
+\label{sec:org9ef0a0d}
 \href{http://clojurecl.uncomplicate.org/}{ClojureCL} とは Clojure で OpenCL を用いるためのライブラリで C言語で書かれる OpenCL のコードよりも簡潔なシンタックスで書くことが主張されている。このライブラリはJVM上でOpenCLを動作させるため、 JNI\footnote{Java Native Interface} を基盤としたライブラリである、jocl を用いており、非常に低レベルな部分で OpenCL とリンクしているため、OpenCL そのものの知識が必要となるものの、その速度を十分に体感することが出来る。本演習ではドキュメントに記載されたソースコードを移し、自分の環境においてそれを体験するまでを行った。2018年2月1日においてはより深い理解を行うために、OpenCL in Action \cite{OpenCL} を学習している。\\
 
 \subsection{Neanderthal}
-\label{sec:org33fb4ac}
+\label{sec:org14fca15}
 \href{http://neanderthal.uncomplicate.org/}{Neanderthal} は、Intel \textsuperscript{\textregistered} MKL を用いた高速行列演算・線形代数のためのライブラリである。その速度はGPUを利用するモードの場合には大規模サイズの行列演算に関しては、 Clojure / Java ライブラリに対しても大凡3000倍の高速化を達成し、CPUを利用する場合においても純粋な Java よりも 100 倍の高速化を達成している。この高速化に関しては後述する Clojure.core.matrix 系ライブラリに対してやや扱いが難しいが、その分大幅な高速化が望むことが出来る。またこのライブラリの依存関係は intel MKL のライブラリ を含むことに意味があるため、 intel MKL のライブラリ \(\footnote{Arch Linuxにおいては /opt/intel/lib,/opt/intel/mkl/lib }\) をアプリケーション内に含んでしまえば標準的な環境で動作させることが出来る。\\
 
 \begin{figure}[htbp]
@@ -385,28 +400,28 @@ Clojure に GPU ライブラリ等を適用する以前に純粋な Clojure で�
 　このコードからわかるように、このライブラリが返す値は必ずしも求めている・求まった解答の形を示していない。この理由は Intel MKL 内のソースコードが与えられたデータのメモリに解答を書き込む性質があるためである。この破壊的代入を行う性質は高速化に大きな貢献をしているとともに、高い副作用と難解さを招いている原因であると考えられるが、このライブラリを利用するためには Intel MKL のドキュメントを精読することや、内部の Fortran による実装を眺める他にない。\\
 
 \subsection{Clojure.core.matrix}
-\label{sec:orgf0d471a}
+\label{sec:orge5aa971}
 　先に紹介した2つに対してこちらは非常におとなしいライブラリであり、 Clojure の標準的な算術関数のラップや行列演算に関するライブラリの基盤を開発している。ライブラリの基盤というのは、 Java などのオブジェクト指向言語におけるインターフェースのようなもので、実装するべき関数を先に示しておくことで、それを様々な手法によって実装・更新されていくことで長期的にそのライブラリ群を使うことが出来るという利点がある。本演習では、高速さが持ち味である \href{https://github.com/mikera/vectorz-clj}{vectorz-clj} や、 \href{http://jblas.org/}{jblas} を用いて実装されている関数が充実している \href{https://github.com/tel/clatrix}{clatrix} の2つを検討しその両方を利用した。\\
 
 \subsubsection{vectorz-clj}
-\label{sec:org1bdebde}
+\label{sec:org25b0221}
 　Vectorz-clj は純粋に JVM で動作する高速な行列計算ライブラリを掲げており、導入にかかるコストの低さが魅力的である。問題としては行列の結合・切り出しに関する関数のいくつかの挙動が不自然であることで、その点を除いては後述する clatrix よりも概ね高速に動作する。\\
 \subsubsection{clatrix}
-\label{sec:org980e1d1}
+\label{sec:org11400f1}
 　clatrix は jblas をラップしたライブラリであり、行列計算において必要とされる関数をほぼすべて網羅しており、先述のライブラリで不足した部分を補完するために利用した。このライブラリを利用するためには jblas がインストールされていることが必要であるため、標準的な環境にこれを用いたアプリケーションを実行したとしても正常に動作しない。不足する関数を自力で補完することでこのライブラリを使用しないという選択肢もあるため、よりアルゴリズムの能力を磨いて自力で必要な関数を補完したいと考えている。\\
 
 \subsection{ACM3 (Apache Common Math 3)}
-\label{sec:orga5a15e8}
+\label{sec:org5283925}
 　計算速度そのものの向上という意味ではこのカテゴリからはやや離れるが、良質なアルゴリズムによって様々な数学に関するライブラリとして ACM3 がある。本演習ではそのうちの、アメーバ法に関する関数を ARMA モデルにおけるパラメータ推定のために利用した。\\
 \section{ARIMA モデルによる時系列分析}
-\label{sec:org1cacaf1}
+\label{sec:org4b9d808}
 　(S)ARIMA モデルは時系列分析手法の一つであり、本演習の要とも言える機械学習手法である。本演習ではこのモデルとその周辺手法を実装した。\\
-　ARIMA モデルは 正確には ``Autoregressive integrated moving average model'' と呼ばれ、概要は \textcircled{\scriptsize 1} I \textcircled{\scriptsize 2} AR \textcircled{\scriptsize 3} の3要素によって構成されており、この適用できるデータは「非定常過程が見られる」時系列データ \footnote{「定常過程を持っている」時系列データは ARMA (Autoregressive moving average) モデルでの推定となる} である。定常過程と非定常過程の違いについては後述する \ref{sec:orge1bc7c9} 単位根検定 で説明を行うが、時系列データには非定常過程を持っている場合が少なからずあり、更に ARIMA モデルを ARMA モデルに変換することは非常に容易であるため ARIMA モデルを実装することによって実質的に定常過程、非定常過程両方の性質を持った時系列データを分析することが出来る。また ARIMA モデルの分析対象はある時系列データ内の時点間の関係である、自己相関 \footnote{系列相関ともいう} にある。\\
-　また ARIMA モデルの発展として季節階差を削除することを目的とした SARIMA モデルもあるが、こちらは \ref{sec:org377d460} SARIMA モデルについて にある理由により開発を中断した。\\
-　以降にこのモデルの実装において必要になる知識を紹介する。尚ここで使用する式の書式に関しては \ref{sec:orgdea5a12} 付録に記載する。\\
+　ARIMA モデルは 正確には ``Autoregressive integrated moving average model'' と呼ばれ、概要は \textcircled{\scriptsize 1} I \textcircled{\scriptsize 2} AR \textcircled{\scriptsize 3} の3要素によって構成されており、この適用できるデータは「非定常過程が見られる」時系列データ \footnote{「定常過程を持っている」時系列データは ARMA (Autoregressive moving average) モデルでの推定となる} である。定常過程と非定常過程の違いについては後述する \ref{sec:orgadac8db} 単位根検定 で説明を行うが、時系列データには非定常過程を持っている場合が少なからずあり、更に ARIMA モデルを ARMA モデルに変換することは非常に容易であるため ARIMA モデルを実装することによって実質的に定常過程、非定常過程両方の性質を持った時系列データを分析することが出来る。また ARIMA モデルの分析対象はある時系列データ内の時点間の関係である、自己相関 \footnote{系列相関ともいう} にある。\\
+　また ARIMA モデルの発展として季節階差を削除することを目的とした SARIMA モデルもあるが、こちらは \ref{sec:org2e7ea46} SARIMA モデルについて にある理由により開発を中断した。\\
+　以降にこのモデルの実装において必要になる知識を紹介する。尚ここで使用する式の書式に関しては \ref{sec:orged6c534} 付録に記載する。\\
 
 \subsection{BackShift記法}
-\label{sec:org0afcc2f}
+\label{sec:org184f170}
 　BackShift記法とは、記号 ``B'' という演算子を用いた時系列データを表現するための手法であり、以下のような使われ方をする。\cite{otext}
 \begin{align}
 (1-B)Y_t &= 1  Y_t - B  Y_t = Y_t - Y_{t-1} \\
@@ -419,7 +434,7 @@ Clojure に GPU ライブラリ等を適用する以前に純粋な Clojure で�
 　この記法を用いることでn次階差や季節階差を表しやすくなり、また関数型言語などにおいてはその実装の手がかりを得ることが出来る \footnote{$(1-B^n)$という意味を持つ関数を定義することで理論上ARIMAモデルに必要な階差に関する関数は満足することが出来る}。\\
 
 \subsection{単位根検定}
-\label{sec:orge1bc7c9}
+\label{sec:orgadac8db}
 　実世界に存在する多くの時系列データは非定常過程を持っていることが示唆されている。この示唆について Jackknifing multiple-window spectra \cite{389899} から有名な一説を引用すると以下のようになる。\\
 \begin{verse}
 Experience with real-world data, however, soon convinces one that both stationarity and Gaussianity are fairy tales invented for the amusement of undergraduates.\\
@@ -436,7 +451,7 @@ y_t = Y_t - E(Y_t) = Y_t - \mu - \mu_1 t
 正確ではないが、ここにおける \(\mu\) は \(t = 0\) における時系列データの値、 \(\mu_t\) は 時系列データの傾きと考えることが出来る。\\
 
 \subsubsection{定常性の性質}
-\label{sec:org431ddb3}
+\label{sec:orgd48c2db}
 　ここまで``定常性''という言葉を多用してきたが、この定常性について簡単に触れておく。定常性とは同時分布が時間を通じて変わらないこと \footnote{この同時分布が同一であることを持つ時系列過程を特に``強定常である''という} を意味しており、以下のような性質を持っている。\\
 
 \begin{itemize}
@@ -469,10 +484,10 @@ y_t = Y_t - E(Y_t) = Y_t - \mu - \mu_1 t
 
 \newpage
 \subsubsection{ADF 検定}
-\label{sec:org0ed3ee7}
+\label{sec:org10dd2f8}
 　ADF 検定 (Augumented Dickey-Fuller test) は DF 検定 (Dickey-Fuller test) の拡張である。\\
 　DF 検定とは \(Y_t\) について自己回帰モデル AR(1) を作成し以下の条件を用いて仮説検定を行う手法である。\\
-　AR(1)モデル \(Y_t = \theta Y_{t-1} + \epsilon_t \  where \ \epsilon_t \sim iid(0, \sigma^2)\) とする。（AR モデルそのものについては \ref{sec:orgdc1a233} AR モデル で解説を行う）\\
+　AR(1)モデル \(Y_t = \theta Y_{t-1} + \epsilon_t \  where \ \epsilon_t \sim iid(0, \sigma^2)\) とする。（AR モデルそのものについては \ref{sec:org39efc52} AR モデル で解説を行う）\\
 　単位根を持っていることを帰無仮説とし、定常であることを対立仮説であるとする。\\
 　つまり、帰無仮説 \(H_0\) と対立仮説 \(H_A\) は以下のように定義できる\\
 \begin{align}
@@ -506,11 +521,13 @@ H_A\ :\ \pi < 0
 　これより \(\pi = (\theta_1 + \theta_2 + \theta_3 - 1)\) とおいて DF 検定と同様に t 検定を行う。\\
 　尚この検定にはいくつかの追加要素として、定常過程にある時系列データの平均値を考えるパターンや、時系列データに傾きがある場合を考慮したパターンがある。これらは人為的にデータを確認することで決定するが、 R 言語や Python などの ADF 検定ではすべてのパターンを一度に実行している場合がある。これは ADF 検定そのものは計算コストが低いため、すべてのパターンを網羅しても問題がないためである。\\
 \subsubsection{KPSS 検定}
-\label{sec:org4702c75}
+\label{sec:orgf9c28bf}
 　KPSS 検定 (Kwiatkowski-Phillips-Schmidt-Shin test) とは先述の ADF 検定に対して帰無仮説と対立仮説を反転させたものとイメージすることが出来る。この検定においては以下の式を中心に展開する。\\
 \begin{align}
 Y_t &= \xi_t + \epsilon_t \nonumber \\
- &where \ \xi_t = \xi_{t-1} + \upsilon_t \ \upsilon_t \sim iid(0, \sigma_{\upsilon}^2)\  \epsilon_t \sim iid(0, \sigma^2)
+ &where \ \xi_t = \xi_{t-1} + \upsilon_t \nonumber \\
+ &\ \ \ \ \ \ \upsilon_t \sim iid(0, \sigma_{\upsilon}^2)\nonumber \\
+ &\ \ \ \ \ \ \epsilon_t \sim iid(0, \sigma^2)
 \end{align}
 　この式における \(\xi_t\) はランダムウォークを示している。尚ランダムウォークとは次に現れる値が確率的にランダムであることを示す。また、\(\epsilon_t\) はその性質から定常過程を示している。\\
 　仮に \(\sigma_{\upsilon}^2 = 0\) であるとしたとき、\(\xi_t = \xi_0\) であることから上式に影響を加える要素は \(\epsilon_t\) のみとなり、つまり \(Y_t\) は定常であるとみなすことが出来る。これを用いて上式を変形すると以下のようになる。\\
@@ -534,9 +551,9 @@ KPSS &= 1/T^2 (\Sigma^{T}_{t = 1}S_t^2)/ \hat{\sigma^2_\infty} \nonumber \\
 \sigma^2_\infty = \lim_{T \rightarrow \infty} (1/T E((\Sigma_{t=1}^T \epsilon_t)^2))
 \end{align}
 　ADF 検定あったようにこちらにもいくつかのパターンがあり、トレンド定常の場合などの場合に合わせた形に 式(14) が存在し、それに伴って仮説検定の内容に多少の変化がある。\\
-実装においては HAC 推定量を実装することができなかったため、KPSS検定も実装することができなかった。\\
+　実装においては HAC 推定量を理解・実装することができなかったため、KPSS検定も実装することができなかった。\\
 \subsection{AR モデル}
-\label{sec:orgdc1a233}
+\label{sec:org39efc52}
 　AR(p) モデル (自己回帰モデル) は以下の式で表すことが出来るモデルである。重回帰モデルが説明変数の線型結合を用いて関心のある変数を予測していること対して、自己回帰モデルは説明変数を過去の観測値に置き換えたものであると言える。\\
 \begin{align}
 Y_t &= c + \phi_1  Y_{t-1} +\phi Y_{t-2} + \cdots + \phi_p  Y_{t-p} + \epsilon_t \nonumber \\
@@ -546,7 +563,7 @@ Y_t &= c + \phi_1  Y_{t-1} +\phi Y_{t-2} + \cdots + \phi_p  Y_{t-p} + \epsilon_t
 \end{align}
 　式からわかるように \(c\) は定数項である。\\
 \subsection{MA モデル}
-\label{sec:orgd2901d8}
+\label{sec:orgdbb3252}
 　MA(q) モデル (移動平均モデル) は以下の式で表すことが出来るモデルである。同様に重回帰モデルの説明変数を過去のノイズの重みに置き換えたものであると言える。これとよく似たものに移動平均という手法があるが、移動平均は過去の値のサイクルを推定するために用いられ、MA(q) モデルは将来の値を予測するために用いられる。\footnote{移動平均とMAモデルは正確には別のものであり、混同されるべきではない。MAモデル自体は有限インパルス応答に近い発想である。cite:2012カルマンフィルタの基礎}\\
 
 \begin{align}
@@ -554,29 +571,29 @@ Y_t &= c + \epsilon_t + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} + \cdo
 &= c + \epsilon_t + \Sigma_{i=1}^{q} (\theta_i \epsilon_{t-i})  \nonumber \\
 \end{align}
 \subsection{ACF と PACF}
-\label{sec:org946c9ae}
-ARMA モデルにおいて\footnote{ACF, PACFは定常過程であるデータに適用される}、AR(p), MA(q) の p, q の値を決定する際の指標となるものに、ACF、PACFがある。この２つはグラフによって視覚化され、この２つのグラフから p, q の値は手動で決定される。\footnote{R言語における auto.arima 関数などはこのような手間なしでモデルを決定することが出来るが、これは p, q などの値を元データにかかわらず適当に複数定めモデルを作成し、AICなどを用いて最も良いモデルを選択しているからである。} \cite{stat510}
+\label{sec:org5e8f064}
+　ARMA モデルにおいて\footnote{ACF, PACFは定常過程であるデータに適用される}、AR(p), MA(q) の p, q の値を決定する際の指標となるものに、ACF、PACFがある。この２つはグラフによって視覚化され、この２つのグラフから p, q の値は手動で決定される。\footnote{R言語における auto.arima 関数などはこのような手間なしでモデルを決定することが出来るが、これは p, q などの値を元データにかかわらず適当に複数定めモデルを作成し、AICなどを用いて最も良いモデルを選択しているからである。} \cite{stat510}
 \subsubsection{ACF}
-\label{sec:org4681576}
-　ACF (autocorrelation function) は自己相関係数とも呼ばれ、元データとある時点分だけずらしたデータとの相関係数を計算する。つまり以下の式を計算することになる。尚、\(t-s\) はそのずらした量(ラグと呼ぶ)である。またこの場合に求まる値を、\(t-s\) 次のACFと呼ぶことがある。\\
+\label{sec:org3c64e03}
+　ACF (autocorrelation function) は自己相関係数とも呼ばれ、元データとある時点分だけずらしたデータとの相関係数を計算する。つまり以下の式を計算することになる。尚 \(t-s\) はそのずらした量(ラグと呼ぶ)である。またこの場合に求まる値を、\(t-s\) 次のACFと呼ぶことがある。\\
 \begin{align}
 \rho(s,t) &= (E((Y_t - \mu_t)(Y_s-\mu_s)))/(\sigma_{Y_t}\sigma_{Y_s}) \nonumber \\
 &= (E((Y_t - \mu_t)(Y_s-\mu_s)))/\sigma^2 \nonumber \\
 &= Cov(Y_t, Y_s)/\sigma^2
 \end{align}
 　上式では \(\sigma_t\sigma_s = \sigma^2\) が成り立っている。これは定常過程を持つ時系列データの分散が時点に依存しないためである。\\
-　尚 ACF と PACF には閾値があり、この閾値を超えた値を元に p, q を考えていく。以下にその境界値を求める式を示す。\\
+　尚 ACF と PACF には閾値があり、この閾値を超えた値を元に p, q を考えていく。以下にその境界値を求める式を示す。 但し n はデータサイズである。\\
 \begin{align}
 threshold = \pm 2/\sqrt{n}
 \end{align}
 \subsubsection{PACF}
-\label{sec:org0125c4e}
+\label{sec:orgab34109}
 　PACF (partical autocorrelation function) は偏自己相関とも呼ばれ、ある時点とそこからある時点分だけ離れた時点の二点間の、その間の存在の影響も考慮した場合における相関関係である。一般式は複雑であるため、1次、3次の 偏自己相関 の式を示す。尚、1次の PACF は 1次の ACF に等しい。計算の都合上、k次の 偏自己相関 を \(\phi(k, k)\) と表す。\\
 \begin{align}
 \phi(2, 2) &= Cov(Y_t,Y_{t-2}|Y_{t-1}) / (\sigma_{Y_t|Y_{t-1}} \sigma_{Y_{t-2}|Y_{t-1}}) \\
 \phi(3, 3) &= Cov(Y_t,Y_{t-3}|Y_{t-1},Y_{t-2})/(\sigma_{Y_t|Y_{t-1},Y_{t-2}}\sigma_{Y_{t-3}|Y_{t-1},Y_{y-2}})
 \end{align}
-　このように式がラグごとに異なるため、実装上計算には以下の行列式を用いた Durbin-Levinson recursion が用いられることが多い。尚以下の式における \(\rho_s\) とは 自己相関 \(\rho(s, t)\) を示している。\\
+　このように式がラグごとに異なるため、実装上計算には以下の行列式を用いた Durbin-Levinson recursion が用いられることが多い。尚 以下の式における \(\rho_s\) とは 自己相関 \(\rho(s, t)\) を示している。\\
 \begin{equation}
 \left(\begin{array}{ccccc}
 \rho(0) & \rho(1) & \rho(2) & \cdots & \rho(k-1) \\
@@ -600,11 +617,11 @@ threshold = \pm 2/\sqrt{n}
 \end{equation}
 　偏自己相関 の値 \(\phi(i, j)\) はARモデルに似た回帰式を得られる。以下の場合は \(\phi(2,2)\) についての例である。\\
 \begin{align}
-\hat{y_t} &= \phi(2,1) \hat{y_{t-1}} + \phi(2,2)\hat{y_{t-2}} + \epsilon_t \\
+\hat{y_t} &= \phi(2,1) \hat{y_{t-1}} + \phi(2,2)\hat{y_{t-2}} + \epsilon_t \nonumber \\
 &where \ \hat{y_t} = Y_t - \mu 
 \end{align}
 \subsubsection{p, q の決定法}
-\label{sec:org1622575}
+\label{sec:org74d7334}
 　AR(p)、MA(q) モデルの p, q の値を考える際には先述の通り ACF と PACF を用いることがある。この２つのグラフと p, q の関連について簡単に説明する。説明のために具体的なグラフ A, B を以下に示す。\\
 \begin{figure}[htbp]
 \centering
@@ -622,39 +639,39 @@ threshold = \pm 2/\sqrt{n}
 　グラフ A に着目すると、自己相関 の 1 次までの値が閾値を大きく超えていることがわかる。 自己相関 はラグｋの共分散であり、偏自己相関 と違って 自己相関 はラグ k-1 やそれ未満の値の影響を考慮していない。よってノイズの重みを示している MA(q) モデルの、 q の値が決まると考えることができ、この例で言うならば \(q = 1\) であると考えることが出来る。\\
 　同様にグラフ B に着目すると、偏自己相関 の 2 次までの値が閾値を大きく超えていることがわかる。偏自己相関 で説明したように、偏自己相関 の値は AR モデルに非常に近い形で用いることができ、このことから AR(p) モデルの p の値が決まると考えることができることがわかり、 \(p = 2\) がふさわしいことがわかるだろう。\footnote{詳しい証明について調べたものの、発見ができなかったため 引用を行ったサイト cite:stat510 に書かれた内容を元に記述した}\\
 　尚この p, q の値は観測者によって異なることがあるため、完全な正解があるわけではない。\\
-　MA モデルにおける PACF 、 AR モデルにおける ACF のグラフは先細りの形を示している。これは上に示した 2 つのグラフは極めて理想的な MA / AR モデルを示していることを意味している。ARMA モデルの場合は ACF、PACF は共に先細りの形ではないため、この2つのグラフを見て係数 p, q を決定しなければならない。ところが AR モデルと MAモデルを同時に用いる場合、お互いの影響を打ち消し合ってしまう可能性があり、この係数決定は慎重に行わなければならない。ここで階差の次数 d も合わせた詳しい係数の決定基準と性質を以下に示す。\cite{acf-pacf} 尚ここで用いる``カットオフ''とは、グラフAの ACF グラフにおける 0 \(\sim\) 2次の自己相関 から ３次の自己相関 への変化を意味する。\\
+　MA モデル (グラフA) における PACF 、 AR モデル（グラフB）における ACF のグラフは先細りの形を示している。これは上に示した 2 つのグラフが極めて理想的な MA / AR モデルを示していることを意味している。ARMA モデルの場合は ACF、PACF は共に先細りの形ではないため、この2つのグラフを見て係数 p, q を決定しなければならない。ところが AR モデルと MAモデルを同時に用いる場合、お互いの影響を打ち消し合ってしまう可能性があり、この係数決定は慎重に行わなければならない。ここで階差の次数 d も合わせた詳しい係数の決定基準と性質を以下に示す。\cite{acf-pacf} 尚ここで用いる``カットオフ''とは、グラフAの ACF グラフにおける 0 \(\sim\) 2次の自己相関 から ３次の自己相関 への変化を意味する。\\
 \begin{enumerate}
-\item その系列の 自己相関 が高い場合にはより高い階差を取る必要がある\\
-\item 1 次の 自己相関 が０以下の場合、或いは 自己相関 がすべて小さくパターンが見られない場合には、それ以上の階差を取る必要はない\\
+\item 　その系列の 自己相関 が高い場合にはより高い階差を取る必要がある\\
+\item 　1 次の 自己相関 が０以下の場合、或いは 自己相関 がすべて小さくパターンが見られない場合には、それ以上の階差を取る必要はない\\
 　１次の 自己相関 が -0.5 以下の値を取っているならば、階差を取りすぎている可能性がある\\
-\item 階差の最もふさわしい次数は、多くの場合、標準偏差が最も低い階差の次数になる \footnote{これは階差は一般的には一次であるらしいという事実に反するが、階差が一般的に一次であるらしいという根拠が見つからなかったため検証を行うことができなかった}\\
-\item 階差を取らない、つまり 0 次階差を取ることになった モデル は元の時系列データが定常であることを示している。\\
+\item 　階差の最もふさわしい次数は、多くの場合、標準偏差が最も低い階差の次数になる \footnote{これは階差は一般的には一次であるらしいという事実に反するが、階差が一般的に一次であるらしいという根拠が見つからなかったため検証を行うことができなかった}\\
+\item 　階差を取らない、つまり 0 次階差を取ることになった モデル は元の時系列データが定常であることを示している。\\
 　1 次階差を取ることになったモデルは元の時系列データが何らかの傾向（ランダムウォークや Simple Exponential Smoothing type model\footnote{単純指数平滑法モデルとも言う}）を持っていると考えられる。\\
 　2 次階差を取ることになったモデルは元の時系列データが time-varying trend \footnote{翻訳が見つけることができなかったため意訳をすると、時間的変動傾向}（random trend や Linear Exponential Smoothing type model\footnote{Brownの線形指数平滑法モデルとも言う}）を持っていると考えられる。\\
-\item 階差を取らないモデルは通常定数項を持っている。2 次階差を持つモデルは通常定数項を持たない。\\
+\item 　階差を取らないモデルは通常定数項を持っている。2 次階差を持つモデルは通常定数項を持たない。\\
 　1 次階差を取るモデルで、元の時系列が 0 でない傾きを持っているならば 定数項を考慮する必要がある。\\
-\item 差分を取った時系列の PACF グラフが鋭いカットオフを示している場合、或いは更に 1 次の自己相関が正である場合にはモデルにARモデルを追加することを検討する必要がある。\\
+\item 　差分を取った時系列の PACF グラフが鋭いカットオフを示している場合、或いは更に 1 次の自己相関が正である場合にはモデルにARモデルを追加することを検討する必要がある。\\
 　AR(p) モデルの p の値はカットオフを示している次数である。(グラフBならば \(p = 2\))\\
-\item 差分を取った時系列の ACF グラフが鋭いカットオフを示している場合、或いは更に 1 次の自己相関が負である場合にはモデルにMAモデルを追加することを検討する必要がある。\\
+\item 　差分を取った時系列の ACF グラフが鋭いカットオフを示している場合、或いは更に 1 次の自己相関が負である場合にはモデルにMAモデルを追加することを検討する必要がある。\\
 　MA(q) モデルの q の値はカットオフを示している次数である。(グラフAならば \(q=1\))\\
-\item ARMA モデルが差分を取った時系列に適合する場合には p, q の値をそれぞれ 1 下げた場合のモデルを検証する必要がある。\\
+\item 　ARMA モデルが差分を取った時系列に適合する場合には p, q の値をそれぞれ 1 下げた場合のモデルを検証する必要がある。\\
 　ARMA(p, q) ならば ARMA(p - 1, q) 、 ARMA(p, q - 1)\\
 　特に ARMA モデルのパラメータ推定値が収束するために 10 回以上の 反復を必要とした場合にはこれを行うべきである。\\
-\item AR モデルに単位根が含まれている場合 \footnote{ARモデル部分のパラメータの合計値が大凡 1 であるとき} 、 p の値を 1 下げて階差の次数を 1 上げるべきである。\\
-\item MA モデルに単位根が含まれている場合 \footnote{MAモデル部分のパラメータの合計値が大凡 1 であるとき} 、 q の値を １ 下げて階差の次数を 1 下げるべきである。\\
-\item 長期予測が奇妙な動きを見せている場合には、AR モデルか MA モデルに単位根が存在している可能性がある。\\
+\item 　AR モデルに単位根が含まれている場合 \footnote{ARモデル部分のパラメータの合計値が大凡 1 であるとき} 、 p の値を 1 下げて階差の次数を 1 上げるべきである。\\
+\item 　MA モデルに単位根が含まれている場合 \footnote{MAモデル部分のパラメータの合計値が大凡 1 であるとき} 、 q の値を １ 下げて階差の次数を 1 下げるべきである。\\
+\item 　長期予測が奇妙な動きを見せている場合には、AR モデルか MA モデルに単位根が存在している可能性がある。\\
 \end{enumerate}
 
 \subsection{パラメータ推定}
-\label{sec:orgb671572}
+\label{sec:org3a764e9}
 　ここまでにおいて ARIMA モデルの係数 p, d, q を決定することが出来る。ここから ARモデル、MAモデルそれぞれにおける、 \(\phi\) 、 \(\theta\) の値を推測する手法を説明する。このパラメータ推定は最尤推定(maximum likelihood)や CSS (conditional sum of squares) が用いられるようである。本演習では対数尤度関数に対してアメーバ法を適用してパラメータ推定を行った。これに際しアメーバ法の適用や、対数尤度関数の実装などについては Clojure for Data Science \cite{data-science} を活用した。\\
 \subsubsection{対数尤度関数}
-\label{sec:orgd32b29e}
+\label{sec:org94b7172}
 　本演習では計算の都合上対数尤度関数を用いて最尤推定を行った。対数尤度関数に関しては既存のコードを読んで実装し、実装後に資料 \cite{log-likelihood} を用いて学習を行った。しかし理解が曖昧な部分が多いため本演習では詳細を示すことができなかった。\\
 \subsubsection{アメーバ法}
-\label{sec:org3e28fb2}
+\label{sec:org1bfbcb1}
 　アメーバ法とは Nelder-Mead法とも呼ばれるパラメータ推定などに用いられる手法であり、本演習では対数尤度関数に対してこれを適用した。\\
-　アメーバ法の特徴に目的となる関数の導関数が不要であることがあり、これは本演習における対数尤度関数などの複雑な関数に対して有効なアルゴリズムである。アメーバ法の基本的なアルゴリズムは、反射、収縮、膨張の三種類であり、最適解の存在する位置に向かってアメーバのように近づいていくことからこの名前がついている。\\
+　アメーバ法の特徴に目的となる関数の導関数が不要であることがある。これは本演習における対数尤度関数などの複雑な関数に対して有効なアルゴリズムである。アメーバ法の基本的なアルゴリズムは、反射、収縮、膨張の三種類であり、最適解の存在する位置に向かってアメーバのように近づいていくことからこの名前がついている。\\
 　具体的な動きを二次元の図で表したものを引用 \cite{nelder-mead} すると以下のようになる。 \(Ti\) はアメーバの領域を示しており、これは議論の次元数に対して 1 つ多い頂点を持っている(この場合では 2次元に対して 3 頂点)。番号 \(i\) は動きの順番を示しており、反射\footnote{反転、或いは移動と考えることも出来る}、縮小を行いながら収束していることがわかる。拡大についてはこの図では見られない動きであるが、頂点を動かした先がより求めたい最大/最小に近いと判断できた場合に、そのまま頂点を引き伸ばす様を考えることができる。\\
 　本演習では詳しいアルゴリズムの実装については調べず、ACM3に含まれている関数をそのまま用いた。\\
 \begin{figure}[htbp]
@@ -664,16 +681,16 @@ threshold = \pm 2/\sqrt{n}
 \end{figure}
 
 \subsubsection{AIC}
-\label{sec:orgf161633}
+\label{sec:org8e2059d}
 　AIC (赤池情報量) はモデルの過適合などを判定するための指標であり、求めることができた対数尤度の適合度に対して p, q の値を考慮して計算される。具体的には以下の式を用いた。\\
 \begin{align}
 AIC = 2 * (p + q + 1) - 2 * log L
 \end{align}
 　尚、Lとは対数尤度である。AIC を最小化させることがモデルの適合度を上げることになる。\\
 \subsection{SARIMA モデルについて}
-\label{sec:org377d460}
+\label{sec:org2e7ea46}
 　本演習においては SARIMA (seasonal arima) モデルを作成することが目標であったが、現実のデータにおいて等間隔で周期を持ったものが少ないことが実装中に判明した。例えば、月単位のデータは１年周期(=12ヶ月周期)で階差を取ることが出来るが、週単位のデータは１年周期(\(=52.1429\))で階差を取ることができない。週単位のデータを近似的に１年周期で階差を取る、つまり数年ごとに調整を入れる案も考え実験をしたものの、予測を行った際における調整した分の補完が困難を極めたため実装を中断した。\\
-　しかしながら季節階差を取る、という発想自体は間違いではない。具体的にどのような式に基づいて SARIMA モデルが作成されているかを \(SARIMA(1,1,1)(1,1,1)_12\) を用いて説明する。尚説明の簡略化のため定数項は無視している。\footnote\{SARIMA(非季節部分のパラメータp, d, q)(季節部分のパラメータP, D, Q)\_\{季節階差のラグ\}\}\\
+　しかしながら季節階差を取る、という発想自体は間違いではない。具体的にどのような式に基づいて SARIMA モデルが作成されているかを \(SARIMA(1,1,1)(1,1,1)_{12}\) を用いて示す。尚説明の簡略化のため定数項は無視している。$$\footnote{SARIMA(非季節部分のパラメータp, d, q)(季節部分のパラメータP, D, Q)_{季節階差のラグ}}$$\\
 \begin{align}
 (1-\phi_1 B)(1-\phi'_1B^{12})(1-B)(1-B^{12})Y_t = (1+\theta_1B)(1+\theta'_1B^{12})\epsilon_t
 \end{align}
@@ -689,20 +706,21 @@ AIC = 2 * (p + q + 1) - 2 * log L
 \item \((1+\theta_1B)\)\\
 　非季節部分のMA(1)モデルの項\\
 \item \((1+\theta'_1B^{12})\)\\
-　季節部分のMA(1)モデルの項\\
+ 　季節部分のMA(1)モデルの項\\
+この式からわかるように SARIMA モデルは ARIMA モデルに対して単純な乗算を行ったのみとなっている。これは ARIMA モデルのアプローチを大きく逸脱していないことを意味している。実際 ACF や PACF に関しては ARIMA モデルと同様に SARIMA モデルにもほとんど同じように適用することが出来る。\footnote{但し季節階差を取ったものに対して ACF/PACF を示した後、ARIMA モデルで用いた意味での ACF/PACF を適用していくという順番を負う}\\
 \end{itemize}
 \section{Clojure/ClojureScript を用いた Web 開発}
-\label{sec:org42f6338}
-　本演習では開発言語として Clojure/ClojureScript を取り上げた。この 2 言語は Java/JavaScript をカバーした言語であるが、Java/JavaScript とは違い２つの言語に大きな差はない。またこの言語はWeb開発に適した言語であり、その WebSocket の質などは極めて優秀であるという比較\footnote{[[https://hashrocket.com/blog/posts/websocket-shootout][Websocket Shootout: Clojure, C++, Elixir, Go, NodeJS, and Ruby]]} もある。更に Lisp であるという特性から HTML に代表されるマークアップ言語、SQLなどのドメイン特化言語を記述することが容易である。また \ref{sec:org142b1f0} 先述のように高速計算も可能であることから ARIMA モデルに関するライブラリ作成、OpenTSDBへの接続、バックエンド、フロントエンドを実質一つのシンタックスで開発することができる。\\
+\label{sec:org558e25f}
+　本演習では開発言語として Clojure/ClojureScript を取り上げた。この 2 言語は Java/JavaScript をカバーした言語であるが、Java/JavaScript とは違い２つの言語に大きな差はない。またこの言語はWeb開発に適した言語であり、その WebSocket の質などは極めて優秀であるという比較\footnote{[[https://hashrocket.com/blog/posts/websocket-shootout][Websocket Shootout: Clojure, C++, Elixir, Go, NodeJS, and Ruby]]} もある。更に Lisp であるという特性から HTML に代表されるマークアップ言語、SQLなどのドメイン特化言語を記述することが容易である。また \ref{sec:org296ddbd} 先述のように高速計算も可能であることから ARIMA モデルに関するライブラリ作成、OpenTSDBへの接続、バックエンド、フロントエンドを実質一つのシンタックスで開発することができる。\\
 　この章では実際にWeb開発で用いたライブラリなどを簡潔に示す。\\
 \subsection{Clojure によるバックエンド開発}
-\label{sec:orgd6571fa}
+\label{sec:org2d3725f}
 　バックエンド開発は \href{http://www.luminusweb.net/}{Luminus Framework} を用いて行った。その際 Web API としての動作を確認するために \href{https://swagger.io/swagger-ui/}{Swagger UI} を用いた。\\
 \subsubsection{Luminus Framework}
-\label{sec:orgc52b4ad}
+\label{sec:orge272b7d}
 　Luminus Framework とは Clojure の Web 開発に関するライブラリを統合したフレームワークである。ライブラリへのアクセスが極めて単純であり、それぞれのライブラリを好きなライブラリへ置換することも容易であるため、極めて自由度の高いフレームワークとなっている。そういった意味では Luminus はフレームワークと言うよりも推奨ライブラリのライブラリと言った方が近いのかも知れない。また様々なデータベースへのアクセスもサポート \footnote{OpenTSDBへの接続に関するサポートはなかったため、この部分の一部を自作する必要があった} されており、本演習ではSQLとして PostgreSQL を用いた。また Luminus には教科書とも言える書籍 \cite{luminus} があり、これをチュートリアルとして活用することが出来る。\\
 \subsubsection{Swagger UI}
-\label{sec:org8c2379d}
+\label{sec:org87790a0}
 　Swagger UI とは \href{https://swagger.io/tools/}{Swagger Tools} と呼ばれる RESTful API を作成するための支援ツール群の一つであり、ブラウザから API の動作を確認することが出来る。本演習では Swagger Tools の一部である Swagger UI のみを用いているが、これは \textcircled{\scriptsize 1} 関数型言語の特性の一つとして、データの源泉からデータの変換が終了するまでをひと続きに記述することが容易であるということから、サーバとクライアントのやり取りを行う部分のみを独立して記述することが効率的でないと判断したため \textcircled{\scriptsize 2} Clojure の REPL\footnote{Read-Eval-Print Loop 書いたコードを評価することでそれを反映することが出来る} 上で開発を行っているためブラウザからAPIの確認を行う以上の高機能を求めていないため \textcircled{\scriptsize 3} Luminus に含まれるライブラリである \href{https://github.com/metosin/compojure-api}{Compojure-api} のサンプルでは Swagger UI を API の確認以上の目的で使用していないためである。\\
 　以下に実際に実装で用いた画面例を示す。\\
 \begin{figure}[htbp]
@@ -718,15 +736,15 @@ AIC = 2 * (p + q + 1) - 2 * log L
 \includegraphics[width=15cm]{./swagger-ui-view2.PNG}
 \caption{Swagger UI の利用例\textcircled{\scriptsize 1}}
 \end{figure}
-
+\newpage
 \subsection{ClojureScript によるフロントエンド開発}
-\label{sec:org94147f5}
+\label{sec:orgbeb4cc4}
 　フロントエンド開発に関しては Luminus Framework ある機能に加え、 \href{https://reactjs.org/}{React.js} の ClojureScript ラッパーである \href{https://reagent-project.github.io/}{Reagent} 、React に特化された CSS フレームワークである \href{http://www.material-ui.com/\#/}{Material UI} を用いて作成した。\\
 \subsubsection{基本的な開発}
-\label{sec:org45aa267}
+\label{sec:org88ef76b}
 　Luminus Framework には Reagent を追加するオプションがあり、これを中心にフロントエンド側の開発を行った。またリクエスト処理などは Ajax を用いて実装した。\\
 \subsubsection{Reagent}
-\label{sec:org762a86b}
+\label{sec:orgad36b7b}
 　Reagent は React.js の ClojureScript ラッパーである。React.js とは UI を作成するための JavaScript ライブラリであり、ボタンやスライダーなどのコンポーネントを簡単に作成することが出来る。Reagent では HTML との連携を非常に簡単に行えるようになっており非常に見やすいシンタックスを提供する。以下に実際に実装に用いた例を紹介する。\\
 
 \captionof{listing}{login-form関数}
@@ -740,7 +758,8 @@ AIC = 2 * (p + q + 1) - 2 * log L
        [:div               ;; モーダルの内容
         [:div.well.well-sm ;; well well-sm は bootstrap のクラス
          [:strong "* required fields"]]
-        [c/text-input "name" :name "enter a pass user name" fields] ;; 自作のテキストフィールドの呼び出し
+        [c/text-input "name" :name "enter a pass user name" fields] 
+        ;; 自作のテキストフィールドの呼び出し
         (when-let [error- (:name @error)]
           [:div.alert.alert-danger error-]) ;; 名前に関するエラーを表示
         [c/password-input "password" :pass "enter a password" fields]
@@ -748,16 +767,18 @@ AIC = 2 * (p + q + 1) - 2 * log L
           [:div.alert.alert-danger error-])
         (when-let [error- (:server-error @error)]
           [:div.alert.alert-danger error-])]
-       [:div ;; <div><button type="button" class= "btn btn-primary" ...>...</button><button ...>...</button><div>
+       [:div ;; <div><button type="button" class= "btn btn-primary" ...>
+             ;;    ...</button><button ...>...</button><div>
         [:button.btn.btn-primary
-         {:on-click #(login! fields error)} ;; ボタンクリック時の動作を指定 (自作の関数 login! を呼び出している)
+         {:on-click #(login! fields error)} 
+         ;; ボタンクリック時の動作を指定 (自作の関数 login! を呼び出している)
          "Login"]
         [:button.btn.btn-danger
          {:on-click #(session/remove! :modal)} 
          "Cancel"]]])))
 \end{minted}
 
-　一見すると非常に入り組んだ構造に見えるかも知れないが、それは HTML を記述している中に JavaScript を直接埋め込んでいるような記述をしているためである。しかし HTML と JavaScript 部をまとめて記述することで どこに何があるのか という疑問を持たずに済む。また細かいパーツに関数として分割することが出来るため \footnote{正確には関数が評価されるタイミングを考慮する必要がある} 上例のように ログインフォームのみを独立して記述をすれば全体として大きな構造が必要となっても小さな構造体に問題を分割することが出来る。\\
+　一見すると非常に入り組んだ構造に見えるかも知れないが、それは HTML を記述している中に JavaScript を直接埋め込んでいるような記述をしているためである。しかし HTML と JavaScript をまとめて記述することで どこに何があるのか という疑問を持たずに済む。また細かいパーツに関数として分割することが出来るため \footnote{正確には関数が評価されるタイミングを考慮する必要がある} 、 上例のように ログインフォームのみを独立して記述をすれば、 全体として大きな構造が必要となったとしても小さな構造体に問題を分割することが出来る。\\
 　以下がこのソースコードを中心にして作成された login-form である。\\
 \begin{figure}[htbp]
 \centering
@@ -766,13 +787,13 @@ AIC = 2 * (p + q + 1) - 2 * log L
 \end{figure}
 
 \section{MLLK の開発}
-\label{sec:org98876de}
-　本演習では紆余曲折があったものの最終的には MLLK (Machine Learning Learning Kit) という Web アプリケーションのベータ版を開発した。完成まで導くことができなかった原因は、公開に足る性能を達成できなかったこと、アプリケーションの安全性が確立できなかったこと、データベースサーバなどの環境が特別であったため、公開可能なサーバを調達できなかったことである。\\
+\label{sec:orgf8de349}
+　本演習では紆余曲折があったものの最終的には MLLK (Machine Learning Learning Kit) という Web アプリケーションのベータ版を開発した。完成まで導くことができなかった原因は、公開に足る性能を達成できなかったこと、アプリケーションの安全性が確立できなかったこと、データベースサーバなどの環境が特別であったため公開可能なサーバを調達できなかったことである。\\
 \subsection{ARIMA モデルライブラリ}
-\label{sec:orgc8e5200}
-　 \ref{sec:org1cacaf1} ARIMA モデルによる時系列分析 に従ってそれぞれの関数を実装した。\\
+\label{sec:org052dc88}
+　 \ref{sec:org4b9d808} ARIMA モデルによる時系列分析 に従ってそれぞれの関数を実装した。\\
 \subsection{データベース設計}
-\label{sec:orgc43ee77}
+\label{sec:org02746a1}
 　以下の図に従ってデータベースを作成した。以降にそれぞれのテーブルについて説明する。\\
 \begin{figure}[htbp]
 \centering
@@ -780,37 +801,37 @@ AIC = 2 * (p + q + 1) - 2 * log L
 \caption{データベースの設計図}
 \end{figure}
 \subsubsection{Postgresql}
-\label{sec:org11a0ed2}
+\label{sec:org6e34b61}
 　SQL サーバとしては \href{https://www.postgresql.org/}{Postgresql} を採用した。\\
 \begin{itemize}
 \item USERS\\
-　ユーザに関するデータを保存している。name はユーザの名前、pass は暗号化済みのパスワード、last$\backslash$\_login は最後のログイン時間、 api$\backslash$\_key は ユーザが持つ Quandl のAPIキーである。admin は管理者権限で本演習ではすべてのユーザが偽にセットされている。id は主キーであり、これは他のテーブルにも共通している。\\
+　ユーザに関するデータを保存している。name はユーザの名前、pass は暗号化済みのパスワード、last\_login は最後のログイン時間、 api\_key は ユーザが持つ Quandl のAPIキーである。admin は管理者権限で本演習ではすべてのユーザが偽にセットされている。id は主キーであり、これは他のテーブルにも共通している。\\
 \item LOG\\
 　ユーザが行った情報をまとめるためのテーブルであるが、今回は実際にテーブルの作成のみで実際にテーブルを動かすことはできなかった。query と success はログインなどのクエリと対応付けられた 番号 が、 date にはそのクエリが送られた日時が当てはまる。IP にはユーザがアクセスした端末の IP アドレスが当てはまる。\\
 \item TSDATA\\
 　例えば ``NIKKEI/INDEX'' のような時系列データの名称を保存するためのテーブルである。name はその時系列データの名前である。freq はデータの時間的頻度を指定しているが、出来る限り等間隔な時間間隔のデータで、ARIMA モデルの規格化などもあり今回はすべて週ごとを示す ``weekly'' がセットされている。\\
-\item TSDATA$\backslash$\_CHILDREN\\
-　``close-price'' のような TSDATA テーブル で扱うべきではない細かいデータ区分を保存するためのテーブルである。name はその区分を示す名前である。ここにある name と parent$\backslash$\_name を用いて OpenTSDB の Metric TSData に保存された時系列データへのアクセスを行う。\footnote{TSDATAの Metric 名は TSDATAテーブルの name , タグの value が TSDATA\_CHILDREN テーブルの name に対応している。}\\
-\item ALLOWED$\backslash$\_DATA\\
+\item TSDATA\_CHILDREN\\
+　``close-price'' のような TSDATA テーブル で扱うべきではない細かいデータ区分を保存するためのテーブルである。name はその区分を示す名前である。ここにある name と parent\_name を用いて OpenTSDB の Metric TSData に保存された時系列データへのアクセスを行う。\footnote{TSDATAの Metric 名は TSDATAテーブルの name , タグの value が TSDATA_CHILDREN テーブルの name に対応している。}\\
+\item ALLOWED\_DATA\\
 　ユーザごとに扱えるデータに制限をかけるためのテーブルである。これは Quandl がAPIキーを登録せずともある上限まではデータを入手できるという機能に即するために作成した。\\
 \item EXPERIENCE\\
-　ユーザの実験データを保存するが、本演習では機能の実装が完了できなかったためテーブルのみの実装になった。 date は実行日時、data$\backslash$\_key は OpenTSDB の Metric EXData にある タグの value の値である。 param には行った機械学習の種類やパラメータが含まれた JSON が当てはまる。\\
+　ユーザの実験データを保存するが、本演習では機能の実装が完了できなかったためテーブルのみの実装になった。 date は実行日時、data\_key は OpenTSDB の Metric EXData にある タグの value の値である。 param には行った機械学習の種類やパラメータが含まれた JSON が当てはまる。\\
 \end{itemize}
 \subsubsection{OpenTSDB}
-\label{sec:orgd8b3f2e}
-　時系列データに関しては \ref{sec:org1cacaf1} ARIMA モデルによる時系列分析 にあるとおり、 OpenTSDB を用いた。\\
+\label{sec:org11960d7}
+　時系列データに関しては \ref{sec:org4b9d808} ARIMA モデルによる時系列分析 にあるとおり、 OpenTSDB を用いた。\\
 \begin{itemize}
 \item TSData\\
 　実際の時系列データを保存するためのデータベースである。本演習ではデータの入手元は \href{https://www.quandl.com/}{Quandl.com} のみであった。Metrics には ``NIKKEI/INDEX'' のような 時系列データの名称が当てはまり、タグの key は本演習では混乱を避けるために ``type'' に統一されており、そしてタグの value は ``close-price'' などの時系列データ内のカテゴリが当てはめられている。\\
 \item EXData\\
-　本演習では実装が終わらず実際に稼働させることはできなかった。Metrics には Postgresql の USERS テーブルの name が当てはまり、タグの key には ``key'' が、 value には　Postgresql の EXPERIENCE の data$\backslash$\_key が当てはまる。\\
+　本演習では実装が終わらず実際に稼働させることはできなかった。Metrics には Postgresql の USERS テーブルの name が当てはまり、タグの key には ``key'' が、 value には　Postgresql の EXPERIENCE の data\_key が当てはまる。\\
 \end{itemize}
 
 \subsection{バックエンド開発}
-\label{sec:org9cd826c}
-　バックエンドは \ref{sec:org42f6338} にあるように、 Luminus Framework を中心に開発を行った。作成した ARIMA モデル やそれに関するライブラリや OpenTSDB を用いるための簡易的なAPI などは別個依存関係に加えた。フロントエンドも含めた\footnote{バックエンドとフロントエンドは同一のプロジェクトとして作成されている}具体的な依存関係は 開発を行っている git @ MokkeMeguru/MLLK にある \href{https://github.com/MokkeMeguru/MLLK/blob/master/project.clj}{project.clj} にある。\\
+\label{sec:orgf6655ce}
+　バックエンドは \ref{sec:org558e25f} にあるように、 Luminus Framework を中心に開発を行った。作成した ARIMA モデル やそれに関するライブラリや OpenTSDB を用いるための簡易的なAPI などは別個依存関係に加えた。フロントエンドも含めた\footnote{バックエンドとフロントエンドは同一のプロジェクトとして作成されている}具体的な依存関係は 開発を行っている git @ MokkeMeguru/MLLK にある \href{https://github.com/MokkeMeguru/MLLK/blob/master/project.clj}{project.clj} にある。\\
 \subsection{フロントエンド開発}
-\label{sec:orga6af761}
+\label{sec:org15385dc}
 　フロントエンドの開発もバックエンド同様 Luminus を用いて行った。以下に実際の画面をユーザが利用する場面を想定して説明する。\\
 　まずユーザはホームとなるページにアクセスし、ユーザ登録画面へと遷移する。\\
 \begin{figure}[htbp]
@@ -819,11 +840,11 @@ AIC = 2 * (p + q + 1) - 2 * log L
 \caption{ユーザ登録画面}
 \end{figure}
 
-　或いは既にユーザ登録が済んでいるユーザは名前とパスワードを入力しログインすることが出来る。この画面は既に \ref{sec:org94147f5} ClojureScript によるフロントエンド開発 で紹介済みであるため省略する。\\
+　或いは既にユーザ登録が済んでいるユーザは名前とパスワードを入力しログインすることが出来る。この画面は既に \ref{sec:orgbeb4cc4} ClojureScript によるフロントエンド開発 で紹介済みであるため省略する。\\
 　次にユーザは実際に ARIMA モデルを (或いは開発が終了した場合にはそれらの手法を) 実行するためにこれらを行う画面へ遷移する。\\
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=8cm]{./ml-view.PNG}
+\includegraphics[width=12cm]{./ml-view.PNG}
 \caption{統計・機械学習手法選択画面}
 \end{figure}
 
@@ -831,7 +852,7 @@ AIC = 2 * (p + q + 1) - 2 * log L
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=8cm]{./settings-view.PNG}
+\includegraphics[width=12cm]{./settings-view.PNG}
 \caption{パラメータ設定画面}
 \end{figure}
 
@@ -843,34 +864,37 @@ AIC = 2 * (p + q + 1) - 2 * log L
 \caption{パラメータ入力欄と実行ボタン、説明ページへのリンク}
 \end{figure}
 
-　実行することでユーザは以下のような画面を得る。\\
+　　実行することでユーザは以下のような画面を得る。\\
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=8cm]{./arima-view.PNG}
 \caption{実行結果画面}
 \end{figure}
 
-　尚 2018年1月18日時点 で出力可能な内容を印刷した pdf を \ref{sec:orgdea5a12} 付録に追記する。\\
+　　尚 2018年1月18日時点 で出力可能な内容を印刷した pdf を \ref{sec:orged6c534} 付録に追記する。\\
 \section{発展 : ARIMA 推定 と Random Forest による予測}
-\label{sec:org7bf607b}
+\label{sec:orga2d99a6}
 \subsection{概要}
-\label{sec:org495767d}
+\label{sec:org9473873}
 \subsection{実験方法}
-\label{sec:orgfd768f1}
+\label{sec:org4dcbeba}
 \subsection{実験結果}
-\label{sec:org983ccd5}
+\label{sec:orgb14227f}
 \subsection{考察}
-\label{sec:org06837f3}
+\label{sec:org84eaca2}
 \section{まとめと今後の課題}
-\label{sec:org7b0b1bb}
-ゲームエンジン・グラフィクエンジンの開発（GPU）、ゲーム画面をデータベースに保存した上で、解析を行う。（ゲームの進行ログではなく、一般的にユーザが見ることになるゲーム画面の遷移から強化学習を行い、ゲームAIを作成する。）データベースとGPU計算技術は学ぶことができた。時系列解析について入門することができた。ゲームAIの入門については昨年度 Common Lisp を用いて学習済みである。\\
+\label{sec:org6cbd844}
+　本演習で学んだ内容は非常に多岐に渡っており、来年度以降の研究題材を豊富に得ることができたと考えている。\\
+　例えば本演習中に GPU 計算について学ぶ際に GPU を用いた開発の花形の一つとも言えるゲームエンジン・グラフィックエンジンの開発について触れる場面があった。現在一部のゲームを除いて殆どのゲームは C++ をベースに作成されているが、JVM 言語も GPU を用いた高速計算が可能である。このため Clojure を用いて高速なゲームエンジンを作成してみる、更にはそこに何かしらのゲームAIを組み込んでみる、ということは需要については議論の余地があるとしても非常に興味深い内容になると考えている。\\
+　また機械学習について調べていく途中で RNN \footnote{Reccurent Neural Network} を見る機会、黒板アーキテクチャ、当然のことながら Random Forest について学ぶ機会があり、様々な特徴を持ったデータベースについて触れる機会も得たため、これらを組み合わせてみた場合にどのようなことが出来るのかを検討・調査してみたいと考えている。\\
+　 本年度の情報特別演習はこなさなければならない課題は多かったが、その分学ぶ部分も多く存在した。残念でならない点は、量が増えたためかそれぞれの成果がやや雑に纏まってしまったということである。来年度は本年度以上に課題を多く解くと共に、その課題一つ一つに真摯に取り組んでいこうと考えている。\\
 \section{付録}
-\label{sec:orgdea5a12}
+\label{sec:orged6c534}
 \subsection{このレポートにおける数式について}
-\label{sec:org419c2c6}
+\label{sec:orgcd41543}
 　このレポートにおける数式表現といくつかの基本的な用語の定義を以下に例と共に示す。\\
 \subsubsection{独立同時分布と変数の補足}
-\label{sec:orgfd7de7c}
+\label{sec:org5c2eac8}
 \begin{align}
 Y_t = \beta t + \epsilon_t \ where \ \epsilon_t \sim iid(0, \sigma^2)
 \end{align}
@@ -888,7 +912,7 @@ Y_t = \beta t + \epsilon_t \ where \ \epsilon_t \sim iid(0, \sigma^2)
 　ホワイトノイズと独立同時分布の関係は、ホワイトノイズには必ずしも独立性があるわけではないという意味で、独立同時分布のほうがより``強固''であると言える。　\\
 
 \subsubsection{標準誤差}
-\label{sec:org62bb17f}
+\label{sec:org83ec8cb}
 \begin{align}
 \hat{\pi}/ se(\hat{\pi})
 \end{align}
@@ -923,11 +947,15 @@ s.e.(\hat{\beta_i}) &= \sqrt{s^2/S_{XX}^j} \nonumber \\
 \end{align}
 　となる。尚 \(S_{xx}^j\) とは \(x_j\) から他の変数の影響を取り除いた \(x_j\) に固有の平方和である。\\
 
-
 \subsection{出力結果}
-\label{sec:org79b78ae}
-\includegraphics{./result.pdf}
-
+\label{sec:org1842473}
+\includegraphics [width=16cm] {./rect4145.png}
+\newpage
+\includegraphics [width=16cm] {./rect1607.png}
+\newpage
+\includegraphics [width=16cm] {./rect1673.png}
+　黒線とやや隠れてしまっているが青線の間がモンテカルロ法によって求めた\footnote{モデルのシミュレートを1000回行い、平均と標準偏差を求めている}予測の95\%信頼区間である。\\
+\newpage
 \printbibliography
 Emacs 26.0.91 (Org mode 9.1.6)
 \end{document}
