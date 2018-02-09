@@ -1358,11 +1358,13 @@ plt.plot(ts1[15:])
 　不安定な部分である、時系列の始めに近い値を取り除くことが出来ると考えた理由は、季節差分を取った際に初期のデータは比較される側のみであり、それ以降のデータとは扱われ方が異なるためである。\\
 
 \begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
-pred_with_SARIMA_resid2 = ts1[15:][1:][105:] - ts1_pred_with_SARIMA_dataframe.tolist()[15:][105:]
+pred_with_SARIMA_resid2 = \
+    ts1[15:][1:][105:] - ts1_pred_with_SARIMA_dataframe.tolist()[15:][105:]
 MSE_pred_SARIMA = np.array([(elem * elem) for elem in pred_with_SARIMA_resid2]).mean()
 print('train: MSE')
 print('      SARIMA model?        : ', MSE_pred_SARIMA)
-pred_with_SARIMA_resid2 = ts1[15:][1:][:105] - ts1_pred_with_SARIMA_dataframe.tolist()[15:][:105]
+pred_with_SARIMA_resid2 = \
+    ts1[15:][1:][:105] - ts1_pred_with_SARIMA_dataframe.tolist()[15:][:105]
 MSE_pred_SARIMA = np.array([(elem * elem) for elem in pred_with_SARIMA_resid2]).mean()
 print('predict: MSE')
 print('      SARIMA model?        : ', MSE_pred_SARIMA)
