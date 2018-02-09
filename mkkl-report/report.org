@@ -812,13 +812,24 @@
    　　尚 2018年1月18日時点 で出力可能な内容を印刷した pdf を [[付録]] 付録に追記する。
 * 発展 : ARIMA 推定 と Random Forest による予測
 ** 概要
-   #+BEGIN_SRC ipython :session :results raw drawer
-   print("Hello")
-#+END_SRC
+   　ARIMA 推定は 単一の時系列データに対してモデル推定・予測を行うが、これにある 予測 を 他のデータと関連させて行う 、という立場から予測を行いたいと考えた。つまりこの実験の目的は複数の時系列データに対して、 相関 を使って予測を行うというアプローチの妥当性について調査したい、ということである。
 
 ** 実験方法
+   　 [[https://github.com/millejoh/emacs-ipython-notebook][Emacs IPython Notebook]] を用いて Python の既存である関数を用いて実験を行う。
+   　実験データは Quandl から入手し、使用するデータは \textcircled{\scriptsize 1} 日経平均株価 \textcircled{\scriptsize 2} アサヒグループホールディングス \textcircled{\scriptsize 3} JR 東日本 \textcircled{\scriptsize 4} トヨタ自動車 \textcircled{\scriptsize 5} アステラス製薬 \textcircled{\scriptsize 6} ソニー の６つの終値である。
+   　実験手順は 以下のとおりである。
+   1. \textcircled{\scriptsize 2} から \textcircled{\scriptsize 6} の 2015年1月 から 2017年4月 までの 週次 データに対して ARIMA モデルを適用し、2017年11月頭までの予測を行う。
+   2. \textcircled{\scriptsize 1} から \textcircled{\scriptsize 6} における 2015年1月 から 2017年4月 までの時系列データに対して Random Forest を用いて回帰分析を行う。
+      　目的変数は \textcircled{\scriptsize 1} であり、説明変数は \textcircled{\scriptsize 2} から \textcircled{\scriptsize 6} である。
+   3. 得られた Random Forest のモデルを用いて \textcircled{\scriptsize 1} について2017年11月頭までの予測を行う。
+   4. 実際の \textcircled{\scriptsize 1} の値と比較を行う。
+   5. Random Forest のみによる回帰分析、ARIMA モデル、 SARIMA モデルのそれぞれを \textcircled{\scriptsize 1} に適用し、 5. と精度比較を行う。
 ** 実験結果
+   　膨大な実験データになったため、付録に解説を含めて添付する。
 ** 考察
+   　提案した手法は実験結果からわかるように良い精度を得られなかった。原因として考えられるものに、ARIMAモデルそのものが精度を必ずしも保証できないということ、説明変数の選択が不適切であったことが考えられる。
+   　実際に実験中に用いた ARIMA モデルは予測精度に難があり、SARIMA モデルを使わなければならなかった。そしてその判定は AIC 等を用いて求める他に、それぞれの実行結果を確認する必要があるのではないかと考えている。季節階差などは ACF や PACF のグラフの閾値内に隠れている可能性が十分に存在することは今回の実験から明らかである。
+   　説明変数の選択については、この実験は複数回実行されておりぞれぞれ 4 \sim 5 個の説明変数を用いて行ったもののこの実験結果とほとんど変わらない精度であったことから、非常に難しい問題であると考えている。特に株価のような様々な要因が複雑に重なり合って初めて決定されると考えられるデータに対して最適な説明変数を選択することは、相当に株式について知見を持った観測者でなければ出来ないと考えている。但し、例えば仮想的に小さな世界を作成し、その中でのみ相互作用が起こる場合にこの手法を適用した場合にどのような結果が出るのか、という疑問が生まれた。この検証については今演習では時間や能力が足りず実験を行うことが出来なかったため、来年度以降の課題となった。
 * まとめと今後の課題
   　本演習で学んだ内容は非常に多岐に渡っており、来年度以降の研究題材を豊富に得ることができたと考えている。
   　例えば本演習中に GPU 計算について学ぶ際に GPU を用いた開発の花形の一つとも言えるゲームエンジン・グラフィックエンジンの開発について触れる場面があった。現在一部のゲームを除いて殆どのゲームは C++ をベースに作成されているが、JVM 言語も GPU を用いた高速計算が可能である。このため Clojure を用いて高速なゲームエンジンを作成してみる、更にはそこに何かしらのゲームAIを組み込んでみる、ということは需要については議論の余地があるとしても非常に興味深い内容になると考えている。
@@ -839,7 +850,7 @@
     - $Var(E_t) < infinity$ 
       　分散は発散しない
     - $Cor(E_t, E_s) = 0$ 
-      　相関 (correlation) $$\footnote{$r_{e_t, e_s}$ と表されることもある}$$ 関係はない 
+      　相関 (correlation) 関係はない $$\footnote{$r_{e_t, e_s}$ と表されることもある}$$ 
     　ホワイトノイズと独立同時分布の関係は、ホワイトノイズには必ずしも独立性があるわけではないという意味で、独立同時分布のほうがより``強固''であると言える。　
 
 *** 標準誤差
@@ -886,7 +897,426 @@
    　黒線とやや隠れてしまっているが青線の間がモンテカルロ法によって求めた\footnote{モデルのシミュレートを1000回行い、平均と標準偏差を求めている}予測の95%信頼区間である。
    #+LATEX: \newpage
    #+LATEX: \printbibliography
-** COMMENT トレンド定常
+** 実験結果
+   　まず依存環境を解決する。
+   #+BEGIN_SRC  ipython :session kernel-27168.json :results output :exports both
+from pprint import pprint
+import warnings
+warnings.filterwarnings('ignore')
+import numpy as np
+import pandas as pd
+from scipy import stats
+import quandl
+from sklearn.ensemble import RandomForestRegressor
+import statsmodels.api as sm
+from statsmodels.tsa.arima_model import ARIMA, ARMA
+from matplotlib import pylab as plt
+
+%matplotlib inline
+   #+END_SRC
+
+   #+RESULTS:
+   　次に、データを入手するための関数を定義する。データは 2015年1月から2017年11月頭までの週次のものである。
+   #+BEGIN_SRC  ipython :session kernel-27168.json :results output :exports both
+def get_dataframe (name) :
+    return quandl.get(name, start_date='2015-1-1', end_date='2017-11-1',
+                      collapse='weekly')
+   #+END_SRC
+
+   #+RESULTS:
+   　これを用いてデータを入手する。dataframe の後ろにつく数字は、 [[*実験方法]] 実験方法に記載されている数字と一致している。
+   #+BEGIN_SRC  ipython :session kernel-27168.json :results output :exports both
+dataframe1 = get_dataframe("NIKKEI/INDEX.4")
+dataframe2 = get_dataframe("TSE/2502.4")
+dataframe3 = get_dataframe("TSE/9020.4")
+dataframe4 = get_dataframe("TSE/7203.4")
+dataframe5 = get_dataframe("TSE/4503.4")
+dataframe6 = get_dataframe("TSE/6758.4")
+   #+END_SRC
+
+   #+RESULTS:
    
+   　以下は入手したデータの整形である。
+   #+BEGIN_SRC  ipython :session kernel-27168.json :results output :exports both
+ts1 = dataframe1['Close Price'].rename('Close')
+ts2 = dataframe2['Close'][:120]
+ts3 = dataframe3['Close'][:120]
+ts4 = dataframe4['Close'][:120]
+ts5 = dataframe5['Close'][:120]
+ts6 = dataframe6['Close'][:120]
+   #+END_SRC
 
+   #+RESULTS:
 
+   　以降は ADF 検定を用いた定常性判定であり、最小となる階差の次数における分析結果が返される。返り値の 1 つめの要素と最後の Map の中身の値を比較して仮説検定が行われ、その際に用いられる次数、つまり最もふさわしい次数が 3 つめの要素である。今回は最も ADF の値が小さくなるように、定数と傾きに関する項を回帰に含めている。
+   #+BEGIN_SRC ipython :session kernel-27168.json :results output :exports both
+pprint(sm.tsa.stattools.adfuller(ts2, regression='ctt', autolag = 'AIC'))
+pprint(sm.tsa.stattools.adfuller(ts3, regression='ct', autolag = 'AIC'))
+pprint(sm.tsa.stattools.adfuller(ts4, regression='ctt', autolag = 'AIC'))
+pprint(sm.tsa.stattools.adfuller(ts5, regression='ct', autolag = 'AIC'))
+pprint(sm.tsa.stattools.adfuller(ts6, regression='ctt', autolag = 'AIC'))
+#+END_SRC
+
+   #+RESULTS:
+   #+begin_example
+   (-3.4243993894646616,
+    0.13326170365782197,
+    0,
+    119,
+    {'1%': -4.471237472469957,
+     '10%': -3.584424431130831,
+     '5%': -3.882969922547368},
+    1307.5889250985836)
+   (-2.904793565308496,
+    0.16067015581233307,
+    0,
+    119,
+    {'1%': -4.036933565633866,
+     '10%': -3.1490681814297643,
+     '5%': -3.4480491338265407},
+    1537.811468467928)
+   (-2.6037424086219305,
+    0.5096036701299048,
+    0,
+    119,
+    {'1%': -4.471237472469957,
+     '10%': -3.584424431130831,
+     '5%': -3.882969922547368},
+    1449.4672932660785)
+   (-3.4174043810519117,
+    0.04910564863187634,
+    0,
+    119,
+    {'1%': -4.036933565633866,
+     '10%': -3.1490681814297643,
+     '5%': -3.4480491338265407},
+    1143.8350636832258)
+   (-4.137776413232316,
+    0.02100681603520161,
+    1,
+    118,
+    {'1%': -4.472110860871852,
+     '10%': -3.584692378310343,
+     '5%': -3.883407308731662},
+    1337.068933005826)
+   #+end_example
+   
+   　次に \textcircled{\scriptsize 2} から \textcircled{\scriptsize 6} の ARIMA モデルの係数 p, q の値を、Python の関数を用いて半自動的に求める。
+   #+BEGIN_SRC ipython :session kernel-27168.json :results output :exports both
+pprint(sm.tsa.arma_order_select_ic(ts2, ic='aic'))
+pprint(sm.tsa.arma_order_select_ic(ts3, ic='aic'))
+pprint(sm.tsa.arma_order_select_ic(ts4, ic='aic'))
+pprint(sm.tsa.arma_order_select_ic(ts5, ic='aic'))
+pprint(sm.tsa.arma_order_select_ic((ts6 - ts6.shift(1)).dropna(), ic='aic'))
+   #+END_SRC
+
+   #+RESULTS:
+   #+begin_example
+   {'aic':              0            1            2
+   0  1679.536657  1577.743635  1763.332522
+   1  1488.936634  1490.614433  1488.660757
+   2  1490.733981  1490.708809  1490.657758
+   3  1489.374765  1491.192556  1492.459610
+   4  1491.350072  1493.041001  1494.459551,
+    'aic_min_order': (1, 2)}
+   {'aic':              0            1            2
+   0  1979.585644  1869.081432  1809.600127
+   1  1737.428598  1738.866964  1739.981652
+   2  1738.990991  1740.494877  1741.980017
+   3  1739.657859  1741.646606  1735.021824
+   4  1741.609854  1743.301390          NaN,
+    'aic_min_order': (3, 2)}
+   {'aic':              0            1            2
+   0  2002.003998  1868.465319  1964.683360
+   1  1640.157010  1641.641261  1643.141242
+   2  1641.711249  1642.628899  1644.606973
+   3  1643.150901  1644.607821  1647.420408
+   4  1645.148941  1646.595370  1648.894668,
+    'aic_min_order': (1, 0)}
+   {'aic':              0            1            2
+   0  1545.805878  1436.081643  1388.521781
+   1  1302.593986  1303.591920  1304.847993
+   2  1303.801149  1305.297028  1306.731610
+   3  1304.443329  1306.432100  1292.806527
+   4  1306.403755  1310.297566  1294.654617,
+    'aic_min_order': (3, 2)}
+   {'aic':              0            1            2
+   0  1525.435271  1522.249768  1523.248768
+   1  1521.388158  1522.796172  1524.758002
+   2  1522.815016  1524.769149          NaN
+   3  1524.725640  1526.723993          NaN
+   4  1526.710486  1528.435723          NaN,
+    'aic_min_order': (1, 0)}
+   #+end_example
+   
+   　ここまでで ARIMA モデルにおける p, d, q の係数が定まったため、それらを適用してモデルを作成する。 尚 階差 d が 0 である場合は、この条件においては同義となる ARMA モデルを適用している。
+   #+BEGIN_SRC ipython :session kernel-27168.json :results output :exports both
+ts2_arima = ARMA(ts2, order = (1, 2)).fit()
+ts3_arima = ARMA(ts3, order = (3, 2)).fit()
+ts4_arima = ARMA(ts4, order = (1, 0)).fit()
+ts5_arima = ARMA(ts5, order = (3, 2)).fit()
+ts6_arima = ARIMA(ts6, order = (1, 1, 0)).fit()
+   #+END_SRC
+
+   #+RESULTS:
+
+   　次に Random Forest モデルを作成する。目的変数を
+   #+BEGIN_SRC ipython :session kernel-27168.json :results output :exports both
+r_forest = RandomForestRegressor(n_estimators = 1000, criterion = 'mse', random_state = 1, n_jobs = 1)
+r_forest.fit(np.vstack((ts2.values,ts3.values,ts4.values,ts5.values,ts6.values)).T,
+             ts1[:120].values)
+   #+END_SRC
+
+   #+RESULTS:
+   　Random Forestのモデルを作成したので、 ARIMA モデルを適用した \textcircled{\scriptsize 2} から \textcircled {\scriptsize 6} を用いて予測値を作成する。
+   #+BEGIN_SRC ipython :session kernel-27168.json :results output :exports both
+ts2_predict = ts2_arima.predict('2015-1-18','2017-11-5')
+ts3_predict = ts3_arima.predict('2015-1-18','2017-11-5')
+ts4_predict = ts4_arima.predict('2015-1-18','2017-11-5')
+ts5_predict = ts5_arima.predict('2015-1-18','2017-11-5')
+ts6_predict = ts6_arima.predict('2015-1-18','2017-11-5')
+   #+END_SRC
+
+   #+RESULTS:
+   
+   　必要な要素が揃ったため、ここで問題となる回帰予測をおこなった。
+   #+BEGIN_SRC ipython :session kernel-27168.json :results drawer :exports both
+ts1_pred_with_RF = r_forest.predict(
+    np.vstack((ts2_predict, ts3_predict, ts4_predict, ts5_predict, ts6_predict)).T)
+ts1_pred_with_RF_dataframe = \
+    pd.DataFrame({'Close': ts1_pred_with_RF.tolist()},index =  pd.DatetimeIndex(periods = 147, freq = 'W', start = '2015-1-18'))
+plt.hold(True)
+plt.plot(ts1_pred_with_RF_dataframe)
+plt.plot(ts1)
+   #+END_SRC
+
+   #+RESULTS:
+   :RESULTS:
+   # Out[58]:
+   : [<matplotlib.lines.Line2D at 0x7fbda6633208>]
+   [[file:./obipy-resources/NZpRGa.png]]
+   :END:
+   
+   　この図を見るとこの手法はあまり精度が出ていないことがわかる。
+   　次に比較として、単純に \textcircled{\scriptsize 1} に ARIMA モデルを適用した場合の時系列予測を行う。行っていることは \textcircled{\scriptsize 2} 等と変わらないため解説は省く。
+   #+BEGIN_SRC ipython :session kernel-27168.json :results drawer :exports both
+   sm.tsa.stattools.adfuller(ts1[:120], regression='ctt', autolag = 'AIC')
+   #+END_SRC
+
+   #+RESULTS:
+   :RESULTS:
+   # Out[60]:
+   #+BEGIN_EXAMPLE
+     (-2.8812138487142485,
+     0.3547039460728244,
+     0,
+     119,
+     {'1%': -4.471237472469957,
+     '10%': -3.584424431130831,
+     '5%': -3.882969922547368},
+     1624.5165654066914)
+   #+END_EXAMPLE
+   :END:
+   
+   #+BEGIN_SRC ipython :session kernel-27168.json :results drawer :exports both
+   sm.tsa.arma_order_select_ic(ts1[:120], ic='aic')
+   #+END_SRC
+
+   #+RESULTS:
+   :RESULTS:
+   # Out[61]:
+   #+BEGIN_EXAMPLE
+     {'aic':              0            1            2
+     0  2096.943059  1986.989400  1930.176824
+     1  1837.682455  1839.576223  1841.481132
+     2  1839.583519  1841.552211  1843.455817
+     3  1841.446417  1843.432328  1843.027764
+     4  1843.368379          NaN  1845.121876, 'aic_min_order': (1, 0)}
+   #+END_EXAMPLE
+   :END:
+
+   #+BEGIN_SRC ipython :session kernel-27168.json :results drawer :exports both
+ts1_arima = ARMA(ts1[:120], order = (1, 0)).fit()
+ts1_pred_with_ARMA_dataframe = ts1_arima.predict('2015-1-18','2017-11-5')
+plt.hold(True)
+plt.plot(ts1_pred_with_ARMA_dataframe)
+plt.plot(ts1)
+   #+END_SRC
+
+   #+RESULTS:
+   :RESULTS:
+   # Out[63]:
+   : [<matplotlib.lines.Line2D at 0x7fbda65d7860>]
+   [[file:./obipy-resources/3LdvJO.png]]
+   :END:
+   
+   　この図を見るとモデルは与えられたデータに対してかなり適合していることがわかるが、予測の段階で非常に大きな誤差が生まれていることがわかる。 [[*p, q の決定法]] p, q の決定法 に書かれている規則を考えるとこのモデルには単位根が残っている可能性が考えられる。これについては次に行う Random Forest を用いた回帰予測とこれらのモデルの精度比較を行った後、 SARIMA モデルと合わせて検討を行う。
+   
+   　同様に比較として Random Forest 回帰を用いた予測を行う。今回は \textcircled{\scriptsize 1} における ARIMA モデル の係数 p の値に従い \footnote{少なくとも過去の値一つと比較した際に何らかの相関があると考えられるためである。} 説明変数に過去の値を一つ取ってモデルを作成した。
+   
+   #+BEGIN_SRC ipython :session kernel-27168.json :results drawer :exports both
+ts1_s1 = ts1.shift(1).dropna()[:120]
+ts1_y = ts1[1:][:120]
+r_forest2 = RandomForestRegressor(n_estimators = 1000, criterion = 'mse', random_state = 1, n_jobs = 1)
+r_forest.fit(np.vstack((ts1_s1.values)),ts1_y.values)
+ts1_pred_with_RF2 = r_forest.predict(np.vstack((ts1.shift(1).dropna().values)))
+ts1_pred_with_RF2_dataframe = \
+    pd.DataFrame({'Close': ts1_pred_with_RF2.T.tolist()},
+                 index =  pd.DatetimeIndex(periods = 147,
+                                           freq = 'W', start = '2015-1-18'))
+plt.hold(True)
+plt.plot(ts1_pred_with_RF2_dataframe)
+plt.plot(ts1)
+   #+END_SRC
+   
+   #+RESULTS:
+   :RESULTS:
+   # Out[78]:
+   : [<matplotlib.lines.Line2D at 0x7fbda64267f0>]
+   [[file:./obipy-resources/sdxJT6.png]]
+   :END:
+
+   　このグラフを見ると、ARIMAモデルを用いた場合に対してもより精度が良くなっているように見える。予測部分に関してもそれなりに近い動きを示しているが、やや不安定な動きを見せている。
+   
+   　次にモデルとの適合具合を調べるために MSE (二乗平均誤差) \footnote{Mean Squared Error} を取る。
+   #+BEGIN_SRC ipython :session kernel-27168.json :results output drawer :exports both
+train_with_RF_resid = ts1[1:][:120] - ts1_pred_with_RF[:120]
+train_with_ARMA_resid = ts1[1:][:120] - ts1_pred_with_ARMA_dataframe.tolist()[:120]
+train_with_RF2_resid = ts1[1:][:120] - ts1_pred_with_RF2[:120]
+MSE_train_RF = np.array([(elem * elem) for elem in train_with_RF_resid]).mean()
+MSE_train_ARMA = np.array([(elem * elem) for elem in train_with_ARMA_resid]).mean()
+MSE_train_RF2 = np.array([(elem * elem) for elem in train_with_RF2_resid]).mean()
+print('train: MSE')
+print('RandomForest and ARIMA model: ', MSE_train_RF)
+print('      AR(I)MA model         : ', MSE_train_ARMA)
+print('      Random Forest         : ', MSE_train_RF2)
+   #+END_SRC
+
+   #+RESULTS:
+   :RESULTS:
+   train: MSE
+   RandomForest and ARIMA model:  1210139.138746533
+         AR(I)MA model         :  247038.67430585716
+         Random Forest         :  42615.21572554316
+   :END:
+   
+   　この結果から、提案した手法が元データを学習する面で良い精度を得られたなかったことは明らかである。また、 ARIMA モデルの精度が低いように見えるが、これは ARIMA モデルが 元データに対してずれた結果を示しているためであると考えられる。実施に求めた時系列データを一つずらすことで以下の結果を得ることが出来る。
+
+   #+BEGIN_SRC ipython :session kernel-27168.json :results output drawer :exports both
+ts1_pred_with_ARMA_dataframe2 = ts1_arima.predict('2015-1-18','2017-11-5')
+train_with_ARMA_resid2 = ts1[:120] - ts1_pred_with_ARMA_dataframe2.tolist()[:120]
+MSE_train_ARMA2 = np.array([(elem * elem) for elem in train_with_ARMA_resid2]).mean()
+print('train: MSE')
+print('      AR(I)MA model?        : ', MSE_train_ARMA2)
+   #+END_SRC
+
+   #+RESULTS:
+   :RESULTS:
+   train: MSE
+         AR(I)MA model?        :  8580.270341196769
+   :END:
+   
+   　この結果は Random Forest に比べてもかなり良い結果であることがわかる。
+   　次に予測に関する精度を比較する。こちらも同様に MSE を用いた比較を行っている。
+   #+BEGIN_SRC ipython :session kernel-27168.json :results output drawer :exports both
+pred_with_RF_resid = ts1[1:][120:] - ts1_pred_with_RF[120:]
+pred_with_ARMA_resid = ts1[1:][120:] - ts1_pred_with_ARMA_dataframe.tolist()[120:]
+pred_with_RF2_resid = ts1[1:][120:] - ts1_pred_with_RF2[120:]
+MSE_pred_RF = np.array([(elem * elem) for elem in pred_with_RF_resid]).mean()
+MSE_pred_ARMA = np.array([(elem * elem) for elem in pred_with_ARMA_resid]).mean()
+MSE_pred_RF2 = np.array([(elem * elem) for elem in pred_with_RF2_resid]).mean()
+print('predict: MSE')
+print('RandomForest and ARIMA model: ', MSE_pred_RF)
+print('      AR(I)MA model         : ', MSE_pred_ARMA)
+print('      Random Forest         : ', MSE_pred_RF2)
+
+pred_with_ARMA_resid2 = ts1[1:][120:] - ts1_pred_with_ARMA_dataframe2.tolist()[120:]
+MSE_pred_ARMA2 = np.array([(elem * elem) for elem in pred_with_ARMA_resid2]).mean()
+print('      AR(I)MA model?        : ', MSE_pred_ARMA2)
+   #+END_SRC
+
+   #+RESULTS:
+   :RESULTS:
+   predict: MSE
+   RandomForest and ARIMA model:  7288573.59721489
+         AR(I)MA model         :  4002781.362739798
+         Random Forest         :  415257.4516347963
+         AR(I)MA model?        :  4002781.362739798
+   :END:
+
+   　この結果からはそれぞれの図で確認したとおり、 Random Forest が最も良い精度を持っていることがわかる。また ARIMA モデルは、モデルの元データとの適合度においては求まったデータをずらすことで精度が大幅に向上したが、予測の観点ではずらしても良い精度を得られていないことがわかる。
+   
+    　今回の実験における ARIMA モデルの精度について確認が出来たところで SARIMA モデルを用いた検討を行う。まず SARIMA モデルを適用するべきであるのかを確認するために ACF, PACF のグラフを確認する。
+    
+    #+BEGIN_SRC ipython :session kernel-27168.json :results drawer :exports both
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+fig = plt.figure(figsize = (12,8))
+ax1 = fig.add_subplot(211)
+fig = sm.graphics.tsa.plot_acf(ts1, lags=40, ax = ax1)
+ax2 = fig.add_subplot(212)
+fig = sm.graphics.tsa.plot_pacf(ts1, lags=40, ax = ax2)
+    #+END_SRC
+
+    #+RESULTS:
+    :RESULTS:
+    # Out[83]:
+    [[file:./obipy-resources/hiPz5Z.png]]
+    :END:
+
+    　この結果を注視すると、PACF のグラフに微かに周期性を見ることが出来る。よって 季節階差\footnote{正確にはこのデータは週次ごとのデータなので、``季節''差分を取っているわけではなく、周期性に基づいて階差を取っている。} を取ることが出来ると考えられる。
+    　実際に SARIMA モデルを適用すると以下のようになる。尚 実験の結果 \footnote{実際にモデルを作成し、最もAICの小さいモデルを選択した} 、このデータに対して季節成分の係数 (P,D,Q) は (1, 1, 0) を設定している。
+    #+BEGIN_SRC ipython :session kernel-27168.json :results drawer :exports both
+ts1_SARIMA = sm.tsa.SARIMAX(ts1, order=(1,0,0), seasonal_order=(1,1,0,12)).fit()
+ts1_pred_with_SARIMA_dataframe =  ts1_SARIMA.predict('2015-1-18','2017-11-5')
+
+plt.hold(True)
+plt.plot(ts1_pred_with_SARIMA_dataframe)
+plt.plot(ts1)
+    #+END_SRC
+
+    #+RESULTS:
+    :RESULTS:
+    # Out[85]:
+    : [<matplotlib.lines.Line2D at 0x7fbda6292048>]
+    [[file:./obipy-resources/Cq8mTf.png]]
+    :END:
+
+    　結果より時系列的に始めに近い部分の値が不安定ではあるが、それ以外の値に関しては元データに即した値を求めると考えられ、予測も比較的理想に近い値を取っている。
+    　また、不安定な部分を除いて表示を行うと以下のようになる。
+    #+BEGIN_SRC ipython :session kernel-27168.json :results drawer :exports both
+plt.plot(ts1_pred_with_SARIMA_dataframe[15:])
+plt.plot(ts1[15:])
+    #+END_SRC
+
+    #+RESULTS:
+    :RESULTS:
+    # Out[86]:
+    : [<matplotlib.lines.Line2D at 0x7fbda61efcc0>]
+    [[file:./obipy-resources/oQbvvm.png]]
+    :END:
+
+    　次にこの不安定な部分を取り除いた場合の SARIMA モデルについて MSE を求める。
+    始めに近い値を取り除くことが出来ると考えた理由は、季節差分を取った際に初期のデータは比較される側のみであり、それ以降のデータとは扱いが異なるためである。
+
+    #+BEGIN_SRC ipython :session kernel-27168.json :results output drawer :exports both
+pred_with_SARIMA_resid2 = ts1[15:][1:][105:] - ts1_pred_with_SARIMA_dataframe.tolist()[15:][105:]
+MSE_pred_SARIMA = np.array([(elem * elem) for elem in pred_with_SARIMA_resid2]).mean()
+print('train: MSE')
+print('      SARIMA model?        : ', MSE_pred_SARIMA)
+pred_with_SARIMA_resid2 = ts1[15:][1:][:105] - ts1_pred_with_SARIMA_dataframe.tolist()[15:][:105]
+MSE_pred_SARIMA = np.array([(elem * elem) for elem in pred_with_SARIMA_resid2]).mean()
+print('predict: MSE')
+print('      SARIMA model?        : ', MSE_pred_SARIMA)
+    #+END_SRC
+
+    #+RESULTS:
+    :RESULTS:
+    train: MSE
+          SARIMA model?        :  256194.51962546672
+    predict: MSE
+          SARIMA model?        :  571242.1110044359
+    :END:
+
+    　この結果から、少なくとも ARIMA モデルに比べると SARIMA モデルが精度面で高い性能を示していると考えることが出来る。
+
+** COMMENT トレンド定常
