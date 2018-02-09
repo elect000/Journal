@@ -4,7 +4,7 @@
     \usepackage{amsmath, amssymb, bm}
 		\usepackage[utf8]{inputenc}
 		\usepackage[dvipdfmx]{graphicx}
-		\usepackage[dvipdfmx]{color}
+	  \usepackage[dvipdfmx]{color}
 		\usepackage[backend=biber,bibencoding=utf8]{biblatex}
 		\usepackage{url}
 		\usepackage{indentfirst}
@@ -43,7 +43,7 @@
 \section{時系列データベースの比較と OpenTSDB の利用法}
 \label{sec:org83dfa88}
 一般的に時系列データのような、単調増加する要素を持つデータを通常の大規模データベースに保存することはデータの分散という点から問題が発生する。 \cite{hbase-reference} このため時系列データを扱うためのデータベースを考える必要がある。幸いなことに、初期案にあった HBase に対して時系列データを扱うことができるように拡張した \(\href{http://opentsdb.net/}{OpenTSDB}\) というデータベースがある。OpenTSDB は HTTP API としての操作が許されており、また保存されているデータを確認することが容易であるように設計されている。今回は HBase を完全分散モードで利用する、というチームメンバーの目標に沿ってこちらのデータベースを採用した。\\
-　他の時系列データベースの提案として考えられるものに、\textcircled{\scriptsize 1} \(\href{https://www.influxdata.com/}{InfluxDB}\) 、\textcircled{\scriptsize 2} \(\href{https://graphiteapp.org/}{Graphite}\) 、 \textcircled{\scriptsize 3} \(\href{https://www.datomic.com/}{Datomic}\) などを挙げることができる、これらを比較した。\\
+　他の時系列データベースの提案として考えられるものに、\textcircled{\scriptsize 1} \(\href{https://www.influxdata.com/}{InfluxDB}\) 、\textcircled{\scriptsize 2} \(\href{https://graphiteapp.org/}{Graphite}\) 、 \textcircled{\scriptsize 3} \(\href{https://www.datomic.com/}{Datomic}\) などを挙げることができ、これらを比較した。\\
 　この章ではそれぞれのデータベースの特徴と利用法を簡潔にまとめる。\\
 \subsection{InfluxDB}
 \label{sec:org07655e7}
@@ -282,10 +282,10 @@ OpenTSDB を利用するにあたって重要な要素に HTTP API の習得が�
 　Grafana は InfluxDB や Graphite 、 OpenTSDB などのデータベースに対してデータを視覚化させるためのツールで、 Web ブラウザから Grafana が開けることになるポート\footnote{標準では3000番}にアクセスすることで、ユーザーフレンドリーなクエリ処理機構を用いてデータベースと通信を行い、得られた結果をグラフや表にすることができる。以下にその例を示す。\\
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=17cm]{./grafana.PNG}
+\includegraphics[width=15cm]{./grafana.PNG}
 \caption{Grafana を用いた視覚化の例}
 \end{figure}
-
+\newpage
 \section{Clojure を用いた JVM における高速計算技法}
 \label{sec:org9a4b90f}
 本演習の開始時、自分のこれまでのプログラム言語学習経歴 \footnote{昨年の情報特別演習においてはPythonを中心に利用し、授業外で Common Lisp をある程度習得した} から、 Lisp の影響を受けた言語を選択することが最も演習に適していると考えており、更に HBase　を活用することが決定していたため、 \href{https://www.java.com}{Java} に近く Lisp に近い言語として JVM \footnote{Java virtual machine}上で動作する \href{https://clojure.org}{Clojure} を採用した。また演習を勧めていく上でフロントエンドの開発も行う必要が出てきたため、同様のシンタックスを用いる \href{https://clojurescript.org}{ClojureScript} も採用し、この両方の言語を中心に学習した。\\
@@ -305,7 +305,7 @@ Clojure に GPU ライブラリ等を適用する以前に純粋な Clojure で�
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.9\linewidth]{./neanderthal.png}
+\includegraphics[width=15cm]{./neanderthal.png}
 \caption{ベンチマーク \href{http://neanderthal.uncomplicate.org/articles/benchmarks.html}{Neanderthal Benchmarks} より}
 \end{figure}
 
@@ -811,7 +811,7 @@ AIC = 2 * (p + q + 1) - 2 * log L
 \item TSDATA\\
 　例えば ``NIKKEI/INDEX'' のような時系列データの名称を保存するためのテーブルである。name はその時系列データの名前である。freq はデータの時間的頻度を指定しているが、ARIMA モデルの規格化などもあり今回はすべて週ごとを示す ``weekly'' がセットされている。\\
 \item TSDATA\_CHILDREN\\
-　``close-price'' のような TSDATA テーブル で扱うべきではない細かいデータ区分を保存するためのテーブルである。name はその区分を示す名前である。ここにある name と parent\_name を用いて OpenTSDB の Metric TSData に保存された時系列データへのアクセスを行う。$$\footnote{TSDATAの Metric 名は TSDATAテーブルの name , タグの value が TSDATA\_CHILDREN テーブルの name に対応している}$$\\
+　``close-price'' のような TSDATA テーブル で扱うべきではない細かいデータ区分を保存するためのテーブルである。name はその区分を示す名前である。ここにある name と parent\_name を用いて OpenTSDB の Metric TSData に保存された時系列データへのアクセスを行う。\footnote{TSDATAの Metric 名は TSDATAテーブルの name , タグの value が TSDATA\_CHILDREN テーブルの name に対応している}\\
 \item ALLOWED\_DATA\\
 　ユーザごとに扱えるデータに制限をかけるためのテーブルである。これは Quandl がAPIキーを登録せずともある上限まではデータを入手できるという機能に即するために作成した。\\
 \item EXPERIENCE\\
@@ -891,7 +891,7 @@ AIC = 2 * (p + q + 1) - 2 * log L
 　目的変数は \textcircled{\scriptsize 1} であり、説明変数は \textcircled{\scriptsize 2} から \textcircled{\scriptsize 6} である。\\
 \item 得られた Random Forest のモデルを用いて \textcircled{\scriptsize 1} について2017年11月頭までの予測を行う。\\
 \item 実際の \textcircled{\scriptsize 1} の値と比較を行う。\\
-\item Random Forest のみによる回帰分析、ARIMA モデル、 SARIMA モデルのそれぞれを \textcircled{\scriptsize 1} に適用し、 5. と精度比較を行う。\\
+\item Random Forest のみによる回帰分析、ARIMA モデル、 SARIMA モデルのそれぞれを \textcircled{\scriptsize 1} に適用し、 3. と精度比較を行う。\\
 \end{enumerate}
 \subsection{実験結果}
 \label{sec:org8902258}
@@ -907,6 +907,11 @@ AIC = 2 * (p + q + 1) - 2 * log L
 　例えば本演習中に GPU 計算について学ぶ際に GPU を用いた開発の花形の一つとも言えるゲームエンジン・グラフィックエンジンの開発について触れる場面があった。現在一部のゲームを除いて殆どのゲームは C++ をベースに作成されているが、JVM 言語も GPU を用いた高速計算が可能である。このため Clojure を用いて高速なゲームエンジンを作成してみる、更にはそこに何かしらのゲームAIを組み込んでみる、ということは需要については議論の余地があるとしても非常に興味深い内容になると考えている。\\
 　また機械学習について調べていく途中で RNN \footnote{Reccurent Neural Network} を見る機会、黒板アーキテクチャ、当然のことながら Random Forest について学ぶ機会があり、様々な特徴を持ったデータベースについて触れる機会も得たため、これらを組み合わせてみた場合にどのようなことが出来るのかを検討・調査してみたいと考えている。\\
 　 本年度の情報特別演習はこなさなければならない課題は多かったが、その分学ぶ部分も多く存在した。残念でならない点は、量が増えたためかそれぞれの成果がやや雑に纏まってしまったということである。来年度は本年度以上に課題を多く解くと共に、その課題一つ一つに真摯に取り組んでいこうと考えている。\\
+
+\section{謝辞}
+\label{sec:orgab0062c}
+　本演習においてはグループメンバーや担当教員である 筑波大学 システム情報系 情報工学域 日野 英逸 准教授に多大なご指導を頂いた。具体的には、グループメンバーには様々な課題を賜り充実した演習を行うことが出来、准教授には実験のみならずレポートの作成などについてもご指導を頂いた。協力に心からの感謝を申し上げます。
+
 \section{付録}
 \label{sec:orgf55781c}
 \subsection{このレポートにおける数式について}
@@ -926,7 +931,7 @@ Y_t = \beta t + \epsilon_t \ where \ \epsilon_t \sim iid(0, \sigma^2)
 \item \(Var(E_t) < infinity\) \\
 　分散は発散しない\\
 \item \(Cor(E_t, E_s) = 0\) \\
-　相関 (correlation) 関係はない $$\footnote{$r_{e_t, e_s}$ と表されることもある}$$ \\
+　相関 (correlation) 関係はない \footnote{$r_{e_t, e_s}$ と表されることもある} \\
 \end{itemize}
 　ホワイトノイズと独立同時分布の関係は、ホワイトノイズには必ずしも独立性があるわけではないという意味で、独立同時分布のほうがより``強固''であると言える。　\\
 
@@ -1132,7 +1137,8 @@ ts6_arima = ARIMA(ts6, order = (1, 1, 0)).fit()
 
 　次に Random Forest モデルを作成する。目的変数を\\
 \begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
-r_forest = RandomForestRegressor(n_estimators = 1000, criterion = 'mse', random_state = 1, n_jobs = 1)
+  r_forest = RandomForestRegressor(n_estimators = 1000, criterion = 'mse',
+                                   random_state = 1, n_jobs = 1)
 r_forest.fit(np.vstack((ts2.values,ts3.values,ts4.values,ts5.values,ts6.values)).T,
              ts1[:120].values)
 \end{minted}
@@ -1151,7 +1157,8 @@ ts6_predict = ts6_arima.predict('2015-1-18','2017-11-5')
 ts1_pred_with_RF = r_forest.predict(
     np.vstack((ts2_predict, ts3_predict, ts4_predict, ts5_predict, ts6_predict)).T)
 ts1_pred_with_RF_dataframe = \
-    pd.DataFrame({'Close': ts1_pred_with_RF.tolist()},index =  pd.DatetimeIndex(periods = 147, freq = 'W', start = '2015-1-18'))
+pd.DataFrame({'Close': ts1_pred_with_RF.tolist()},index = \
+    pd.DatetimeIndex(periods = 147, freq = 'W', start = '2015-1-18'))
 plt.hold(True)
 plt.plot(ts1_pred_with_RF_dataframe)
 plt.plot(ts1)
@@ -1216,7 +1223,8 @@ plt.plot(ts1)
 \begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 ts1_s1 = ts1.shift(1).dropna()[:120]
 ts1_y = ts1[1:][:120]
-r_forest2 = RandomForestRegressor(n_estimators = 1000, criterion = 'mse', random_state = 1, n_jobs = 1)
+r_forest2 = RandomForestRegressor(n_estimators = 1000, criterion = 'mse',
+                                  random_state = 1, n_jobs = 1)
 r_forest.fit(np.vstack((ts1_s1.values)),ts1_y.values)
 ts1_pred_with_RF2 = r_forest.predict(np.vstack((ts1.shift(1).dropna().values)))
 ts1_pred_with_RF2_dataframe = \
@@ -1312,7 +1320,7 @@ fig = sm.graphics.tsa.plot_pacf(ts1, lags=40, ax = ax2)
 \end{center}
 
 　この結果を注視すると、PACF のグラフに微かに周期性を見ることが出来る。よって 季節階差\footnote{正確にはこのデータは週次ごとのデータなので、``季節''差分を取っているわけではなく、周期性に基づいて階差を取っている。} を取ることが出来ると考えられる。\\
-　実際に SARIMA モデルを適用すると以下のようになる。尚 実験の結果 \footnote{実際にモデルを作成し、最もAICの小さいモデルを選択した} 、このデータに対して季節成分の係数 (P,D,Q) は (1, 1, 0) を設定している。\\
+　実際に SARIMA モデルを適用すると以下のようになる。尚 実験の結果 \footnote{様々なモデルを作成し、最もAICの小さいモデルを選択した} 、このデータに対して季節成分の係数 (P,D,Q) は (1, 1, 0) を設定している。\\
 \begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 ts1_SARIMA = sm.tsa.SARIMAX(ts1, order=(1,0,0), seasonal_order=(1,1,0,12)).fit()
 ts1_pred_with_SARIMA_dataframe =  ts1_SARIMA.predict('2015-1-18','2017-11-5')
