@@ -389,6 +389,20 @@
       \endverb
       \keyw{filtering theory;frequency estimation;signal sampling;spectral analysis;time series;jackknife variance;jackknifing;line frequency parameters;log spectrum estimate;multiple-window estimates;multiple-window spectra;projection filter;resampling;time-series;variance estimate;Amplitude estimation;Bandwidth;Books;Filters;Frequency estimation;Gaussian processes;Parameter estimation;Phase estimation;Statistics;Time series analysis}
     \endentry
+    \entry{2012カルマンフィルタの基礎}{book}{}
+      \field{sortinit}{カ}
+      \field{sortinithash}{d0c2b13be44fa0dc82384b1dd76bb3f9}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9784501960902}
+      \field{title}{カルマンフィルタの基礎}
+      \field{year}{2012}
+      \verb{urlraw}
+      \verb https://books.google.co.jp/books?id=AO2GjwEACAAJ
+      \endverb
+      \verb{url}
+      \verb https://books.google.co.jp/books?id=AO2GjwEACAAJ
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

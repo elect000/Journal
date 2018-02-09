@@ -182,7 +182,6 @@ Hadoop は大規模データセットの分散処理フレームワークであ�
 \label{sec:orge09f29e}
 Zookeeper は Hadoop などにおける、構成情報の管理、分散処理の提供、またグループサービスの提供なども行う、分散アプリケーション全体を管理するツールである。使用用途は多岐にわたり、例えば Hadoop などにおける構成管理、 \href{http://storm.apache.org/}{Apache Storm}\textsuperscript{\texttrademark} \footnote{リアルタイム高速分散処理フレームワーク} における処理の同期などに用いられる。ツリー状の階層化された名前空間を持ち、ノードと呼ばれる要素にサーバなどを割り当てている。高速処理や高い信頼性があるにもかかわらず、非常に簡単な API を持っていることが特徴である。ベンチマークとしては \href{http://zookeeper.apache.org/doc/current/zookeeperOver.html#fg_zkPerfRW}{Zookeeper\ 3.4\ Documentation} に記載されている。\\
 
-
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=8cm]{./zknamespace.jpg}
@@ -460,7 +459,7 @@ y_t = Y_t - E(Y_t) = Y_t - \mu - \mu_1 t
 \item \(Var(Y_t) = \gamma_0\) \\
 　分散 (variance) は 時点 t に依存しない\\
 \item \(Cov(Y_t, Y_{t-j}) = \gamma_j\) \\
-　共分散 (covariance) は 時点 t に依存しない $$\footnote{$\sigma_{Y_t Y_{t-j}}$と表すこともある}$$\\
+　共分散 (covariance) は 時点 t に依存しない \footnote{$\sigma_{Y_t Y_{t-j}}$と表すこともある}
 \end{itemize}
 
 　更に \(E(Y_t) = \mu \land Cov(Y_t, Y_{t-j}) = \gamma_j\) のみである場合を特に``弱定常である''という。\\
@@ -564,7 +563,7 @@ Y_t &= c + \phi_1  Y_{t-1} +\phi Y_{t-2} + \cdots + \phi_p  Y_{t-p} + \epsilon_t
 　式からわかるように \(c\) は定数項である。\\
 \subsection{MA モデル}
 \label{sec:orgfd8eb6e}
-　MA(q) モデル (移動平均モデル) は以下の式で表すことが出来るモデルである。同様に重回帰モデルの説明変数を過去のノイズの重みに置き換えたものであると言える。これとよく似たものに移動平均という手法があるが、移動平均は過去の値のサイクルを推定するために用いられ、MA(q) モデルは将来の値を予測するために用いられる。\footnote\{移動平均とMAモデルは正確には別のものであり、混同されるべきではない。MAモデル自体は有限インパルス応答に近い発想である。\cite{2012カルマンフィルタの基礎}\}\\
+　MA(q) モデル (移動平均モデル) は以下の式で表すことが出来るモデルである。同様に重回帰モデルの説明変数を過去のノイズの重みに置き換えたものであると言える。これとよく似たものに移動平均という手法があるが、移動平均は過去の値のサイクルを推定するために用いられ、MA(q) モデルは将来の値を予測するために用いられる。\footnote\{移動平均とMAモデルは正確には別のものであり、混同されるべきではない。MAモデル自体は有限インパルス応答に近い発想である。\cite{2012カルマンフィルタの基礎}
 
 \begin{align}
 Y_t &= c + \epsilon_t + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} + \cdots + \theta_1 \epsilon_{t-q}   \nonumber \\
@@ -637,7 +636,8 @@ threshold = \pm 2/\sqrt{n}
 
 　簡潔に言うならば ACF と q、 PACF と p が強く関係している。\\
 　グラフ A に着目すると、自己相関 の 1 次までの値が閾値を大きく超えていることがわかる。 自己相関 はラグｋの共分散であり、偏自己相関 と違って 自己相関 はラグ k-1 やそれ未満の値の影響を考慮していない。よってノイズの重みを示している MA(q) モデルの、 q の値が決まると考えることができ、この例で言うならば \(q = 1\) であると考えることが出来る。\\
-　同様にグラフ B に着目すると、偏自己相関 の 2 次までの値が閾値を大きく超えていることがわかる。偏自己相関 で説明したように、偏自己相関 の値は AR モデルに非常に近い形で用いることができ、このことから AR(p) モデルの p の値が決まると考えることができることがわかり、 \(p = 2\) がふさわしいことがわかるだろう。\footnote\{詳しい証明について調べたものの、発見ができなかったため 引用を行ったサイト \cite{stat510} に書かれた内容を元に記述した\}\\
+　同様にグラフ B に着目すると、偏自己相関 の 2 次までの値が閾値を大きく超えていることがわかる。偏自己相関 で説明したように、偏自己相関 の値は AR モデルに非常に近い形で用いることができ、このことから AR(p) モデルの p の値が決まると考えることができることがわかり、 \(p = 2\) がふさわしいことがわかるだろう。\footnote{詳しい証明について調べたものの、発見ができなかったため 引用を行ったサイト \cite{stat510} に書かれた内容を元に記述した}\\
+
 　尚この p, q の値は観測者によって異なることがあるため、完全な正解があるわけではない。\\
 　MA モデル (グラフA) における PACF 、 AR モデル（グラフB）における ACF のグラフは先細りの形を示している。これは上に示した 2 つのグラフが極めて理想的な MA / AR モデルを示していることを意味している。ARMA モデルの場合は ACF、PACF は共に先細りの形ではないため、この2つのグラフを見て係数 p, q を決定しなければならない。ところが AR モデルと MAモデルを同時に用いる場合、お互いの影響を打ち消し合ってしまう可能性があり、この係数決定は慎重に行わなければならない。ここで階差の次数 d も合わせた詳しい係数の決定基準と性質を以下に示す。\cite{acf-pacf} 尚 ここで用いる``カットオフ''とは、グラフAの ACF グラフにおける 0 \(\sim\) 2次の自己相関 から ３次の自己相関 への変化を意味する。\\
 \begin{enumerate}
@@ -690,7 +690,7 @@ AIC = 2 * (p + q + 1) - 2 * log L
 \subsection{SARIMA モデルについて}
 \label{sec:orgf282bf4}
 　本演習においては SARIMA (seasonal arima) モデルを作成することが目標であったが、現実のデータにおいて等間隔で周期を持ったものが少ないことが実装中に判明した。例えば、月単位のデータは１年周期(=12ヶ月周期)で階差を取ることが出来るが、週単位のデータは１年周期(\(=52.1429\))で階差を取ることができない。週単位のデータを近似的に１年周期で階差を取る、つまり数年ごとに調整を入れる案も考え実験をしたものの、予測を行った際における調整した分の補完が困難を極めたため実装を中断した。\\
-　しかしながら季節階差を取る、という発想自体は間違いではない。具体的にどのような式に基づいて SARIMA モデルが作成されているかを \(SARIMA(1,1,1)(1,1,1)_{12}\) を用いて示す。尚説明の簡略化のため定数項は無視している。$$\footnote{SARIMA(非季節部分のパラメータp, d, q)(季節部分のパラメータP, D, Q)_{季節階差のラグ}}$$\\
+　しかしながら季節階差を取る、という発想自体は間違いではない。具体的にどのような式に基づいて SARIMA モデルが作成されているかを \(SARIMA(1,1,1)(1,1,1)_{12}\) を用いて示す。尚説明の簡略化のため定数項は無視している。\footnote{SARIMA(非季節部分のパラメータp, d, q)(季節部分のパラメータP, D, Q){季節階差のラグ}}
 \begin{align}
 (1-\phi_1 B)(1-\phi'_1B^{12})(1-B)(1-B^{12})Y_t = (1+\theta_1B)(1+\theta'_1B^{12})\epsilon_t
 \end{align}
@@ -711,7 +711,7 @@ AIC = 2 * (p + q + 1) - 2 * log L
 \end{itemize}
 \section{Clojure/ClojureScript を用いた Web 開発}
 \label{sec:org5743b5e}
-　本演習では開発言語として Clojure/ClojureScript を取り上げた。この 2 言語は Java/JavaScript をカバーした言語であるが、Java/JavaScript とは違い２つの言語に大きな差はない。またこの言語はWeb開発に適した言語であり、その WebSocket の質などは極めて優秀であるという比較\footnote{[[https://hashrocket.com/blog/posts/websocket-shootout]]} もある。更に Lisp であるという特性から HTML に代表されるマークアップ言語、SQLなどのドメイン特化言語を記述することが容易である。また \ref{sec:org9a4b90f} 先述のように高速計算も可能であることから ARIMA モデルに関するライブラリ作成、OpenTSDBへの接続、バックエンド、フロントエンドを実質一つのシンタックスで開発することができる。\\
+　本演習では開発言語として Clojure/ClojureScript を取り上げた。この 2 言語は Java/JavaScript をカバーした言語であるが、Java/JavaScript とは違い２つの言語に大きな差はない。またこの言語はWeb開発に適した言語であり、その WebSocket の質などは極めて優秀であるという比較\footnote{\href{https://hashrocket.com/blog/posts/websocket-shootout}{Websocket Shootout: Clojure, C++, Elixir, Go, NodeJS, and Ruby}} もある。更に Lisp であるという特性から HTML に代表されるマークアップ言語、SQLなどのドメイン特化言語を記述することが容易である。また \ref{sec:org9a4b90f} 先述のように高速計算も可能であることから ARIMA モデルに関するライブラリ作成、OpenTSDBへの接続、バックエンド、フロントエンドを実質一つのシンタックスで開発することができる。\\
 　この章では実際にWeb開発で用いたライブラリなどを簡潔に示す。\\
 \subsection{Clojure によるバックエンド開発}
 \label{sec:orgb7533b6}
@@ -811,7 +811,7 @@ AIC = 2 * (p + q + 1) - 2 * log L
 \item TSDATA\\
 　例えば ``NIKKEI/INDEX'' のような時系列データの名称を保存するためのテーブルである。name はその時系列データの名前である。freq はデータの時間的頻度を指定しているが、ARIMA モデルの規格化などもあり今回はすべて週ごとを示す ``weekly'' がセットされている。\\
 \item TSDATA\_CHILDREN\\
-　``close-price'' のような TSDATA テーブル で扱うべきではない細かいデータ区分を保存するためのテーブルである。name はその区分を示す名前である。ここにある name と parent\_name を用いて OpenTSDB の Metric TSData に保存された時系列データへのアクセスを行う。\footnote{TSDATAの Metric 名は TSDATAテーブルの name , タグの value が TSDATA_CHILDREN テーブルの name に対応している。}\\
+　``close-price'' のような TSDATA テーブル で扱うべきではない細かいデータ区分を保存するためのテーブルである。name はその区分を示す名前である。ここにある name と parent\_name を用いて OpenTSDB の Metric TSData に保存された時系列データへのアクセスを行う。$$\footnote{TSDATAの Metric 名は TSDATAテーブルの name , タグの value が TSDATA\_CHILDREN テーブルの name に対応している}$$\\
 \item ALLOWED\_DATA\\
 　ユーザごとに扱えるデータに制限をかけるためのテーブルである。これは Quandl がAPIキーを登録せずともある上限まではデータを入手できるという機能に即するために作成した。\\
 \item EXPERIENCE\\
@@ -975,11 +975,11 @@ s.e.(\hat{\beta_i}) &= \sqrt{s^2/S_{XX}^j} \nonumber \\
 \includegraphics [width=16cm] {./rect1673.png}
 　黒線とやや隠れてしまっているが青線の間がモンテカルロ法によって求めた\footnote{モデルのシミュレートを1000回行い、平均と標準偏差を求めている}予測の95\%信頼区間である。\\
 \newpage
-\printbibliography
+
 \subsection{実験結果}
 \label{sec:org4f2ffe7}
 　まず依存環境を解決する。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 from pprint import pprint
 import warnings
 warnings.filterwarnings('ignore')
@@ -996,14 +996,14 @@ from matplotlib import pylab as plt
 \end{minted}
 
 　次に、データを入手するための関数を定義する。データは 2015年1月から2017年11月頭までの週次のものである。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 def get_dataframe (name) :
     return quandl.get(name, start_date='2015-1-1', end_date='2017-11-1',
                       collapse='weekly')
 \end{minted}
 
 　これを用いてデータを入手する。dataframe の後ろにつく数字は、 \ref{sec:orgc221c42} 実験方法に記載されている数字と一致している。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 dataframe1 = get_dataframe("NIKKEI/INDEX.4")
 dataframe2 = get_dataframe("TSE/2502.4")
 dataframe3 = get_dataframe("TSE/9020.4")
@@ -1013,7 +1013,7 @@ dataframe6 = get_dataframe("TSE/6758.4")
 \end{minted}
 
 　以下は入手したデータの整形である。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 ts1 = dataframe1['Close Price'].rename('Close')
 ts2 = dataframe2['Close'][:120]
 ts3 = dataframe3['Close'][:120]
@@ -1023,7 +1023,7 @@ ts6 = dataframe6['Close'][:120]
 \end{minted}
 
 　以降は ADF 検定を用いた定常性判定であり、最小となる階差の次数における分析結果が返される。返り値の 1 つめの要素と最後の Map の中身の値を比較して仮説検定が行われ、その際に用いられる次数、つまり最もふさわしい次数が 3 つめの要素である。今回は最も ADF の値が小さくなるように、定数と傾きに関する項を回帰に含めている。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 pprint(sm.tsa.stattools.adfuller(ts2, regression='ctt', autolag = 'AIC'))
 pprint(sm.tsa.stattools.adfuller(ts3, regression='ct', autolag = 'AIC'))
 pprint(sm.tsa.stattools.adfuller(ts4, regression='ctt', autolag = 'AIC'))
@@ -1075,7 +1075,7 @@ pprint(sm.tsa.stattools.adfuller(ts6, regression='ctt', autolag = 'AIC'))
 \end{verbatim}
 
 　次に \textcircled{\scriptsize 2} から \textcircled{\scriptsize 6} の ARIMA モデルの係数 p, q の値を、Python の関数を用いて半自動的に求める。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 pprint(sm.tsa.arma_order_select_ic(ts2, ic='aic'))
 pprint(sm.tsa.arma_order_select_ic(ts3, ic='aic'))
 pprint(sm.tsa.arma_order_select_ic(ts4, ic='aic'))
@@ -1122,7 +1122,7 @@ pprint(sm.tsa.arma_order_select_ic((ts6 - ts6.shift(1)).dropna(), ic='aic'))
 \end{verbatim}
 
 　ここまでで ARIMA モデルにおける p, d, q の係数が定まったため、それらを適用してモデルを作成する。 尚 階差 d が 0 である場合は、この条件においては同義となる ARMA モデルを適用している。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 ts2_arima = ARMA(ts2, order = (1, 2)).fit()
 ts3_arima = ARMA(ts3, order = (3, 2)).fit()
 ts4_arima = ARMA(ts4, order = (1, 0)).fit()
@@ -1131,14 +1131,14 @@ ts6_arima = ARIMA(ts6, order = (1, 1, 0)).fit()
 \end{minted}
 
 　次に Random Forest モデルを作成する。目的変数を\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 r_forest = RandomForestRegressor(n_estimators = 1000, criterion = 'mse', random_state = 1, n_jobs = 1)
 r_forest.fit(np.vstack((ts2.values,ts3.values,ts4.values,ts5.values,ts6.values)).T,
              ts1[:120].values)
 \end{minted}
 
-　Random Forestのモデルを作成したので、 ARIMA モデルを適用した \textcircled{\scriptsize 2} から \textcircled \{\scriptsize 6\} を用いて予測値を作成する。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+　Random Forestのモデルを作成したので、 ARIMA モデルを適用した \textcircled{\scriptsize 2} から \textcircled{\scriptsize 6} を用いて予測値を作成する。\\
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 ts2_predict = ts2_arima.predict('2015-1-18','2017-11-5')
 ts3_predict = ts3_arima.predict('2015-1-18','2017-11-5')
 ts4_predict = ts4_arima.predict('2015-1-18','2017-11-5')
@@ -1147,7 +1147,7 @@ ts6_predict = ts6_arima.predict('2015-1-18','2017-11-5')
 \end{minted}
 
 　必要な要素が揃ったため、ここで問題となる回帰予測をおこなった。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 ts1_pred_with_RF = r_forest.predict(
     np.vstack((ts2_predict, ts3_predict, ts4_predict, ts5_predict, ts6_predict)).T)
 ts1_pred_with_RF_dataframe = \
@@ -1166,7 +1166,7 @@ plt.plot(ts1)
 
 　この図を見るとこの手法はあまり精度が出ていないことがわかる。\\
 　次に比較として、単純に \textcircled{\scriptsize 1} に ARIMA モデルを適用した場合の時系列予測を行う。行っていることは \textcircled{\scriptsize 2} 等と変わらないため解説は省く。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 sm.tsa.stattools.adfuller(ts1[:120], regression='ctt', autolag = 'AIC')
 \end{minted}
 
@@ -1181,7 +1181,7 @@ sm.tsa.stattools.adfuller(ts1[:120], regression='ctt', autolag = 'AIC')
 1624.5165654066914)
 \end{verbatim}
 
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 sm.tsa.arma_order_select_ic(ts1[:120], ic='aic')
 \end{minted}
 
@@ -1194,7 +1194,7 @@ sm.tsa.arma_order_select_ic(ts1[:120], ic='aic')
 4  1843.368379          NaN  1845.121876, 'aic_min_order': (1, 0)}
 \end{verbatim}
 
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 ts1_arima = ARMA(ts1[:120], order = (1, 0)).fit()
 ts1_pred_with_ARMA_dataframe = ts1_arima.predict('2015-1-18','2017-11-5')
 plt.hold(True)
@@ -1213,7 +1213,7 @@ plt.plot(ts1)
 
 　同様に比較として Random Forest 回帰を用いた予測を行う。今回は \textcircled{\scriptsize 1} における ARIMA モデル の係数 p の値に従い \footnote{少なくとも過去の値一つと比較した際に何らかの相関があると考えられるためである。} 説明変数に過去の値を一つ取ってモデルを作成した。\\
 
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 ts1_s1 = ts1.shift(1).dropna()[:120]
 ts1_y = ts1[1:][:120]
 r_forest2 = RandomForestRegressor(n_estimators = 1000, criterion = 'mse', random_state = 1, n_jobs = 1)
@@ -1238,7 +1238,7 @@ plt.plot(ts1)
 　このグラフを見ると、ARIMAモデルを用いた場合に対してもより精度が良くなっているように見える。予測部分に関してもそれなりに近い動きを示しているが、やや不安定な動きを見せている。\\
 
 　次にモデルとの適合具合を調べるために MSE (二乗平均誤差) \footnote{Mean Squared Error} を取る。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 train_with_RF_resid = ts1[1:][:120] - ts1_pred_with_RF[:120]
 train_with_ARMA_resid = ts1[1:][:120] - ts1_pred_with_ARMA_dataframe.tolist()[:120]
 train_with_RF2_resid = ts1[1:][:120] - ts1_pred_with_RF2[:120]
@@ -1258,7 +1258,7 @@ RandomForest and ARIMA model:  1210139.138746533\\
 
 　この結果から、提案した手法が元データを学習する面で良い精度を得られたなかったことは明らかである。また、 ARIMA モデルの精度が低いように見えるが、これは ARIMA モデルが 元データに対してずれた結果を示しているためであると考えられる。実施に求めた時系列データを一つずらすことで以下の結果を得ることが出来る。\\
 
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 ts1_pred_with_ARMA_dataframe2 = ts1_arima.predict('2015-1-18','2017-11-5')
 train_with_ARMA_resid2 = ts1[:120] - ts1_pred_with_ARMA_dataframe2.tolist()[:120]
 MSE_train_ARMA2 = np.array([(elem * elem) for elem in train_with_ARMA_resid2]).mean()
@@ -1271,7 +1271,7 @@ train: MSE\\
 
 　この結果は Random Forest に比べてもかなり良い結果であることがわかる。\\
 　次に予測に関する精度を比較する。こちらも同様に MSE を用いた比較を行っている。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 pred_with_RF_resid = ts1[1:][120:] - ts1_pred_with_RF[120:]
 pred_with_ARMA_resid = ts1[1:][120:] - ts1_pred_with_ARMA_dataframe.tolist()[120:]
 pred_with_RF2_resid = ts1[1:][120:] - ts1_pred_with_RF2[120:]
@@ -1298,7 +1298,7 @@ RandomForest and ARIMA model:  7288573.59721489\\
 
 　今回の実験における ARIMA モデルの精度について確認が出来たところで SARIMA モデルを用いた検討を行う。まず SARIMA モデルを適用するべきであるのかを確認するために ACF, PACF のグラフを確認する。\\
 
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 fig = plt.figure(figsize = (12,8))
 ax1 = fig.add_subplot(211)
@@ -1313,7 +1313,7 @@ fig = sm.graphics.tsa.plot_pacf(ts1, lags=40, ax = ax2)
 
 　この結果を注視すると、PACF のグラフに微かに周期性を見ることが出来る。よって 季節階差\footnote{正確にはこのデータは週次ごとのデータなので、``季節''差分を取っているわけではなく、周期性に基づいて階差を取っている。} を取ることが出来ると考えられる。\\
 　実際に SARIMA モデルを適用すると以下のようになる。尚 実験の結果 \footnote{実際にモデルを作成し、最もAICの小さいモデルを選択した} 、このデータに対して季節成分の係数 (P,D,Q) は (1, 1, 0) を設定している。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 ts1_SARIMA = sm.tsa.SARIMAX(ts1, order=(1,0,0), seasonal_order=(1,1,0,12)).fit()
 ts1_pred_with_SARIMA_dataframe =  ts1_SARIMA.predict('2015-1-18','2017-11-5')
 
@@ -1331,7 +1331,7 @@ plt.plot(ts1)
 
 　結果より時系列的に始めに近い部分の値が不安定ではあるが、それ以外の値に関しては元データに即した値を求めると考えられ、予測も比較的理想に近い値を取っている。\\
 　また、不安定な部分を除いて表示を行うと以下のようになる。\\
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 plt.plot(ts1_pred_with_SARIMA_dataframe[15:])
 plt.plot(ts1[15:])
 \end{minted}
@@ -1346,7 +1346,7 @@ plt.plot(ts1[15:])
 　次にこの不安定な部分を取り除いた場合の SARIMA モデルについて MSE を求める。\\
 始めに近い値を取り除くことが出来ると考えた理由は、季節差分を取った際に初期のデータは比較される側のみであり、それ以降のデータとは扱いが異なるためである。\\
 
-\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{ipython}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{python}
 pred_with_SARIMA_resid2 = ts1[15:][1:][105:] - ts1_pred_with_SARIMA_dataframe.tolist()[15:][105:]
 MSE_pred_SARIMA = np.array([(elem * elem) for elem in pred_with_SARIMA_resid2]).mean()
 print('train: MSE')
@@ -1363,5 +1363,6 @@ predict: MSE\\
       SARIMA model?        :  571242.1110044359\\
 
 　この結果から、少なくとも ARIMA モデルに比べると SARIMA モデルが精度面で高い性能を示していると考えることが出来る。\\
+\printbibliography
 Emacs 26.0.91 (Org mode 9.1.6)
 \end{document}
