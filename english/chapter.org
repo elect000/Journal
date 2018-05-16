@@ -1,0 +1,105 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:t f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:t todo:t |:t
+#+TITLE: 線形システムと最小二乗法
+#+SUBTITLE: 
+#+DATE: 
+#+AUTHOR: 情報科学類３年 江畑 拓哉 (201611350)
+#+EMAIL: 
+#+LANGUAGE: ja
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 9.0.2)
+
+#+LATEX_CLASS: koma-article
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER:\newtheorem{th.}{Proposition}
+#+LATEX_HEADER:
+#+LATEX_HEADER_EXTRA:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+SUBTITLE:
+#+STARTUP: indent overview inlineimages
+
+#+STARTUP: latexpreview
+
+* 概要
+
+
+  \begin{align}
+          \bm{A} \bm{x}  &=  \bm{b} & \text{(3-1)}\\
+          &where\  \bm{A}\ \in \ \bm{R}^{n \times n} 
+  \end{align}
+
+　という線形問題を解くためのいくつかの定理を学びます。
+　(3-1)式は部分ピボットを用いたガウス消去法によって解くことが出来ます。これは行列を三角行列に分解することと同義です。
+　私達が考えなければならない点として、$\bm{A}\in\bm{R}^{m \times n}\ where\ m > n$ の場合があり、これは最小二乗法によって解を求めます。
+　行列の分解について議論する前に、 (3-1)が単一の解を持つための条件について基本的な知識を示します。
+
+** Proposition
+
+    \begin{align*}
+    \bm{A}\bm{x} &= \bm{b} \\ 
+    &where\ \bm{A} \in \bm{R}^{n \times n}\ and \ nonsingular \\ 
+    \end{align*}  
+
+　であるならば、$\bm{Ax}=\bm{b}$ は単一の解を持ちます。
+
+** Proof
+
+　上の結果から、非特異的行列（=正則行列）の列ベクトルが直線的に独立しているという事実を導くことが出来ます。
+
+* LU 分解 
+
+　LU分解は(ガウス変換を用いた)ガウスの消去法を用いた行列を分解する手法の一つです。
+　部分ピボットを用いたガウスの消去法で、行列の列について並べ替えを行う置換行列を用います。
+
+　$\bm{A}\  where\  n \times n \ matrix$ の場合について考えた時、ガウスの消去法で最初に行うことは、一列目の絶対値的に最大の要素が一行目に来るように移動することです。
+　この変換を行うAに対して左側からかかる置換行列を $\bm{P_1}$ とします。
+　以下の式によって対角線の下の第一列の要素は全て0になります。
+
+\begin{align}
+  \bm{A}^{(1)} := L_1^{-1} P_1 A
+\end{align}
+
+ $\bm{L_1}$ はガウス変換であり、
+
+\begin{gather}
+&\[
+  A = \left(
+    \begin{array}{cc}
+      1 & 0  \\
+      \bm{m_1} & \bm{I}  
+    \end{array}
+  \right)
+\]
+\end{gather}
+
+\begin{gather}
+\[
+  A = \left(
+    \begin{array}{c}
+      m_{21}   \\
+      m_{31} \\
+      \vdots \\
+      m_{n1}
+    \end{array}
+  \right)
+\]
+\end{gather}
+
+　この置換が終ると、以下のように $\bm{A}$ は変換されます。
+
+\[
+\bm{A}^{(1)} = \left(
+\begin{array} {cccc}
+a_{11}^' & a_{12}^' & \cdots a_{1n}^' \\
+0 & a_{22}^{(1)} &\cdots a_{2n}^{(1)} \\
+\vdots & & \\
+0 & a_{n2}^{(1)} & \cdots a_{nn}^{(1)}
+\end {array}
+\right) 
+\]
+
