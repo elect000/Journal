@@ -1,0 +1,12 @@
+\frametitle{導入}
+　行列を直交変換を用いて三角行列や対角行列と言った形に小さく圧縮したい。\\
+　\(\rightarrow\) そのような圧縮手法として ``QR分解'' が挙げられる。\\
+
+　QR分解とはある行列 \(\bm{A}\) を直交行列と三角行列に因数分解する手法で、分解される2つの条件に \texttt{三角行列である} という点のみが要求されるという意味でLU分解よりも広い範囲をカバーする。\\
+\begin{columns}
+\begin{column}{1.00\columnwidth}
+\begin{block}{LU分解の適用条件}
+分解する行列 \(\bm{A}\) が正則行列であること\\
+\end{block}
+\end{column}
+\end{columns}

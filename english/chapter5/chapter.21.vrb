@@ -1,0 +1,42 @@
+\frametitle{例5.4 QR分解を用いて最小二乗問題を解く}
+　尚 MATLAB では \(x=A\backslash b\) とすると同じアルゴリズムで解を求める。\\
+\begin{columns}
+\begin{column}{0.23\columnwidth}
+\begin{block}{Octave Code}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{octave}
+A = [1 1;
+     1 2;
+     1 3;
+     1 4;
+     1 5];
+b = [7.9700;
+     10.2000;
+     14.2000;
+     16.0000;
+     21.2000];
+# thin QR
+[Q1,R]=qr(A,0)
+x=R\(Q1'*b)
+\end{minted}
+\end{block}
+\end{column}
+
+\begin{column}{0.73\columnwidth}
+\begin{block}{Output}
+\begin{verbatim}
+Q1 =
+  -4.4721e-01  -6.3246e-01
+  -4.4721e-01  -3.1623e-01
+  -4.4721e-01   2.7756e-17
+  -4.4721e-01   3.1623e-01
+  -4.4721e-01   6.3246e-01
+R =
+  -2.23607  -6.70820
+   0.00000   3.16228
+x =
+   4.2360
+   3.2260
+\end{verbatim}
+\end{block}
+\end{column}
+\end{columns}

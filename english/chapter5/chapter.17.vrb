@@ -1,0 +1,34 @@
+\frametitle{例5.2 単純な数を用いたQR分解}
+薄いQR分解は \(qr(A,0)\) コマンドで実行する。\\
+\begin{columns}
+\begin{column}{0.3\columnwidth}
+\begin{block}{Octave Code}
+\begin{minted}[frame=lines,linenos=true,obeytabs,tabsize=4]{octave}
+A = [1 1 1;
+     1 2 4;
+     1 3 9;
+     1 4 16];
+[Q,R] = qr(A,0)
+\end{minted}
+\end{block}
+\end{column}
+\begin{column}{0.65\columnwidth}
+\begin{block}{Output}
+\begin{verbatim}
+Q =
+
+  -0.50000   0.67082   0.50000
+  -0.50000   0.22361  -0.50000
+  -0.50000  -0.22361  -0.50000
+  -0.50000  -0.67082   0.50000
+
+R =
+
+   -2.00000   -5.00000  -15.00000
+    0.00000   -2.23607  -11.18034
+    0.00000    0.00000    2.00000
+
+\end{verbatim}
+\end{block}
+\end{column}
+\end{columns}
