@@ -1,0 +1,31 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{(}\PYG{k+kd}{defn }\PYG{n+nv}{ensyuu\PYGZhy{}5} \PYG{p}{[]}
+  \PYG{p}{(}\PYG{k}{let }\PYG{p}{[}\PYG{n+nv}{func} \PYG{p}{(}\PYG{n+nf}{atom} \PYG{l+m+mi}{0}\PYG{p}{)]}
+    \PYG{p}{(}\PYG{n+nf}{q/defsketch} \PYG{n+nv}{sikaku}
+      \PYG{l+s+ss}{:title} \PYG{l+s}{\PYGZdq{}sikaku\PYGZdq{}}
+      \PYG{l+s+ss}{:setup} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[]}
+               \PYG{p}{(}\PYG{n+nf}{q/frame\PYGZhy{}rate} \PYG{l+m+mi}{30}\PYG{p}{)}
+               \PYG{p}{(}\PYG{n+nf}{q/color\PYGZhy{}mode} \PYG{l+s+ss}{:rgb}\PYG{p}{)}
+               \PYG{p}{(}\PYG{n+nf}{q/background} \PYG{l+m+mi}{100}\PYG{p}{)}
+               \PYG{p}{\PYGZob{}}\PYG{l+s+ss}{:len} \PYG{l+m+mi}{0}\PYG{p}{\PYGZcb{})} \PYG{c+c1}{;; len を現在の描いた長さを持つ変数として宣言}
+                         \PYG{c+c1}{;; 上の func 変数の位置に宣言しても同様の使い方が出来るが、}
+                         \PYG{c+c1}{;; Processing の update 関数を用いるためこちらに宣言した}
+      \PYG{l+s+ss}{:size} \PYG{p}{[}\PYG{l+m+mi}{300} \PYG{l+m+mi}{300}\PYG{p}{]}
+      \PYG{l+s+ss}{:update} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[}\PYG{n+nv}{state}\PYG{p}{]} \PYG{c+c1}{;; Processing にある update 関数}
+                \PYG{p}{\PYGZob{}}\PYG{l+s+ss}{:len} \PYG{p}{(}\PYG{k}{if }\PYG{p}{(}\PYG{n+nb}{== }\PYG{p}{(}\PYG{l+s+ss}{:len} \PYG{n+nv}{state}\PYG{p}{)} \PYG{l+m+mi}{800}\PYG{p}{)} \PYG{l+m+mi}{0} \PYG{p}{(}\PYG{n+nb}{inc }\PYG{p}{(}\PYG{l+s+ss}{:len} \PYG{n+nv}{state}\PYG{p}{)))\PYGZcb{})}
+                \PYG{c+c1}{;; len を 増加させ、 800 を超えたらリセットする}
+      \PYG{l+s+ss}{:draw} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[}\PYG{n+nv}{state}\PYG{p}{]}
+              \PYG{p}{(}\PYG{k}{let }\PYG{p}{[}\PYG{n+nv}{len} \PYG{p}{(}\PYG{l+s+ss}{:len} \PYG{n+nv}{state}\PYG{p}{)]}
+                \PYG{p}{(}\PYG{n+nf}{cond}
+                  \PYG{p}{(}\PYG{n+nb}{and }\PYG{p}{(}\PYG{n+nb}{\PYGZlt{} }\PYG{l+m+mi}{0} \PYG{n+nv}{len}\PYG{p}{)} \PYG{p}{(}\PYG{n+nb}{\PYGZlt{}= }\PYG{n+nv}{len} \PYG{l+m+mi}{200}\PYG{p}{))} \PYG{c+c1}{;; 0 より大きく 200 以下なら}
+                  \PYG{p}{(}\PYG{n+nf}{q/ellipse} \PYG{p}{(}\PYG{n+nb}{+ }\PYG{l+m+mi}{50} \PYG{n+nv}{len}\PYG{p}{)} \PYG{l+m+mi}{50} \PYG{l+m+mi}{10} \PYG{l+m+mi}{10}\PYG{p}{)} \PYG{c+c1}{;; 右に進め}
+                  \PYG{p}{(}\PYG{n+nb}{and }\PYG{p}{(}\PYG{n+nb}{\PYGZlt{} }\PYG{l+m+mi}{200} \PYG{n+nv}{len}\PYG{p}{)} \PYG{p}{(}\PYG{n+nb}{\PYGZlt{}= }\PYG{n+nv}{len} \PYG{l+m+mi}{400}\PYG{p}{))} \PYG{c+c1}{;; 200 より大きく 400 以下なら}
+                  \PYG{p}{(}\PYG{n+nf}{q/ellipse} \PYG{l+m+mi}{250} \PYG{p}{(}\PYG{n+nb}{\PYGZhy{} }\PYG{n+nv}{len} \PYG{l+m+mi}{150}\PYG{p}{)} \PYG{l+m+mi}{10} \PYG{l+m+mi}{10}\PYG{p}{)} \PYG{c+c1}{;; 下に進め}
+                  \PYG{p}{(}\PYG{n+nb}{and }\PYG{p}{(}\PYG{n+nb}{\PYGZlt{} }\PYG{l+m+mi}{400} \PYG{n+nv}{len}\PYG{p}{)} \PYG{p}{(}\PYG{n+nb}{\PYGZlt{}= }\PYG{n+nv}{len} \PYG{l+m+mi}{600}\PYG{p}{))} \PYG{c+c1}{;; 400 より大きく 600 以下なら}
+                  \PYG{p}{(}\PYG{n+nf}{q/ellipse} \PYG{p}{(}\PYG{n+nb}{\PYGZhy{} }\PYG{l+m+mi}{250} \PYG{p}{(}\PYG{n+nb}{\PYGZhy{} }\PYG{n+nv}{len} \PYG{l+m+mi}{400}\PYG{p}{))} \PYG{l+m+mi}{250} \PYG{l+m+mi}{10} \PYG{l+m+mi}{10}\PYG{p}{)} \PYG{c+c1}{;; 左に進め}
+                  \PYG{p}{(}\PYG{n+nb}{and }\PYG{p}{(}\PYG{n+nb}{\PYGZlt{} }\PYG{l+m+mi}{600} \PYG{n+nv}{len}\PYG{p}{)} \PYG{p}{(}\PYG{n+nb}{\PYGZlt{}= }\PYG{n+nv}{len} \PYG{l+m+mi}{800}\PYG{p}{))} \PYG{c+c1}{;; 600 より大きく 800 以下なら}
+                  \PYG{p}{(}\PYG{n+nf}{q/ellipse} \PYG{l+m+mi}{50} \PYG{p}{(}\PYG{n+nb}{\PYGZhy{} }\PYG{l+m+mi}{250} \PYG{p}{(}\PYG{n+nb}{\PYGZhy{} }\PYG{n+nv}{len} \PYG{l+m+mi}{600}\PYG{p}{))} \PYG{l+m+mi}{10} \PYG{l+m+mi}{10}\PYG{p}{)} \PYG{c+c1}{;; 上に進め}
+                  \PYG{p}{)}
+                \PYG{p}{))}
+      \PYG{l+s+ss}{:middleware} \PYG{p}{[}\PYG{n+nv}{m/fun\PYGZhy{}mode} \PYG{n+nv}{m/pause\PYGZhy{}on\PYGZhy{}error}\PYG{p}{])))}
+\end{Verbatim}

@@ -1,0 +1,30 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{(}\PYG{k+kd}{defn }\PYG{n+nv}{ensyuu\PYGZhy{}4} \PYG{p}{[]}
+  \PYG{p}{(}\PYG{k}{let }\PYG{p}{[}\PYG{n+nv}{func} \PYG{p}{(}\PYG{n+nf}{atom} \PYG{l+m+mi}{0}\PYG{p}{)]} \PYG{c+c1}{;; ローカル変数の宣言（描画する図形を変化させるために使用)}
+   \PYG{p}{(}\PYG{n+nf}{q/defsketch} \PYG{n+nv}{key\PYGZhy{}press\PYGZhy{}event}
+     \PYG{l+s+ss}{:title} \PYG{l+s}{\PYGZdq{}Key Press Event\PYGZdq{}}
+     \PYG{l+s+ss}{:setup} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[]}
+              \PYG{p}{(}\PYG{n+nf}{q/frame\PYGZhy{}rate} \PYG{l+m+mi}{30}\PYG{p}{)}
+              \PYG{p}{(}\PYG{n+nf}{q/color\PYGZhy{}mode} \PYG{l+s+ss}{:rgb}\PYG{p}{)}
+              \PYG{p}{(}\PYG{n+nf}{q/background} \PYG{l+m+mi}{100}\PYG{p}{)}
+              \PYG{p}{\PYGZob{}\PYGZcb{})}
+     \PYG{l+s+ss}{:size} \PYG{p}{[}\PYG{l+m+mi}{300} \PYG{l+m+mi}{300}\PYG{p}{]}
+     \PYG{l+s+ss}{:mouse\PYGZhy{}pressed} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[}\PYG{n+nv}{state} \PYG{n+nv}{event}\PYG{p}{]} \PYG{c+c1}{;; マウスボタンが押されたたら}
+                      \PYG{p}{(}\PYG{n+nf}{q/stroke} \PYG{l+m+mi}{255} \PYG{l+m+mi}{0} \PYG{l+m+mi}{0}\PYG{p}{))} \PYG{c+c1}{;; 線の色を変える}
+     \PYG{l+s+ss}{:mouse\PYGZhy{}released} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[}\PYG{n+nv}{state} \PYG{n+nv}{event}\PYG{p}{]} \PYG{c+c1}{;; マウスボタンが離されたら}
+                       \PYG{p}{(}\PYG{n+nf}{q/stroke} \PYG{l+m+mi}{0} \PYG{l+m+mi}{0} \PYG{l+m+mi}{0}\PYG{p}{))} \PYG{c+c1}{;; 線の色を変える}
+     \PYG{l+s+ss}{:key\PYGZhy{}pressed} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[}\PYG{n+nv}{\PYGZus{}} \PYG{p}{\PYGZob{}}\PYG{l+s+ss}{:keys} \PYG{p}{[}\PYG{n+nb}{key }\PYG{n+nv}{key\PYGZhy{}code}\PYG{p}{]\PYGZcb{}]} \PYG{c+c1}{;; キーが押されたら}
+                    \PYG{p}{(}\PYG{n+nf}{case} \PYG{n+nb}{key }\PYG{c+c1}{;; 以下の中から該当する物に対応した関数を実行する}
+                      \PYG{l+s+ss}{:r} \PYG{p}{(}\PYG{n+nf}{q/fill} \PYG{l+m+mi}{255} \PYG{l+m+mi}{0} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{c+c1}{;; 赤くする}
+                      \PYG{l+s+ss}{:g} \PYG{p}{(}\PYG{n+nf}{q/fill} \PYG{l+m+mi}{0} \PYG{l+m+mi}{255} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{c+c1}{;; 緑にする}
+                      \PYG{l+s+ss}{:b} \PYG{p}{(}\PYG{n+nf}{q/fill} \PYG{l+m+mi}{0} \PYG{l+m+mi}{0} \PYG{l+m+mi}{255}\PYG{p}{)} \PYG{c+c1}{;; 青にする}
+                      \PYG{l+s+ss}{:c} \PYG{p}{(}\PYG{n+nf}{reset!} \PYG{n+nv}{func} \PYG{p}{(}\PYG{k}{if }\PYG{p}{(}\PYG{n+nb}{zero? }\PYG{o}{@}\PYG{n+nv}{func}\PYG{p}{)} \PYG{l+m+mi}{1} \PYG{l+m+mi}{0}\PYG{p}{))))}
+                      \PYG{c+c1}{;; 描画する図形を丸\PYGZlt{}=\PYGZgt{}四角にトグルする}
+     \PYG{l+s+ss}{:draw} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[}\PYG{n+nv}{state}\PYG{p}{]}
+             \PYG{p}{(}\PYG{k}{let }\PYG{p}{[}\PYG{n+nv}{r} \PYG{p}{(}\PYG{k}{if }\PYG{p}{(}\PYG{n+nf}{q/mouse\PYGZhy{}pressed?}\PYG{p}{)} \PYG{l+m+mi}{20} \PYG{l+m+mi}{10}\PYG{p}{)]}
+             　　　\PYG{c+c1}{;; マウスが押されているならば r に 20 押されていないなら 10 を入れる。}
+               \PYG{p}{(}\PYG{k}{if }\PYG{p}{(}\PYG{n+nb}{zero? }\PYG{o}{@}\PYG{n+nv}{func}\PYG{p}{)} \PYG{c+c1}{;; 描くべき図形をローカル変数 func から調べる}
+                 \PYG{p}{(}\PYG{n+nf}{q/ellipse} \PYG{p}{(}\PYG{n+nf}{q/mouse\PYGZhy{}x}\PYG{p}{)} \PYG{p}{(}\PYG{n+nf}{q/mouse\PYGZhy{}y}\PYG{p}{)} \PYG{n+nv}{r} \PYG{n+nv}{r}\PYG{p}{)} \PYG{c+c1}{;; 0 なら 丸を描く}
+                 \PYG{p}{(}\PYG{n+nf}{q/rect} \PYG{p}{(}\PYG{n+nf}{q/mouse\PYGZhy{}x}\PYG{p}{)} \PYG{p}{(}\PYG{n+nf}{q/mouse\PYGZhy{}y}\PYG{p}{)} \PYG{n+nv}{r} \PYG{n+nv}{r}\PYG{p}{))))} \PYG{c+c1}{;; 1 なら 四角を描く}
+     \PYG{l+s+ss}{:middleware} \PYG{p}{[}\PYG{n+nv}{m/fun\PYGZhy{}mode} \PYG{n+nv}{m/pause\PYGZhy{}on\PYGZhy{}error}\PYG{p}{])))}
+\end{Verbatim}

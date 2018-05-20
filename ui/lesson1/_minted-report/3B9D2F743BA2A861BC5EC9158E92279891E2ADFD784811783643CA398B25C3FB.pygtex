@@ -1,0 +1,18 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{(}\PYG{k+kd}{defn }\PYG{n+nv}{ensyuu\PYGZhy{}3} \PYG{p}{[]}
+  \PYG{p}{(}\PYG{n+nf}{q/defsketch} \PYG{n+nv}{mouse\PYGZhy{}press\PYGZhy{}event}
+    \PYG{l+s+ss}{:title} \PYG{l+s}{\PYGZdq{}Mouse Event\PYGZdq{}}
+    \PYG{l+s+ss}{:setup} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[]}
+             \PYG{p}{(}\PYG{n+nf}{q/frame\PYGZhy{}rate} \PYG{l+m+mi}{30}\PYG{p}{)}
+             \PYG{p}{(}\PYG{n+nf}{q/color\PYGZhy{}mode} \PYG{l+s+ss}{:rgb}\PYG{p}{)}
+             \PYG{p}{\PYGZob{}\PYGZcb{})}
+    \PYG{l+s+ss}{:size} \PYG{p}{[}\PYG{l+m+mi}{200} \PYG{l+m+mi}{200}\PYG{p}{]}
+    \PYG{l+s+ss}{:mouse\PYGZhy{}pressed} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[}\PYG{n+nv}{state} \PYG{n+nv}{event}\PYG{p}{]} \PYG{c+c1}{;; マウスボタンが押されたときに呼び出される関数}
+                     \PYG{p}{(}\PYG{n+nf}{q/stroke} \PYG{l+m+mi}{255} \PYG{l+m+mi}{0} \PYG{l+m+mi}{0}\PYG{p}{))} \PYG{c+c1}{;; 枠の色を変える}
+    \PYG{l+s+ss}{:mouse\PYGZhy{}released} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[}\PYG{n+nv}{state} \PYG{n+nv}{event}\PYG{p}{]} \PYG{c+c1}{;; マウスボタンが離されたときに呼び出される関数}
+                     \PYG{p}{(}\PYG{n+nf}{q/stroke} \PYG{l+m+mi}{0} \PYG{l+m+mi}{0} \PYG{l+m+mi}{0}\PYG{p}{))} \PYG{c+c1}{;; 枠の色を変える}
+    \PYG{l+s+ss}{:draw} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[}\PYG{n+nv}{state}\PYG{p}{]}
+           \PYG{p}{(}\PYG{n+nf}{q/fill} \PYG{l+m+mi}{255} \PYG{l+m+mi}{255} \PYG{l+m+mi}{255}\PYG{p}{)}
+           \PYG{p}{(}\PYG{n+nf}{q/rect} \PYG{l+m+mi}{20} \PYG{l+m+mi}{20} \PYG{l+m+mi}{60} \PYG{l+m+mi}{60}\PYG{p}{))}
+    \PYG{l+s+ss}{:middleware} \PYG{p}{[}\PYG{n+nv}{m/fun\PYGZhy{}mode} \PYG{n+nv}{m/pause\PYGZhy{}on\PYGZhy{}error}\PYG{p}{]))}
+\end{Verbatim}
