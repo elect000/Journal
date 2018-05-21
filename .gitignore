@@ -8,3 +8,6 @@
 *.out
 */ltximg/
 */_minted-report/
+*.pygstyle
+*.vrb
+*.snm

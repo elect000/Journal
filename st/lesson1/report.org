@@ -22,6 +22,7 @@
 #+KEYWORDS:
 #+SUBTITLE:
 #+STARTUP: indent overview inlineimages
+
 * 課題１：中心極限定理、大数の弱法則
 ** サイズnの標本を多数用意して、標本平均 $\overline{X}$ がどのように分布するかを調べよう
 #+CAPTION: サイズ5
