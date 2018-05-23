@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{A} \PYG{p}{=} \PYG{p}{[}\PYG{l+m+mi}{1} \PYG{l+m+mi}{1}\PYG{p}{;}
+     \PYG{l+m+mi}{1} \PYG{l+m+mi}{2}\PYG{p}{;}
+     \PYG{l+m+mi}{1} \PYG{l+m+mi}{3}\PYG{p}{;}
+     \PYG{l+m+mi}{1} \PYG{l+m+mi}{4}\PYG{p}{;}
+     \PYG{l+m+mi}{1} \PYG{l+m+mi}{5}\PYG{p}{];}
+\PYG{n}{b} \PYG{p}{=} \PYG{p}{[}\PYG{l+m+mf}{7.9700}\PYG{p}{;}
+     \PYG{l+m+mf}{10.2000}\PYG{p}{;}
+     \PYG{l+m+mf}{14.2000}\PYG{p}{;}
+     \PYG{l+m+mf}{16.0000}\PYG{p}{;}
+     \PYG{l+m+mf}{21.2000}\PYG{p}{];}
+\PYG{c}{\PYGZsh{} thin QR}
+\PYG{p}{[}\PYG{n}{Q1}\PYG{p}{,}\PYG{n}{R}\PYG{p}{]=}\PYG{n+nb}{qr}\PYG{p}{(}\PYG{n}{A}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{n}{x}\PYG{p}{=}\PYG{n}{R}\PYG{o}{\PYGZbs{}}\PYG{p}{(}\PYG{n}{Q1}\PYG{o}{\PYGZsq{}*}\PYG{n}{b}\PYG{p}{)}
+\end{Verbatim}

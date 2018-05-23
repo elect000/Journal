@@ -38,8 +38,8 @@
 
 
 \section{導入}
-\label{sec:org8d87b3d}
-\begin{frame}[fragile,label={sec:org08adfe5}]{導入}
+\label{sec:org8b216b6}
+\begin{frame}[fragile,label={sec:org5db5098}]{導入}
  　行列を直交変換を用いて三角行列や対角行列と言った形に小さく圧縮したい。\\
 　\(\rightarrow\) そのような圧縮手法として ``QR分解'' が挙げられる。\\
 
@@ -54,8 +54,8 @@
 \end{frame}
 
 \section{直交変換を用いた三角行列への変換}
-\label{sec:orgddf72be}
-\begin{frame}[label={sec:org69587c4}]{　}
+\label{sec:orgd34029b}
+\begin{frame}[label={sec:orgc41dc30}]{　}
 　直交変換の一つであるハウスホルダー変形を行うことで、任意の行列 \(\bm{A}\ \in \ \mathbb{R}^{m \times n}\ where\ m \geq n\) について上三角行列 \(\bm{R}\) と 直交行列 \(\bm{Q}\ \in\ \mathbb{R}^{m \times m}\) を用いた関係式を作ることが出来る。\\
 
 \begin{align*}
@@ -74,10 +74,12 @@
 \times & \times & \times & \times \\
 \times & \times & \times & \times \\
 \times & \times & \times & \times \\
+\times & \times & \times & \times \\
 \end{pmatrix}
 =
 \begin{pmatrix}
 + & + & + & + \\
+0 & + & + & + \\
 0 & + & + & + \\
 0 & + & + & + \\
 0 & + & + & + \\
@@ -95,11 +97,13 @@
 0 & \times & \times & \times \\
 0 & \times & \times & \times \\
 0 & \times & \times & \times \\
+0 & \times & \times & \times \\
 \end{pmatrix}
 =
 \begin{pmatrix}
 \times & \times & \times & \times \\
 0 & + & + & + \\
+0 & 0 & + & + \\
 0 & 0 & + & + \\
 0 & 0 & + & + \\
 \end{pmatrix}
@@ -116,12 +120,14 @@
 0 & \times & \times & \times \\
 0 & 0 & \times & \times \\
 0 & 0 & \times & \times \\
+0 & 0 & \times & \times \\
 \end{pmatrix}
 =
 \begin{pmatrix}
 \times & \times & \times & \times \\
 0 & \times & \times & \times \\
 0 & 0 & + & + \\
+0 & 0 & 0 & + \\
 0 & 0 & 0 & + \\
 \end{pmatrix}
 \end{align*}
@@ -177,7 +183,7 @@
 
 　尚、三角行列への変換は行列 \(\bm{A}\) の圧縮と等しい。\\
 \end{frame}
-\begin{frame}[label={sec:org669bf76}]{QR分解Ⅰ}
+\begin{frame}[label={sec:org29e3856}]{QR分解Ⅰ}
 \begin{columns}
 \begin{column}{1.00\columnwidth}
 \begin{block}{定理 5.1 QR分解}
@@ -198,7 +204,7 @@
 \end{columns}
 \end{frame}
 
-\begin{frame}[label={sec:org635eea9}]{QR分解Ⅱ}
+\begin{frame}[label={sec:org8f5c7a2}]{QR分解Ⅱ}
 \begin{columns}
 \begin{column}{1.00\columnwidth}
 \begin{block}{証明}
@@ -247,7 +253,7 @@
 　\(\bm{R}\) の j 列は直交基底の \(\bm{a}_j\) の位置を保持することがわかります。\\
 \end{frame}
 
-\begin{frame}[fragile,label={sec:org49751d2}]{例5.2 単純な数を用いたQR分解}
+\begin{frame}[fragile,label={sec:orgc28776f}]{例5.2 単純な数を用いたQR分解}
  \begin{columns}
 \begin{column}{0.23\columnwidth}
 \begin{block}{Octave Code}
@@ -284,7 +290,7 @@ R =
 \end{columns}
 \end{frame}
 
-\begin{frame}[fragile,label={sec:orga2d1a9f}]{例5.2 単純な数を用いたQR分解}
+\begin{frame}[fragile,label={sec:orga4f64f1}]{例5.2 単純な数を用いたQR分解}
  薄いQR分解は \(qr(A,0)\) コマンドで実行する。\\
 \begin{columns}
 \begin{column}{0.3\columnwidth}
@@ -320,7 +326,7 @@ R =
 \end{columns}
 \end{frame}
 \section{最小二乗問題の解き方}
-\label{sec:orgc887d59}
+\label{sec:org47d60f5}
 \begin{frame}[allowframebreaks]{最小二乗問題}
 　QR分解を用いて、以下の最小二乗問題を正規方程式を形成することなく解くことが出来る。これを行うために、ユークリッドベクトルノルムは直交変換の元で変わらないという事実を利用する。\\
 \begin{align}
@@ -345,8 +351,8 @@ R =
 \begin{frame}[allowframebreaks]{}
 　残差ベクトルに A についてのQR分解を用いて、\\
 \begin{align*}
-||\bm{r}|_2^2&=||\bm{b}-\bm{A}\bm{x}||_2^2=||\bm{b}-\bm{Q}\begin{pmatrix}\bm{R}\\0\end{pmatrix}x||^2_2 \\
-&=||\bm{Q}(\bm{Q}^T\bm{b}-\begin{pmatrix}\bm{R}\\0\end{pmatrix}x)||^2_2=||\bm{Q}^T\bm{b}-\begin{pmatrix}\bm{R}\\0\end{pmatrix}x||^3_2
+||\bm{r}||_2^2&=||\bm{b}-\bm{A}\bm{x}||_2^2=||\bm{b}-\bm{Q}\begin{pmatrix}\bm{R}\\0\end{pmatrix}\bm{x}||^2_2 \\
+&=||\bm{Q}(\bm{Q}^T\bm{b}-\begin{pmatrix}\bm{R}\\0\end{pmatrix}\bm{x})||^2_2=||\bm{Q}^T\bm{b}-\begin{pmatrix}\bm{R}\\0\end{pmatrix}\bm{x}||^2_2
 \end{align*}
 　ここで \(\bm{Q}=(\bm{Q}_1\ \bm{Q}_2),\ where\ \bm{Q}_1\ \in\ \mathbb{R}^{m\times n}\) と分割して以下の式を導く。\\
  \begin{align*}
@@ -371,7 +377,7 @@ R =
 \end{align*}
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:org8a54b52}]{例5.4 QR分解を用いて最小二乗問題を解く}
+\begin{frame}[fragile,label={sec:org2785add}]{例5.4 QR分解を用いて最小二乗問題を解く}
  　尚 MATLAB では \(x=A\backslash b\) とすると同じアルゴリズムで解を求める。\\
 \begin{columns}
 \begin{column}{0.23\columnwidth}

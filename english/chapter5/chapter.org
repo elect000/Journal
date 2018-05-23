@@ -64,10 +64,12 @@
 \times & \times & \times & \times \\
 \times & \times & \times & \times \\
 \times & \times & \times & \times \\
+\times & \times & \times & \times \\
 \end{pmatrix}
 =
 \begin{pmatrix}
 + & + & + & + \\
+0 & + & + & + \\
 0 & + & + & + \\
 0 & + & + & + \\
 0 & + & + & + \\
@@ -85,11 +87,13 @@
 0 & \times & \times & \times \\
 0 & \times & \times & \times \\
 0 & \times & \times & \times \\
+0 & \times & \times & \times \\
 \end{pmatrix}
 =
 \begin{pmatrix}
 \times & \times & \times & \times \\
 0 & + & + & + \\
+0 & 0 & + & + \\
 0 & 0 & + & + \\
 0 & 0 & + & + \\
 \end{pmatrix}
@@ -106,12 +110,14 @@
 0 & \times & \times & \times \\
 0 & 0 & \times & \times \\
 0 & 0 & \times & \times \\
+0 & 0 & \times & \times \\
 \end{pmatrix}
 =
 \begin{pmatrix}
 \times & \times & \times & \times \\
 0 & \times & \times & \times \\
 0 & 0 & + & + \\
+0 & 0 & 0 & + \\
 0 & 0 & 0 & + \\
 \end{pmatrix}
 \end{align*}
@@ -347,8 +353,8 @@ R =
 :END:
 　残差ベクトルに A についてのQR分解を用いて、
 \begin{align*}
-||\bm{r}|_2^2&=||\bm{b}-\bm{A}\bm{x}||_2^2=||\bm{b}-\bm{Q}\begin{pmatrix}\bm{R}\\0\end{pmatrix}x||^2_2 \\
-&=||\bm{Q}(\bm{Q}^T\bm{b}-\begin{pmatrix}\bm{R}\\0\end{pmatrix}x)||^2_2=||\bm{Q}^T\bm{b}-\begin{pmatrix}\bm{R}\\0\end{pmatrix}x||^3_2
+||\bm{r}||_2^2&=||\bm{b}-\bm{A}\bm{x}||_2^2=||\bm{b}-\bm{Q}\begin{pmatrix}\bm{R}\\0\end{pmatrix}\bm{x}||^2_2 \\
+&=||\bm{Q}(\bm{Q}^T\bm{b}-\begin{pmatrix}\bm{R}\\0\end{pmatrix}\bm{x})||^2_2=||\bm{Q}^T\bm{b}-\begin{pmatrix}\bm{R}\\0\end{pmatrix}\bm{x}||^2_2
 \end{align*}
 　ここで $\bm{Q}=(\bm{Q}_1\ \bm{Q}_2),\ where\ \bm{Q}_1\ \in\ \mathbb{R}^{m\times n}$ と分割して以下の式を導く。
  \begin{align*}
