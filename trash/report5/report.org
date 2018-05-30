@@ -1,0 +1,36 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:2 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:t f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:t todo:t |:t
+#+TITLE: 自己紹介
+#+SUBTITLE: 
+#+DATE: 
+#+AUTHOR: 情報科学類３年 江畑 拓哉 (201611350)
+#+EMAIL: 
+#+LANGUAGE: ja
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 9.0.2)
+
+#+LATEX_CLASS: mybeamer
+#+LATEX_CLASS_OPTIONS:[dvipdfmx,10pt,presentation]
+#+LATEX_HEADER: \useoutertheme[subsection=false]{smoothbars}
+#+LATEX_HEADER: \setbeamertemplate{footline}[page number]
+#+LATEX_HEADER: \setbeamercolor{page number in head/foot}{fg=black}
+#+LATEX_HEADER: \setbeamerfont{page number in head/foot}{size=\normalsize}
+#+LATEX_HEADER_EXTRA:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+SUBTITLE:
+#+STARTUP: indent overview inlineimages
+#+STARTUP: beamer
+#+BEAMER_FRAME_LEVEL: 2
+* 自己紹介
+** 
+   情報科学類3年知能情報メディア主専攻 江畑 拓哉
+*** 最近やっていること
+    
+** 研究テーマ
+*** メタAI
+    環境データを用いてAIを調整することで、より人との親和性を高めたい。
