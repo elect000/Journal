@@ -29,10 +29,15 @@
 * 自己紹介
 ** 
    情報科学類3年知能情報メディア主専攻 江畑 拓哉
+   出身：千葉
+   好きなもの：Lisp
 *** 最近やっていること
     #+ATTR_LATEX: :width 0.7\linewidth
     [[./res.png]]
 ** 研究テーマ
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
 *** メタAI
     環境データを用いてAIを調整することで、より人との親和性を高めたい。
     具体的には、ChatBotを作りユーザからの直接的な Q だけでなくその日の環境やユーザの体調・機嫌などによって応答を変化させてみたい。
@@ -41,3 +46,14 @@
       - Web : COJT での学習と並行して学習 (Pixijsでキャラクタを描画 websocketでサーバ内のChatBotとリアルタイム通信を行いたい)
       - 自然言語処理 : MeCabを使ってみたいが、先にドキュメントが豊富な英語から始めていきたいと考えている。
       - 他にも沢山 : どうやってユーザの情報を得るかについて(顔認識等) 
+*** Web の例
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+    #+ATTR_LATEX: :width 0.7\linewidth
+    [[./screen.png]]
+
+
+*** 
+    #+ATTR_LATEX: :width 0.7\linewidth
+    [[./screen2.png]]
