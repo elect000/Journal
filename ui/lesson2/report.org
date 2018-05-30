@@ -1,0 +1,51 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:t f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:t todo:t |:t
+#+TITLE:ヒューマンインタフェース演習課題2
+#+SUBTITLE: 
+#+DATE: 
+#+AUTHOR: 情報科学類３年 江畑 拓哉 (201611350)
+#+EMAIL: 
+#+LANGUAGE: ja
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 9.0.2)
+
+#+LATEX_CLASS: koma-article
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER: 
+#+LATEX_HEADER: 
+#+LATEX_HEADER_EXTRA:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+SUBTITLE:
+#+STARTUP: indent overview inline images
+* 実験1 平均反応時間計測
+** ヒストグラム
+   #+ATTR_LATEX: :width 0.5\linewidth
+   [[./1-1.png]]
+   #+ATTR_LATEX: :width 0.5\linewidth
+   [[./1-3.png]]   
+   #+ATTR_LATEX: :width 0.5\linewidth
+   [[./1-5.png]]
+** 平均と最大最小
+   |------+------+------+------|
+   | 色数 | 平均 | 最大 | 最小 |
+   |------+------+------+------|
+   |    1 |  290 |  551 |  130 |
+   |    3 |  567 | 1370 |  270 |
+   |    5 |  658 | 1530 |  408 |
+   |------+------+------+------|
+** 考察
+   　ヒストグラムを見たところ、中央から山のような形になっていることがわかる。正規分布に見えないことはないが、正確にどうかはこのグラフからはサンプル数から判定するのは良くないと考えられる。
+   　またおそらく最大値と最小値はあまり当てにならないと考えられる。なぜなら初回や所謂ぼうっとしたタイミングでボタンを押した場合、勘が当たった場合がこれらに該当すると考えられるからだ。これはグラフの概形の、特に最大値が極端に外れた位置にあることからわかる。
+* 実験2 フィッツの実験
+** グラフ
+   #+ATTR_LATEX: :width 0.8\linewidth
+   [[./2-1.png]]
+** 考察
+   　フィッツの法則通り、おおよそ線形になっている事がわかる。
+   　しかし今回は平均値を取っており、実験1のような外れ値を直接目にすることが出来ないためこれらがどの程度影響しているかが正確にはわからなかった。おそらく今回うまく線形に一致したのはどの試行でも同じ程度に外れ値を含んでいたためだと考えられる。
+   

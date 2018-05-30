@@ -54,6 +54,9 @@
     [[./screen.png]]
 
 
-*** 
-    #+ATTR_LATEX: :width 0.7\linewidth
-    [[./screen2.png]]
+** Web の例2
+   :PROPERTIES:
+   :BEAMER_opt: allowframebreaks
+   :END:
+   #+ATTR_LATEX: :width 0.7\linewidth
+   [[./screen2.png]]
