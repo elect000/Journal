@@ -1,0 +1,179 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:2 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:t f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:t todo:t |:t
+#+TITLE: ドキュメント
+#+SUBTITLE: 
+#+DATE: 
+#+AUTHOR: elect000
+#+EMAIL: 
+#+LANGUAGE: ja
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 9.0.2)
+
+#+LATEX_CLASS: koma-article
+#+LATEX_HEADER_EXTRA:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+SUBTITLE:
+#+STARTUP: indent overview inlineimages
+#+BEAMER_FRAME_LEVEL: 2
+
+* Sequence chart
+** login
+   #+BEGIN_SRC plantuml :file login-seq.png :cmdline -charset UTF-8
+@startuml
+hide footbox
+actor User
+participant "login form"
+participant server
+participant DB
+activate User
+User -> "login form" : click login butto
+activate "login form"
+"login form" -> server : login request
+deactivate "login form"
+activate server
+server -> DB : check user's existence
+activate DB
+DB --> server :
+deactivate DB
+alt existence [true]
+server --> User : redirect to /{user-name}
+else exitence [false]
+server --> "login form" : send error message 
+deactivate server
+activate "login form"
+"login form" --> User : show error message
+deactivate "login form"
+deactivate User
+end
+@enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:login-seq.png]]
+
+** logout
+   #+BEGIN_SRC plantuml :file logout-seq.png :cmdline -charset UTF-8
+   @startuml
+   hide footbox
+actor User
+participant "logout button"
+participant server
+activate User
+User -> "logout button" : click logout button
+activate "logout button"
+"logout button" -> server : logout request
+deactivate "logout button"
+activate server
+server --> User : redirect /login-form
+deactivate server
+deactivate User
+   @enduml
+   #+END_SRC
+   #+RESULTS:
+   [[file:logout-seq.png]]
+** select channel
+   #+BEGIN_SRC plantuml :file selct-channel-seq.png :cmdline -charset UTF-8
+   @startuml
+   hide footbox
+actor User
+participant "channel list"
+participant server
+participant DB
+activate User
+User -> "channel list" : select channel
+activate "channel list"
+"channel list" -> server : connection request
+deactivate "channel list"
+activate server
+server -> DB : check channnel's existence
+activate DB
+DB --> server :
+deactivate DB
+alt existence[true]
+server --> User : redirect /{channel}
+else existence[false]
+server --> "channel list" : send error message
+deactivate server
+activate "channel list"
+"channel list" --> User : show error message
+deactivate "channel list"
+deactivate User
+end
+@enduml
+   #+END_SRC
+
+   #+RESULTS:
+   [[file:selct-channel-seq.png]]
+** make channel
+   #+BEGIN_SRC plantuml :file make-channel-seq.png :cmdline -charset UTF-8
+   @startuml
+   hide footbox
+   actor User
+   participant "make channel\nform"
+   participant server
+   participant DB
+   activate User
+   User -> "make channel\nform" : click button
+   activate "make channel\nform"
+   "make channel\nform" -> server : request make channel
+   deactivate "make channel\nform"
+   activate server
+   server -> DB : check channel's existence
+   activate DB
+   DB --> server 
+   alt existence[false]
+   deactivate DB
+   server -> DB : record channel's info
+   activate DB
+   DB --> server :
+   deactivate DB
+   server --> User : redirect /{channel}
+   else existence[true]
+   server --> "make channel\nform" : send error message
+   deactivate server
+   activate "make channel\nform"
+   "make channel\nform" --> User : show error message
+   deactivate "make channel\nform"
+   deactivate User
+   end
+   @enduml
+   #+END_SRC
+   
+   #+RESULTS:
+   [[file:make-channel-seq.png]]
+** close channel
+   #+BEGIN_SRC plantuml :file close-channel-seq.png :cmdline -charset UTF-8
+   @startuml
+   hide footbox
+   actor "Other users"
+   actor Owner
+   participant "channel page"
+   participant server
+   participant DB
+   activate Owner
+   activate "Other users"
+   Owner -> "channel page" : click close button
+   activate "channel page"
+   "channel page" -> server : request close channel
+   deactivate "channel page"
+   activate server
+   server -> DB : delete channel\n channel log
+   activate DB
+   DB --> server :
+   deactivate DB
+   server --> Owner : send message ["closed"] \n by websocket
+   deactivate Owner
+   server --> "Other users" : send message ["closed"] \n by websocket
+   deactivate server
+   deactivate "Other users"
+   @enduml
+   #+END_SRC
+
+   #+RESULTS:
+   [[file:close-channel-seq.png]]
+   
