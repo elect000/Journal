@@ -222,7 +222,7 @@ where\ \bm{P} &= \bm{P}_1 \bm{P}_2 \cdots \bm{P}_n \in \mathbb{R}^{m \times m}\\
 \end{align*}
 ※ $\bm{W}$ が $n-2$ までであるのは、上二重対角であるから。
 
-　一般的に以下で示される $\bm{P}$ , $\bm{W}$ はハウスホルダー変換の積であり、
+　一般的に上で示された $\bm{P}$ , $\bm{W}$ はハウスホルダー変換の積であり、
 ** 
 \begin{align*}
 \hat{\bm{B}} =
