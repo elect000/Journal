@@ -1,0 +1,20 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/elect/GitHub/journal/ui/lesson3/report.org
+
+
+* 設計＆実装したGUIにおいて、温度入力にどれだけ時間がかかるかを KLM に基づいて推定せよ。 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2018-06-12 火 00:10
+  :ARCHIVE_FILE: ~/GitHub/journal/ui/lesson3/report.org
+  :ARCHIVE_CATEGORY: report
+  :END:
+- タイマーの開始ボタンをクリックする。($2\times B$)
+- タブキーを押して華氏温度か摂氏温度、いずれかの画面へ行く。($(K + 2 \times K) / 2$)
+- 入力する温度を想起する。 ($M$)
+- キーボードから XX.X と入力する。 ($T(4)=4*K$)
+- エンターキーを押す。($T(1)=1\times K$)
+\begin{equation*}
+2\times B + 1.5 \times K + M + 4 \times K + K = 3.22
+\end{equation*}

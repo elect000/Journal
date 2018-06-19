@@ -1,0 +1,71 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{(}\PYG{n+nb}{load} \PYG{l+s}{\PYGZdq{}package.lisp\PYGZdq{}} \PYG{l+s+ss}{:external\PYGZhy{}format} \PYG{l+s+ss}{:utf\PYGZhy{}8}\PYG{p}{)} \PYG{c+c1}{;; package.lisp のロード}
+
+\PYG{p}{(}\PYG{n+nb}{in\PYGZhy{}package} \PYG{l+s+ss}{:cl\PYGZhy{}ltk\PYGZhy{}text\PYGZhy{}input}\PYG{p}{)} \PYG{c+c1}{;; java でいう package / C\PYGZsh{} の namespace のようなもの}
+
+\PYG{p}{(}\PYG{n+nb}{defun} \PYG{n+nv}{get\PYGZhy{}current\PYGZhy{}mill} \PYG{p}{()} \PYG{c+c1}{;; 現在の時刻をミリ単位で取得するための関数}
+  \PYG{p}{(}\PYG{n+nb}{multiple\PYGZhy{}value\PYGZhy{}bind}
+    \PYG{p}{(}\PYG{n+nv}{foo} \PYG{n+nv}{bar}\PYG{p}{)}
+    \PYG{p}{(}\PYG{n+nv}{sb\PYGZhy{}unix::system\PYGZhy{}real\PYGZhy{}time\PYGZhy{}values}\PYG{p}{)}
+    \PYG{p}{(}\PYG{n+nb}{+} \PYG{n+nv}{bar} \PYG{p}{(}\PYG{n+nb}{*} \PYG{l+m+mi}{1000} \PYG{n+nv}{foo}\PYG{p}{))))}
+
+\PYG{p}{(}\PYG{n+nb}{defun} \PYG{n+nv}{main} \PYG{p}{()}
+  \PYG{p}{(}\PYG{n+nv}{with\PYGZhy{}ltk} \PYG{p}{()} \PYG{c+c1}{;; ltk を使うための関数}
+    \PYG{p}{(}\PYG{n+nv}{wm\PYGZhy{}title} \PYG{n+nv+vg}{*tk*} \PYG{l+s}{\PYGZdq{}Celsius \PYGZlt{}=\PYGZgt{} Fahrenheit\PYGZdq{}}\PYG{p}{)} \PYG{c+c1}{;; タイトル}
+    \PYG{p}{(}\PYG{n+nv}{bind} \PYG{n+nv+vg}{*tk*} \PYG{l+s}{\PYGZdq{}\PYGZlt{}Alt\PYGZhy{}q\PYGZgt{}\PYGZdq{}} \PYG{p}{(}\PYG{k}{lambda} \PYG{p}{(}\PYG{n+nv}{event}\PYG{p}{)} \PYG{c+c1}{;; Alt\PYGZhy{}q をトリガーにするイベント関数を定義}
+                           \PYG{p}{(}\PYG{k}{declare} \PYG{p}{(}\PYG{k}{ignore} \PYG{n+nv}{event}\PYG{p}{))}
+                           \PYG{c+c1}{;; event 変数を使わないということを明示}
+                           \PYG{p}{(}\PYG{k}{setq} \PYG{n+nv+vg}{*exit\PYGZhy{}mainloop*} \PYG{n+no}{t}\PYG{p}{)))} \PYG{c+c1}{;; 画面を閉じる}
+    \PYG{c+c1}{;; ローカル変数を定義する}
+    \PYG{p}{(}\PYG{k}{let*} \PYG{p}{((}\PYG{n+nv}{start\PYGZhy{}time} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{c+c1}{;; start\PYGZhy{}time 計測開始時間}
+           \PYG{p}{(}\PYG{n+nv}{main\PYGZhy{}frame} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}frame}\PYG{p}{))} \PYG{c+c1}{;; ボタンを包むフレーム}
+           \PYG{c+c1}{;; \PYGZdq{}Timer Start!\PYGZdq{} と書かれているボタン}
+          \PYG{p}{(}\PYG{n+nv}{btn0} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}button} \PYG{l+s+ss}{:text} \PYG{l+s}{\PYGZdq{}Timer Start!\PYGZdq{}} \PYG{l+s+ss}{:master} \PYG{n+nv}{main\PYGZhy{}frame}\PYG{p}{))}
+          \PYG{c+c1}{;; \PYGZdq{}Enter=\PYGZgt{}Translate!\PYGZdq{} と書かれているラベル(クリックは出来ない)}
+          \PYG{p}{(}\PYG{n+nv}{label0} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}label} \PYG{l+s+ss}{:text} \PYG{l+s}{\PYGZdq{}Enter=\PYGZgt{}Translate!\PYGZdq{}} \PYG{l+s+ss}{:width} \PYG{l+m+mi}{15}\PYG{p}{))}
+          \PYG{p}{(}\PYG{n+nv}{cel\PYGZhy{}frame} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}frame}\PYG{p}{))}
+          \PYG{p}{(}\PYG{n+nv}{label1} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}label} \PYG{l+s+ss}{:text} \PYG{l+s}{\PYGZdq{}Celsius\PYGZdq{}} \PYG{l+s+ss}{:width} \PYG{l+m+mi}{10} \PYG{l+s+ss}{:master} \PYG{n+nv}{cel\PYGZhy{}frame}\PYG{p}{))}
+          \PYG{c+c1}{;; テキストフィールド}
+          \PYG{p}{(}\PYG{n+nv}{entry1} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}entry} \PYG{l+s+ss}{:master} \PYG{n+nv}{cel\PYGZhy{}frame} \PYG{l+s+ss}{:width} \PYG{l+m+mi}{10}\PYG{p}{))}
+          \PYG{p}{(}\PYG{n+nv}{far\PYGZhy{}frame} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}frame}\PYG{p}{))}
+          \PYG{p}{(}\PYG{n+nv}{label2} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}label} \PYG{l+s+ss}{:text} \PYG{l+s}{\PYGZdq{}Fahrenheit\PYGZdq{}} \PYG{l+s+ss}{:width} \PYG{l+m+mi}{10} \PYG{l+s+ss}{:master} \PYG{n+nv}{far\PYGZhy{}frame}\PYG{p}{))}
+          \PYG{p}{(}\PYG{n+nv}{entry2} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}entry} \PYG{l+s+ss}{:master} \PYG{n+nv}{far\PYGZhy{}frame} \PYG{l+s+ss}{:width} \PYG{l+m+mi}{10}\PYG{p}{))}
+          \PYG{p}{(}\PYG{n+nv}{label3} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}label} \PYG{l+s+ss}{:text} \PYG{l+s}{\PYGZdq{}Result\PYGZdq{}} \PYG{l+s+ss}{:foreground} \PYG{l+s+ss}{\PYGZsq{}black}\PYG{p}{))}
+          \PYG{p}{(}\PYG{n+nv}{label4} \PYG{p}{(}\PYG{n+nb}{make\PYGZhy{}instance} \PYG{l+s+ss}{\PYGZsq{}label} \PYG{l+s+ss}{:text} \PYG{l+s}{\PYGZdq{}Sequence Time\PYGZdq{}} \PYG{l+s+ss}{:foreground} \PYG{l+s+ss}{\PYGZsq{}black}\PYG{p}{)))}
+      \PYG{c+c1}{;; btn0 が押されたことをトリガーとしたイベントを設定する・現在時刻を start\PYGZhy{}time に代入}
+      \PYG{p}{(}\PYG{n+nb}{setf} \PYG{p}{(}\PYG{n+nv}{command} \PYG{n+nv}{btn0}\PYG{p}{)} \PYG{p}{(}\PYG{k}{lambda} \PYG{p}{()} \PYG{p}{(}\PYG{n+nb}{setf} \PYG{n+nv}{start\PYGZhy{}time} \PYG{p}{(}\PYG{n+nv}{get\PYGZhy{}current\PYGZhy{}mill}\PYG{p}{))))}
+      \PYG{c+c1}{;; entry1 で Return が押されたことをトリガーとしたイベントを設定する}
+      \PYG{c+c1}{;;   現在時刻と start\PYGZhy{}time との差を label4 に表示する}
+      \PYG{c+c1}{;;   摂氏温度から華氏温度へ変換して label3 に表示する}
+      \PYG{p}{(}\PYG{n+nv}{bind} \PYG{n+nv}{entry1} \PYG{l+s}{\PYGZdq{}\PYGZlt{}Return\PYGZgt{}\PYGZdq{}} \PYG{p}{(}\PYG{k}{lambda} \PYG{p}{(}\PYG{n+nv}{event}\PYG{p}{)}
+                                \PYG{p}{(}\PYG{k}{declare} \PYG{p}{(}\PYG{k}{ignore} \PYG{n+nv}{event}\PYG{p}{))}
+                                \PYG{p}{(}\PYG{n+nb}{setf} \PYG{p}{(}\PYG{n+nv}{text} \PYG{n+nv}{label4}\PYG{p}{)} \PYG{p}{(}\PYG{n+nb}{\PYGZhy{}} \PYG{p}{(}\PYG{n+nv}{get\PYGZhy{}current\PYGZhy{}mill}\PYG{p}{)}
+                                                       \PYG{n+nv}{start\PYGZhy{}time}\PYG{p}{))}
+                                \PYG{p}{(}\PYG{n+nb}{setf} \PYG{p}{(}\PYG{n+nv}{text} \PYG{n+nv}{label3}\PYG{p}{)}
+                                      \PYG{p}{(}\PYG{n+nb}{+} \PYG{l+m+mi}{32}
+                                         \PYG{p}{(}\PYG{n+nb}{*} \PYG{l+m+mf}{1.8}
+                                            \PYG{p}{(}\PYG{n+nb}{with\PYGZhy{}input\PYGZhy{}from\PYGZhy{}string} \PYG{p}{(}\PYG{n+nv}{in} \PYG{p}{(}\PYG{n+nv}{text} \PYG{n+nv}{entry1}\PYG{p}{))}
+                                              \PYG{p}{(}\PYG{n+nb}{read} \PYG{n+nv}{in}\PYG{p}{))))}
+                                      \PYG{p}{)))}
+      \PYG{p}{(}\PYG{n+nv}{bind} \PYG{n+nv}{entry2} \PYG{l+s}{\PYGZdq{}\PYGZlt{}Return\PYGZgt{}\PYGZdq{}} \PYG{p}{(}\PYG{k}{lambda} \PYG{p}{(}\PYG{n+nv}{event}\PYG{p}{)}
+                                \PYG{p}{(}\PYG{k}{declare} \PYG{p}{(}\PYG{k}{ignore} \PYG{n+nv}{event}\PYG{p}{))}
+                                \PYG{p}{(}\PYG{n+nb}{setf} \PYG{p}{(}\PYG{n+nv}{text} \PYG{n+nv}{label4}\PYG{p}{)} \PYG{p}{(}\PYG{n+nb}{\PYGZhy{}} \PYG{p}{(}\PYG{n+nv}{get\PYGZhy{}current\PYGZhy{}mill}\PYG{p}{)}
+                                                       \PYG{n+nv}{start\PYGZhy{}time}\PYG{p}{))}
+                                \PYG{p}{(}\PYG{n+nb}{setf} \PYG{p}{(}\PYG{n+nv}{text} \PYG{n+nv}{label3}\PYG{p}{)}
+                                      \PYG{p}{(}\PYG{n+nb}{/} \PYG{p}{(}\PYG{n+nb}{+} \PYG{p}{(}\PYG{n+nb}{\PYGZhy{}} \PYG{l+m+mi}{0} \PYG{l+m+mi}{32}\PYG{p}{)}
+                                           \PYG{p}{(}\PYG{n+nb}{with\PYGZhy{}input\PYGZhy{}from\PYGZhy{}string} \PYG{p}{(}\PYG{n+nv}{in} \PYG{p}{(}\PYG{n+nv}{text} \PYG{n+nv}{entry2}\PYG{p}{))}
+                                             \PYG{p}{(}\PYG{n+nb}{read} \PYG{n+nv}{in}\PYG{p}{)))}
+                                         \PYG{l+m+mf}{1.8}\PYG{p}{))))}
+      \PYG{c+c1}{;; 開始時には btn0 にフォーカスする}
+      \PYG{p}{(}\PYG{n+nv}{focus} \PYG{n+nv}{btn0}\PYG{p}{)}
+      \PYG{c+c1}{;; 開始時の画面サイズと位置を指定}
+      \PYG{p}{(}\PYG{n+nv}{set\PYGZhy{}geometry} \PYG{n+nv+vg}{*tk*} \PYG{l+m+mi}{300} \PYG{l+m+mi}{200} \PYG{l+m+mi}{200} \PYG{l+m+mi}{200}\PYG{p}{)}
+      \PYG{c+c1}{;; main\PYGZhy{}frame を上下 10 隙間を作って表示する}
+      \PYG{p}{(}\PYG{n+nv}{pack} \PYG{n+nv}{main\PYGZhy{}frame} \PYG{l+s+ss}{:pady} \PYG{l+m+mi}{10}\PYG{p}{)}
+      \PYG{p}{(}\PYG{n+nv}{pack} \PYG{p}{(}\PYG{n+nb}{list} \PYG{n+nv}{btn0} \PYG{n+nv}{label0}\PYG{p}{))}
+      \PYG{c+c1}{;; 横並び左寄せに label1 と entry1 を表示する}
+      \PYG{p}{(}\PYG{n+nv}{pack} \PYG{p}{(}\PYG{n+nb}{list} \PYG{n+nv}{label1} \PYG{n+nv}{entry1}\PYG{p}{)} \PYG{l+s+ss}{:side} \PYG{l+s+ss}{:left} \PYG{l+s+ss}{:padx} \PYG{l+m+mi}{10}\PYG{p}{)}
+      \PYG{p}{(}\PYG{n+nv}{pack} \PYG{p}{(}\PYG{n+nb}{list} \PYG{n+nv}{label2} \PYG{n+nv}{entry2}\PYG{p}{)} \PYG{l+s+ss}{:side} \PYG{l+s+ss}{:left} \PYG{l+s+ss}{:padx} \PYG{l+m+mi}{10}\PYG{p}{)}
+      \PYG{p}{(}\PYG{n+nv}{pack} \PYG{p}{(}\PYG{n+nb}{list} \PYG{n+nv}{cel\PYGZhy{}frame} \PYG{n+nv}{far\PYGZhy{}frame}\PYG{p}{)} \PYG{l+s+ss}{:fill} \PYG{l+s+ss}{:x} \PYG{l+s+ss}{:padx} \PYG{l+m+mi}{50}\PYG{p}{)}
+      \PYG{p}{(}\PYG{n+nv}{pack} \PYG{p}{(}\PYG{n+nb}{list} \PYG{n+nv}{label3} \PYG{n+nv}{label4}\PYG{p}{)))))}
+\end{Verbatim}

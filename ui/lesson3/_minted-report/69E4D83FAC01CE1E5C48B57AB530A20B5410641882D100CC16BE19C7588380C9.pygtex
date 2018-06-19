@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{(}\PYG{n+nv}{ql:quickload} \PYG{l+s}{\PYGZdq{}ltk\PYGZdq{}}\PYG{p}{)}
+
+\PYG{p}{(}\PYG{n+nb}{defpackage} \PYG{l+s+ss}{:cl\PYGZhy{}ltk\PYGZhy{}text\PYGZhy{}input}
+  \PYG{p}{(}\PYG{l+s+ss}{:use} \PYG{l+s+ss}{:common\PYGZhy{}lisp} \PYG{l+s+ss}{:ltk}\PYG{p}{))}
+\end{Verbatim}

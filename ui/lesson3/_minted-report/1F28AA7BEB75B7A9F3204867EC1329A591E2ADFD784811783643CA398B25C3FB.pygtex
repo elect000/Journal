@@ -1,0 +1,46 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{(}\PYG{k+kd}{defn }\PYG{n+nv}{form\PYGZhy{}input} \PYG{p}{[}\PYG{n+nv}{label} \PYG{n+nv}{placeholder} \PYG{n+nv}{id} \PYG{n+nv}{fields} \PYG{n+nv}{start\PYGZhy{}time} \PYG{n+nv}{result}\PYG{p}{]}
+  \PYG{p}{[}\PYG{l+s+ss}{:div.container}
+   \PYG{p}{[}\PYG{l+s+ss}{:div.form\PYGZhy{}group.flex.my\PYGZhy{}auto}
+    \PYG{p}{[}\PYG{l+s+ss}{:label} \PYG{n+nv}{label}\PYG{p}{]}
+    \PYG{p}{[}\PYG{l+s+ss}{:input.form\PYGZhy{}control.input\PYGZhy{}lg} \PYG{c+c1}{;; フォーム}
+     \PYG{p}{\PYGZob{}}\PYG{l+s+ss}{:type} \PYG{l+s+ss}{:text}
+      \PYG{l+s+ss}{:placeholder} \PYG{n+nv}{placeholder}
+      \PYG{l+s+ss}{:value} \PYG{p}{(}\PYG{n+nf}{id} \PYG{o}{@}\PYG{n+nv}{fields}\PYG{p}{)}
+      \PYG{l+s+ss}{:on\PYGZhy{}change} \PYG{o}{\PYGZsh{}}\PYG{p}{(}\PYG{k}{do }\PYG{c+c1}{;; 入力を反映}
+                    \PYG{p}{(}\PYG{n+nf}{swap!} \PYG{n+nv}{fields} \PYG{n+nb}{assoc }\PYG{n+nv}{id} \PYG{p}{(}\PYG{n+nb}{\PYGZhy{}\PYGZgt{} }\PYG{n+nv}{\PYGZpc{}} \PYG{n+nv}{.\PYGZhy{}target} \PYG{n+nv}{.\PYGZhy{}value}\PYG{p}{)))}
+      \PYG{l+s+ss}{:on\PYGZhy{}key\PYGZhy{}press} \PYG{p}{(}\PYG{k}{fn }\PYG{p}{[}\PYG{n+nv}{e}\PYG{p}{]} \PYG{c+c1}{;; Enter キーを押されれば、計算を行い実行時間と共に表示する}
+                      \PYG{p}{(}\PYG{n+nb}{when }\PYG{p}{(}\PYG{n+nb}{= }\PYG{l+m+mi}{13} \PYG{p}{(}\PYG{n+nf}{.\PYGZhy{}charCode} \PYG{n+nv}{e}\PYG{p}{))}
+                        \PYG{p}{(}\PYG{n+nf}{swap!} \PYG{n+nv}{result} \PYG{n+nb}{assoc }\PYG{l+s+ss}{:state} \PYG{n+nv}{true}\PYG{p}{)}
+                        \PYG{p}{(}\PYG{n+nf}{swap!} \PYG{n+nv}{result} \PYG{n+nb}{assoc }\PYG{l+s+ss}{:t} \PYG{p}{(}\PYG{n+nb}{\PYGZhy{} }\PYG{p}{(}\PYG{n+nf}{.getTime} \PYG{p}{(}\PYG{n+nf}{js/Date.}\PYG{p}{))} \PYG{o}{@}\PYG{n+nv}{start\PYGZhy{}time}\PYG{p}{))}
+                        \PYG{p}{(}\PYG{k}{if }\PYG{p}{(}\PYG{n+nb}{= }\PYG{n+nv}{id} \PYG{l+s+ss}{:cel}\PYG{p}{)}
+                          \PYG{p}{(}\PYG{n+nf}{swap!} \PYG{n+nv}{result} \PYG{n+nv}{assoc}
+                                 \PYG{l+s+ss}{:res}
+                                 \PYG{p}{(}\PYG{n+nb}{+ }\PYG{l+m+mi}{32} \PYG{p}{(}\PYG{n+nb}{* }\PYG{l+m+mf}{1.8} \PYG{p}{(}\PYG{n+nf}{id} \PYG{o}{@}\PYG{n+nv}{fields}\PYG{p}{))))}
+                          \PYG{p}{(}\PYG{n+nf}{swap!} \PYG{n+nv}{result} \PYG{n+nv}{assoc}
+                                 \PYG{l+s+ss}{:res}
+                                 \PYG{p}{(}\PYG{n+nb}{/ }\PYG{p}{(}\PYG{n+nb}{\PYGZhy{} }\PYG{p}{(}\PYG{n+nf}{id} \PYG{o}{@}\PYG{n+nv}{fields}\PYG{p}{)} \PYG{l+m+mi}{32}\PYG{p}{)} \PYG{l+m+mf}{1.8}\PYG{p}{))))}
+                      \PYG{p}{(}\PYG{n+nf}{swap!} \PYG{n+nv}{fields} \PYG{p}{\PYGZob{}}\PYG{l+s+ss}{:cel} \PYG{n+nv}{nil} \PYG{l+s+ss}{:far} \PYG{n+nv}{nil}\PYG{p}{\PYGZcb{}))\PYGZcb{}]]])}
+
+\PYG{p}{(}\PYG{k+kd}{defn }\PYG{n+nv}{res} \PYG{p}{[}\PYG{n+nv}{result}\PYG{p}{]} \PYG{c+c1}{;; 結果を表示するための関数}
+  \PYG{p}{[}\PYG{l+s+ss}{:div.container}
+   \PYG{p}{(}\PYG{n+nb}{when }\PYG{p}{(}\PYG{l+s+ss}{:state} \PYG{o}{@}\PYG{n+nv}{result}\PYG{p}{)}
+     \PYG{p}{[}\PYG{l+s+ss}{:div.flex.col}
+      \PYG{p}{[}\PYG{l+s+ss}{:label.col\PYGZhy{}md\PYGZhy{}4} \PYG{l+s}{\PYGZdq{}Result\PYGZdq{}} \PYG{p}{[}\PYG{l+s+ss}{:p} \PYG{p}{(}\PYG{l+s+ss}{:res} \PYG{o}{@}\PYG{n+nv}{result}\PYG{p}{)]]}
+      \PYG{p}{[}\PYG{l+s+ss}{:label.col\PYGZhy{}md\PYGZhy{}4} \PYG{l+s}{\PYGZdq{}Time\PYGZdq{}} \PYG{p}{[}\PYG{l+s+ss}{:p} \PYG{p}{(}\PYG{l+s+ss}{:t} \PYG{o}{@}\PYG{n+nv}{result}\PYG{p}{)]]])])}
+
+\PYG{p}{(}\PYG{k+kd}{defn }\PYG{n+nv}{home\PYGZhy{}page} \PYG{p}{[]}
+  \PYG{p}{[}\PYG{l+s+ss}{:div.container}
+   \PYG{p}{(}\PYG{k}{let }\PYG{p}{[}\PYG{n+nv}{fields} \PYG{p}{(}\PYG{n+nf}{r/atom} \PYG{p}{\PYGZob{}}\PYG{l+s+ss}{:cel} \PYG{n+nv}{nil} \PYG{l+s+ss}{:far} \PYG{n+nv}{nil}\PYG{p}{\PYGZcb{})}
+         \PYG{n+nv}{start\PYGZhy{}time} \PYG{p}{(}\PYG{n+nf}{r/atom} \PYG{n+nv}{nil}\PYG{p}{)}
+         \PYG{n+nv}{result} \PYG{p}{(}\PYG{n+nf}{r/atom} \PYG{n+nv}{nil}\PYG{p}{)]}
+     \PYG{p}{[}\PYG{l+s+ss}{:div.col}
+      \PYG{p}{[}\PYG{l+s+ss}{:button.btn.btn\PYGZhy{}primary.col\PYGZhy{}md\PYGZhy{}2} \PYG{c+c1}{;; 計測開始のためのボタン}
+       \PYG{p}{\PYGZob{}}\PYG{l+s+ss}{:on\PYGZhy{}click} \PYG{o}{\PYGZsh{}}\PYG{p}{(}\PYG{k}{do }\PYG{p}{(}\PYG{n+nf}{reset!} \PYG{n+nv}{start\PYGZhy{}time} \PYG{p}{(}\PYG{n+nf}{.getTime} \PYG{p}{(}\PYG{n+nf}{js/Date.}\PYG{p}{)))}
+                       \PYG{p}{(}\PYG{n+nf}{swap!} \PYG{n+nv}{result} \PYG{n+nb}{assoc }\PYG{l+s+ss}{:state} \PYG{n+nv}{false}\PYG{p}{))\PYGZcb{}}
+       \PYG{l+s}{\PYGZdq{}Timer Start!\PYGZdq{}}\PYG{p}{]}
+      \PYG{p}{[}\PYG{n+nv}{form\PYGZhy{}input} \PYG{l+s}{\PYGZdq{}Celsius\PYGZdq{}} \PYG{l+s}{\PYGZdq{}XX.X\PYGZdq{}} \PYG{l+s+ss}{:cel} \PYG{n+nv}{fields} \PYG{n+nv}{start\PYGZhy{}time} \PYG{n+nv}{result}\PYG{p}{]}
+      \PYG{p}{[}\PYG{n+nv}{form\PYGZhy{}input} \PYG{l+s}{\PYGZdq{}Fahrenheit\PYGZdq{}} \PYG{l+s}{\PYGZdq{}XX.X\PYGZdq{}} \PYG{l+s+ss}{:far} \PYG{n+nv}{fields} \PYG{n+nv}{start\PYGZhy{}time} \PYG{n+nv}{result}\PYG{p}{]}
+      \PYG{p}{[}\PYG{n+nv}{res} \PYG{n+nv}{result}\PYG{p}{]}
+      \PYG{p}{])])}
+\end{Verbatim}
