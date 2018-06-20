@@ -75,13 +75,13 @@
 
 * ハウスホルダー変換を用いた二重対角化 
 ** ハウスホルダー変換を用いた二重対角化
-　密行列 $C\in\mathbb{R}^{m\times(n+1)}$ の SVD を計算するアルゴリズムの最初のステップは、左から右へハウスホルダー変換をし、上二重対角の形に $\bm{C}$ を変換することである。
+　密行列 $\bm{C}\in\mathbb{R}^{m\times(n+1)}$ の SVD を計算するアルゴリズムの最初のステップは、左から右へハウスホルダー変換をし、上二重対角の形に $\bm{C}$ を変換することである。
 　 $m > n$ を仮定すると、以下の形が求まる。
 
 \begin{align*}
 \bm{C} &= \bm{P}\begin{pmatrix}\hat{\bm{B}}\\\bm{0}\end{pmatrix}\bm{W}^T\\
 where\ \bm{P}, \bm{W} \ &is\ orthogonal\\
-      \bm{B} \ &is\ upper bidiagonal \tag{7.5}
+      \hat{\bm{B}} \ &is\ upper bidiagonal \tag{7.5}
 \end{align*}
 　この自己圧縮は他の目的でも有用。
 　$\Rightarrow$ 疎・密行列の最小二乗問題の近似解を求める際など
@@ -222,7 +222,8 @@ where\ \bm{P} &= \bm{P}_1 \bm{P}_2 \cdots \bm{P}_n \in \mathbb{R}^{m \times m}\\
 \end{align*}
 ※ $\bm{W}$ が $n-2$ までであるのは、上二重対角であるから。
 
-　一般的に上で示された $\bm{P}$ , $\bm{W}$ はハウスホルダー変換の積であり、
+　一般的に上で示された
+ $\bm{P}$ , $\bm{W}$ はハウスホルダー変換の積であり、
 ** 
 \begin{align*}
 \hat{\bm{B}} =
