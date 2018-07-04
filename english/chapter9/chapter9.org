@@ -1,0 +1,67 @@
+
+#+OPTIONS: ':nil *:t -:t ::t <:t H:2 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:t f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:t todo:t |:t
+#+TITLE: クラスタリングと非負行列の因数分解
+#+SUBTITLE: 
+#+DATE: 
+#+AUTHOR: 情報科学類３年 江畑 拓哉 (201611350)
+#+EMAIL: 
+#+LANGUAGE: ja
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 9.0.2)
+
+#+LATEX_CLASS: mybeamer
+#+LATEX_CLASS_OPTIONS:[dvipdfmx,10pt,presentation]
+#+LATEX_HEADER: \useoutertheme[subsection=false]{smoothbars}
+#+LATEX_HEADER: \setbeamertemplate{footline}[page number]
+#+LATEX_HEADER: \setbeamercolor{page number in head/foot}{fg=black}
+#+LATEX_HEADER: \setbeamerfont{page number in head/foot}{size=\normalsize}
+#+LATEX_HEADER_EXTRA:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+SUBTITLE:
+#+STARTUP: indent overview inlineimages
+#+STARTUP: beamer
+#+BEAMER_FRAME_LEVEL: 2
+
+* 非負行列の因数分解
+  
+** 
+   　ある行列 $\bm{A}\in\mathbb{R}^{m\times n}$ が与えられ、非負の要素を持ように制限された $k$ ランクの近似を行いたいと考えた時、言い換えれば $\bm{W}\in\mathbb{R}^{m\times k}$ と $\bm{H}\in\mathbb{R}^{k\times n}$ を仮定して以下の式を解きたい場合について考える。
+    \begin{align*}
+    \min_{\bm{W}\geq 0, \bm{H}\geq 0}||\bm{A}-\bm{W}\bm{H}||_F\\  \tag{9.3}
+where\ ||\bm{A}||_F = \sqrt{\Sigma_i\Sigma_j|a_{ij}|^2}\ means\ Frobenius\ norm
+    \end{align*}
+    
+   　同時に $\bm{W}$ と $\bm{H}$ を最適化しようとした時、この問題は非線形になる。
+   　しかし、行列の一つが既にわかっている場合、例えば $\bm{W}$ がわかっている場合で言えば、この $\bm{H}$ を求める問題は、非負の制限がついた右側の行列についての最小二乗問題であると言える。
+    従って元の問題に対する最も一般的な解決法は、交互最小二乗法 (ALS) を使うことである。
+   
+   
+** Alternating nonnegative least squares のアルゴリズム
+   
+*** Alternating nonnegative least squares algorithm
+    :PROPERTIES:
+    :BEAMER_ENV: block
+    :BEAMER_COL: 1.00
+    :END:
+    1. 初期値 $\bm{W}^{1}$ を与える。=>初期値の例 $\sim N(0, \sigma^2)$
+    2. $k = 1 , 2 \dots$ と収束するまで繰り返す。
+        - $\min_{h\geq0} ||\bm{A}-\bm{W}^{k}\bm{H}||_F$
+
+** 
+    　しかし、近似 $\bm{W}\bm{H}$ は単一のものではない。ここで正の対角要素を持つ任意の対角行列 $\bm{D}$ とその逆行列を要素間に適用しすることが出来る。
+    \begin{align*}
+    \bm{W}\bm{H} = (\bm{W}\bm{D})(\bm{D}^{-1}\bm{H})
+    \end{align*}
+    　ある要素の増大と他の要素の減衰を防ぐために、毎処理ごとにそれらの一つを正規化する必要がある。一般的な正規かとして、 $\bm{W}$ の各列の最大要素が $1$ になるように \bm{W} の列をスケーリングすることである。
+    　 $\bm{A}$ と $\bm{H}$ の列要素として、 $\bm{a_j}$ と $\bm{h_j}$ を置く。各行の要素を一つずつ書き下すと、この最小二乗問題は以下の $n$ 個の独立したベクトルの最小二乗問題と等しいものと見ることが出来る。
+    \begin{align*}
+    \min_{h_j\geq 0}||\bm{a}_j - \bm{W}^{(k)}\bm{h}_j||_2 \ where\ j= 1,2,\dots , n
+    \end{align*}
+   
+    　これらは 23章で紹介されるアクティブセットアルゴリズムで解決される。
