@@ -1,0 +1,113 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:2 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:t f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:t todo:t |:t
+#+TITLE: 進捗報告
+#+SUBTITLE: 
+#+DATE: 
+#+AUTHOR: 情報科学類３年 江畑 拓哉 (201611350)
+#+EMAIL: 
+#+LANGUAGE: ja
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 9.0.2)
+
+#+LATEX_CLASS: mybeamer
+#+LATEX_CLASS_OPTIONS:[dvipdfmx,10pt,presentation]
+#+LATEX_HEADER: \useoutertheme[subsection=false]{smoothbars}
+#+LATEX_HEADER: \setbeamertemplate{footline}[page number]
+#+LATEX_HEADER: \setbeamercolor{page number in head/foot}{fg=black}
+#+LATEX_HEADER: \setbeamerfont{page number in head/foot}{size=\normalsize}
+#+LATEX_HEADER_EXTRA:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+SUBTITLE:
+#+STARTUP: indent overview inlineimages
+#+STARTUP: beamer
+#+BEAMER_FRAME_LEVEL: 2
+
+* 要約
+  - Seq2Seq model について学習した。
+  - 使用するライブラリを変更した。(それに伴い使用言語も変更)
+  - 幾つかのモデルについて調べた。
+  - 実験したいモデル
+  - 今後の予定
+
+* Seq2Seq model について
+  - 翻訳に多く使われている。
+  - Q & A 形式の一文が短い会話についても適用できる。
+  - モデル図
+    #+ATTR_LATEX: width 0.8\linewidth
+    [./seq2seq.png]
+  - 参考文献
+    [[https://web.stanford.edu/class/cs20si/2017/][CS 20SI: Tensorflow for Deep Learning Research]]
+    [[https://www.researchgate.net/publication/323587007_Deep_Learning_Based_Chatbot_Models][Deep_Learning_Based_Chatbot_Models]]
+
+* LSTM について
+  - Long Short-Term Memory 
+  - 概図
+    #+ATTR_LATEX: width 0.8\linewidth
+    [./lstm.png]
+*** それぞれの要素に対する式
+    \begin{align}
+    \bm{i}_t=\sigma(\bm{W}_{ix}\bm{x}_t + \bm{W}_{im}m_{t-1} + \bm{W}_{ic}\bm{c}_{t-1} + \bm{b}_i) \\ 
+    \bm{f}_t=\sigma(\bm{W}_{fx}\bm{x}_t + \bm{W}_{fm}m_{t-1} + \bm{W}_{fc}\bm{c}_{t-1} + \bm{b}_f) \\
+    \bm{c_t}=\bm{f}_t \odot \bm{c}_{t-1} + \bm{i}_t \odot g(\bm{W}_{cx}\bm{x}_t + \bm{W}_{cm}\bm{m}_{t-1} + \bm{b}_c) \\
+    \bm{o_t}=\sigma(\bm{W}_{ox}x_t + \bm{W}_{om}m_{t-1} + \bm{W}_{oc}\bm{c}_t + \bm{b}_o) \\
+    \bm{m}_t = \bm{o}_t \odot h(\bm{c}_t) \\
+    \bm{y}_t = \phi(\bm{W}_{ym}\bm{m}_t + \bm{b}_y)
+    \end{align}
+    \begin{align}
+    where\ &\bm{W}\ is\ weight \\
+           &\bm{b}\ is\ bias \\
+           &\odot\ is\ the\ element-wise\ product\ for\ vectors\\ 
+           &\sigma\ is\ the sigmoid function \\
+           &\phi \ is\ network\ output\ activation\ (e.g.\ softmax) \\
+           &g,h \ is\ activation\ function\ (e.g. tanh)
+    \end{align}
+    なお、i は input 、f は forget 、o は output gate を表しており、 c は　cell activation を示している。
+    ※すべてのベクトルのサイズは等しい。
+  - 参考文献
+    [[https://static.googleusercontent.com/media/research.google.com/ja//pubs/archive/43905.pdf][Long Short-Term Memory Recurrent Neural Network Architectures for Large Scale Acoustic Modeling]]
+
+* 使用するライブラリを変更した
+  - 以前は common lisp mgl を用いていたが、事情により撤回を余儀無くされた。
+    - 事情 Optimizer を絡ませずに lstm セルを回すことができない。
+  - 現在は TensorFlow を Hylang から利用している。
+    Python とTensorFlowの実行環境が入っていれば動く
+    (common lisp mgl の内部実装を熟読したが、頑張れば目的に対応する LSTM を実装できると思われる。$\rightarrow$ それは卒研の目的とは外れてしまう。)
+  - 現在ベースとなる Seq2Seq モデルそのものは完成(ほとんどドキュメントの翻訳に近い)しているが、実行にかなり時間がかかっており満足な結果を手に入れられていない。
+    リポジトリ github.com/MokkeMeguru/hy-seq2seq-with-tensorflow
+    #+ATTR_LATEX: width 0.9\linewidth
+
+* 新たに調べたモデル
+- Doc2Vec
+  任意の長さの文章を分類するためのモデル。ある単語それぞれについてベクトル化を行い比較をする Word2Vec の文章版。類似の手法として Bag of Words という手法があるが、Doc2Vecは語順を考慮するという点や、単語の意味を表現するうことが出来るようになるらしいという点で有利。
+  文書ベクトルを並べた重み行列を用いて、入力となるある文章に対して最もふさわしい文書ベクトルを返す。
+  内部では PV-DM (文と文中の単語に固有のベクトルを与えて文に含まれる単語の予測を行う(語順を考慮している)) PV-DBOW (ランダムに抽出した文中の単語から、その文に含まれるだろう単語を予測する)が行われている。
+  既に文章からの感情分析において成果を出している。
+- Seq2Seq with Attention
+  Seq2Seq model を長文にも耐えられるように改良したもの。Decoder で最終的に取り出される hidden state を Encoder で毎回考慮させるようにしている。
+- HRED
+  Seq2Seq model に文脈についての情報を与えるようにしたもの。長い会話を行えるようになる。
+  このため、RNNは Encoder Decoder に加え Context が必要になる。
+- 参考文献　
+   [[https://cs.stanford.edu/~quocle/paragraph_vector.pdf][Distributed Representations of Sentences and Documents]]
+   [[https://arxiv.org/pdf/1507.04808.pdf][Building End-To-End Dialogue SystemsUsing Generative Hierarchical Neural Network Models]]
+* 実験したいモデル
+- Doc2Vec でトピックごとの小さい問題に分割してそれぞれのトピックごとにSeq2Seq等を与えてみたい
+  => 計算量が多く結果が満足に得られない/Doc2Vecで話者の気分を読み取ることができればそれに応じた返答が出来るのではないか？
+- Seq2Seq の部分を Seq2Seq with Attention や HRED に変えてみたい。
+  => どの程度の差が生まれるのか比較を行いたい
+* 今後の予定
+- TensorFlow に慣れる。
+- 実験を行い、結果データを得る。
+- 文体変換に関する論文を読む。(日本語の既存研究は見てきたが、あまりめぼしい物はなかった)  特徴として、すでに文章からの感情分析において成果を出している。
+  具体的には seq2seq を用いたものと GAN を用いたもの、Zero-Shot 変換を用いたものが論文としてあるので、この３つについて学習していきたい。
+- VHRED の論文を読む (HRED に確率成分を追加したものらしい)
+- 参考文献
+  [[https://arxiv.org/pdf/1605.06069.pdf][A Hierarchical Latent Variable Encoder-Decoder Model for Generating Dialogues]]
+  [[http://www.cs.tau.ac.il/~joberant/teaching/advanced_nlp_spring_2018/past_projects/style_transfer.pdf][Deep Text Style Transfer]]
+  [[https://arxiv.org/pdf/1711.04731.pdf][Zero-Shot Style Transfer in Text Using RecurrentNeural Networks]]
+  [[http://cl.naist.jp/~yutaro-s/download/Shigeto_NL222_slides.pdf][Ridge regression, hubness,and zero-shot learning]]
