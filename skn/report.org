@@ -26,8 +26,12 @@
 #+STARTUP: indent overview inlineimages
 #+STARTUP: beamer
 #+BEAMER_FRAME_LEVEL: 2
-
 * 要約
+** 要約
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+
   - Seq2Seq model について学習した。
   - 使用するライブラリを変更した。(それに伴い使用言語も変更)
   - 幾つかのモデルについて調べた。
@@ -35,21 +39,35 @@
   - 今後の予定
 
 * Seq2Seq model について
+** 
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+
   - 翻訳に多く使われている。
   - Q & A 形式の一文が短い会話についても適用できる。
   - モデル図
     #+ATTR_LATEX: width 0.8\linewidth
-    [./seq2seq.png]
+    [[./seq2seq.png]]
   - 参考文献
     [[https://web.stanford.edu/class/cs20si/2017/][CS 20SI: Tensorflow for Deep Learning Research]]
     [[https://www.researchgate.net/publication/323587007_Deep_Learning_Based_Chatbot_Models][Deep_Learning_Based_Chatbot_Models]]
 
 * LSTM について
+** lstm
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+
   - Long Short-Term Memory 
   - 概図
     #+ATTR_LATEX: width 0.8\linewidth
-    [./lstm.png]
-*** それぞれの要素に対する式
+    [[./lstm.png]]
+** それぞれの要素に対する式
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+
     \begin{align}
     \bm{i}_t=\sigma(\bm{W}_{ix}\bm{x}_t + \bm{W}_{im}m_{t-1} + \bm{W}_{ic}\bm{c}_{t-1} + \bm{b}_i) \\ 
     \bm{f}_t=\sigma(\bm{W}_{fx}\bm{x}_t + \bm{W}_{fm}m_{t-1} + \bm{W}_{fc}\bm{c}_{t-1} + \bm{b}_f) \\
@@ -72,16 +90,26 @@
     [[https://static.googleusercontent.com/media/research.google.com/ja//pubs/archive/43905.pdf][Long Short-Term Memory Recurrent Neural Network Architectures for Large Scale Acoustic Modeling]]
 
 * 使用するライブラリを変更した
-  - 以前は common lisp mgl を用いていたが、事情により撤回を余儀無くされた。
+** 
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+
+- 以前は common lisp mgl を用いていたが、事情により撤回を余儀無くされた。
     - 事情 Optimizer を絡ませずに lstm セルを回すことができない。
   - 現在は TensorFlow を Hylang から利用している。
     Python とTensorFlowの実行環境が入っていれば動く
     (common lisp mgl の内部実装を熟読したが、頑張れば目的に対応する LSTM を実装できると思われる。$\rightarrow$ それは卒研の目的とは外れてしまう。)
   - 現在ベースとなる Seq2Seq モデルそのものは完成(ほとんどドキュメントの翻訳に近い)しているが、実行にかなり時間がかかっており満足な結果を手に入れられていない。
-    リポジトリ github.com/MokkeMeguru/hy-seq2seq-with-tensorflow
-    #+ATTR_LATEX: width 0.9\linewidth
-
+    リポジトリ ~github.com/MokkeMeguru/hy-seq2seq-with-tensorflow~
+    
+    
 * 新たに調べたモデル
+** 
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+
 - Doc2Vec
   任意の長さの文章を分類するためのモデル。ある単語それぞれについてベクトル化を行い比較をする Word2Vec の文章版。類似の手法として Bag of Words という手法があるが、Doc2Vecは語順を考慮するという点や、単語の意味を表現するうことが出来るようになるらしいという点で有利。
   文書ベクトルを並べた重み行列を用いて、入力となるある文章に対して最もふさわしい文書ベクトルを返す。
@@ -90,21 +118,36 @@
 - Seq2Seq with Attention
   Seq2Seq model を長文にも耐えられるように改良したもの。Decoder で最終的に取り出される hidden state を Encoder で毎回考慮させるようにしている。
   #+ATTR_LATEX: width 0.8\linewidth
-  [./attention.png]
+  [[./attention.png]]
+** 
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+
 - HRED
   Seq2Seq model に文脈についての情報を与えるようにしたもの。長い会話を行えるようになる。
   このため、RNNは Encoder Decoder に加え Context が必要になる。
   #+ATTR_LATEX: width 0.9\linewidth
-  [./hred.png]
+  [[./hred.png]]
 - 参考文献　
    [[https://cs.stanford.edu/~quocle/paragraph_vector.pdf][Distributed Representations of Sentences and Documents]]
    [[https://arxiv.org/pdf/1507.04808.pdf][Building End-To-End Dialogue SystemsUsing Generative Hierarchical Neural Network Models]]
 * 実験したいモデル
+** 
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+
 - Doc2Vec でトピックごとの小さい問題に分割してそれぞれのトピックごとにSeq2Seq等を与えてみたい
   => 計算量が多く結果が満足に得られない/Doc2Vecで話者の気分を読み取ることができればそれに応じた返答が出来るのではないか？
 - Seq2Seq の部分を Seq2Seq with Attention や HRED に変えてみたい。
   => どの程度の差が生まれるのか比較を行いたい
 * 今後の予定
+** 
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+
 - TensorFlow に慣れる。
 - 実験を行い、結果データを得る。
 - 文体変換に関する論文を読む。(日本語の既存研究は見てきたが、あまりめぼしい物はなかった)  特徴として、すでに文章からの感情分析において成果を出している。
