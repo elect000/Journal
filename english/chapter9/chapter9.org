@@ -1,4 +1,3 @@
-
 #+OPTIONS: ':nil *:t -:t ::t <:t H:2 \n:t arch:headline ^:nil
 #+OPTIONS: author:t broken-links:nil c:nil creator:nil
 #+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:t f:t inline:t num:t
