@@ -89,9 +89,13 @@
   既に文章からの感情分析において成果を出している。
 - Seq2Seq with Attention
   Seq2Seq model を長文にも耐えられるように改良したもの。Decoder で最終的に取り出される hidden state を Encoder で毎回考慮させるようにしている。
+  #+ATTR_LATEX: width 0.8\linewidth
+  [./attention.png]
 - HRED
   Seq2Seq model に文脈についての情報を与えるようにしたもの。長い会話を行えるようになる。
   このため、RNNは Encoder Decoder に加え Context が必要になる。
+  #+ATTR_LATEX: width 0.9\linewidth
+  [./hred.png]
 - 参考文献　
    [[https://cs.stanford.edu/~quocle/paragraph_vector.pdf][Distributed Representations of Sentences and Documents]]
    [[https://arxiv.org/pdf/1507.04808.pdf][Building End-To-End Dialogue SystemsUsing Generative Hierarchical Neural Network Models]]
