@@ -168,6 +168,7 @@
 \bm{u}_3
 \end{pmatrix}
 \end{align*}
+
 　尚、三角行列への変換は行列 $\bm{A}$ の圧縮と等しい。
 ** QR分解Ⅰ
 
@@ -223,9 +224,10 @@
 
 \begin{align}
 \bm{A} = (\bm{Q}_1\bm{Q}_2)\begin{pmatrix}\bm{R}\\0\end{pmatrix}=\bm{Q}_1\bm{R}
+\tag{5.2}
 \end{align}
 
-　この方程式から、 $\bm{R}(\bm{A})=\bm{R}(\bm{Q}_1)$ がわかる。このようにして、値空間 $\bm{R(A)}$ の直交基底が計算できる。また上の式より、
+　この方程式から、 $\bm{R}(\bm{A})=\bm{R}(\bm{Q}_1)$ がわかる。このようにして、値空間 $\bm{R(A)}$ の直交基底を計算した。さらに、(5.2) において j 列 を書き出すと、
 
 \begin{align*}
 \bm{a}_j = \bm{Q}_1\bm{r}_j = \Sigma^j_{i = 1}r_{ij}\bm{q}_i
