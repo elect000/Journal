@@ -1,0 +1,102 @@
+#+TITLE: 夏季レポート3
+#+SUBTITLE: 
+#+AUTHOR: 情報科学類３年 江畑 拓哉 (201611350)
+# This is a Bibtex reference
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:nil todo:t |:t
+#+DATE: 
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 9.1.4)
+#+LATEX_CLASS: koma-article
+#+LATEX_CLASS_OPTIONS: 
+#+LATEX_HEADER_EXTRA: \DeclareMathOperator*{\argmax}{argmax}
+#+LATEX_HEADER_EXTRA: \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+#+LaTeX_CLASS_OPTIONS:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+STARTUP: indent overview inlineimages
+
+* Variational Autoencoder
+　X, Zの関係における近似推論のために、Variational Autoencoder モデルを利用する。我々の用いるVAEにおいて、シーケンスの生成モデルは、尤度関数 $p_{\bm{D}}(x|z)$ と組み合わされた潜在値 $z$ に対する我々の事前確率に対して指定される。この尤度関数は、 $z$ における任意のシーケンス $x$ の尤度を評価するための decoder network $\mathpzc{D}$ が出力するものである。任意のシーケンス $x$ が与えられたとき、encoder network $\mathpzc{E}$ は、潜在値 $p(z | x) \propto p_{\bm{D}}(x | z)p_{\bm{Z}}(z)$ の真の事後確率の変分近似(Variational approximation)  $q_{\bm{E}}(z | x)$ を出力する。なおこの変分近似には、Kingma & Welling よBowmanらによって提唱されているように、対角共分散(diagonal coviarance)を持つ変分族(variational family) $q_{\bm{E}} = N(\mu_{z|x}, \Sigma_{z|x})$ を利用する。
+　我々の変形の手法では、シーケンスを潜在値 $z$ の最大事後(MAP)構成(the maximum a posteriori configuration)にマッピングする符号化手順を採用している。(これはencoder network $\mathpzc{E}$ によって推定される)
+　$\mathpzc{E}, \mathpzc{D}$ のパラメータは、訓練データにおけるそれぞれの観測に対する周辺尤度の下限を最大化する確率変分推論(stochastic variational inference)を用いて学習される。
+\begin{align}
+\log p_\bm{X} \geqslant - [\mathcal{L}_{rec}(x) + \mathcal{L}_{pri}(x)]
+\mathcal{L}_{rec}(x) = -\mathbb{E}_{q_{\bm{E}}(z|x)}[\log p_{\bm{D}}(x|z)]
+\mathcal{L}_{pri}(x) = KL(q_{\bm{E}}(z|x)||p_{\bm{Z}})
+\end{align}
+　$\sigma_{z|x} = diag(\Sigma_{z|x})$ と定義すると、$q_{\bm{E}}, q_{\bm{Z}}$ が対角ガウス分布であるとき、事前強制(prior-enforcing)KLダイバージェンスは異なる閉形表現(closed form expression)(see. https://minus9d.hatenablog.com/entry/20130624/1372084229 )を持つ。 $\mathcal{L}_{rec}$ 項(すなわちdecoderモデルの元での対数尤度)を再構築したものは、ただ一つの取り出されたモンテカルロ標本 $z\sim q_{\bm{E}}(z|x)$ より効率的に近似することができる。ニューラルネットワーク $\mathpzc{E}, \mathpzc{D}$ のパラメータに関して、我々のデータ $\mathpzc{D}_n$ に対して変分加減を最適化するために、我々は誤差逆伝搬法とKingma & Wellingによる再パラメータ化のトリック(see. https://arxiv.org/pdf/1312.6114.pdf)を用いて得られた、(2)の確率的勾配を用いる。
+　全体を通して、我々の encoder/decoderモデル $\mathpzc{E},\mathpzc{D}$ はRNNである。RNNは各時間のステップ $t\in\{1,\dot,T\}$ において固定サイズの隠れ層の状態を示すベクトル $h_t \in \mathbb{R}^d$ が入力シーケンスの次の要素に基づいて更新されていくという、シーケンシャルなデータ $x = (s_1, \dot, \s_{T})$ に対するニューラルネットワークである。与えられた x に対して近似的な事後確率を生成するために、我々の encoder network $\mathpzc{E}$ にはRNNの最終的な隠れ層の状態を表すベクトルに対して以下の層を追加している。(パラメータとして、$\bm{W}, b$ を取っている)
+\begin{align}
+\mu_{z|x} = \bm{W}_{\mu}h_{T} + b_{\mu} \in \mathbb{R}^d
+\sigma{z|x} = exp(-|\bm{W}_{\sigma}v + b_{\sigma})
+v = ReLU(\bm{W}_v h_{T}+b_v)
+\end{align}
+　 $\sigma_{z|x} \in \mathbb{R}^d$ の(二乗された)要素は、我々の近似された事後共分散(approximate-posterior coviarance) $\Sigma_{z|x}$ の対角要素を形成する。
+　$\mathcal{L}_{pri}$ は $\sigma_{z|x} = \vec{1}$ で最小化され、encodingの分散が更に増えるとこれが悪化する可能性がある(我々の事後近似はUnimodal(単峰)である))ため、我々の変分族(variational family)の1を超える $\sigma_{z|x}$ の値を単純に考えることが出来ない。この制限を加えることは、より安定的な学習を促し、また、真の事後確率が分散 $\leqslant$ 1 で単峰性(see. 正規分布)に近づくようにencoder, decoder が共進化することを助ける(encourage)。
+　シーケンスの尤度を評価するため、RNNである $\mathpzc{D}$ を隠れ層の状態を表すベクトル $h_t$ のみならず、以下の追加された出力も考慮する。
+\begin{align}
+\pi_t = softmax(\bm{W}_{\pi}h_t + b_{\pi})
+\end{align}
+　それぞれのポジション $t$ において、$h_t$ を要約することで、$p(s_t| s_1,\dots , s_{t-1})$ を予測する。 $p(s_1,\dots s_T) = \PI^T_{t=1}p(s_t|s_{t-1}, \dots ,s_1)$ という因数分解を用いることで、 $p_{D}(x|z)=\PI^T_{t=1}\pi_t[s_t]$ を得ることができる。これは最初の隠れ層の状態を表すベクトル $h_0 = z$ と、$x = (s_1, \dots , s_T)$ を $\mathpzc{D}$ に与えることで計算される。与えられた潜在設定 $z$ より、我々の変形は以下に示されるよりもっともらしい観測を通してでシーケンスを復号することで得られる。
+\begin{align}
+D(z) = \argmax_{x\in \bm{X}} p_{\bm{D}}(x|z)
+\end{align}
+　(5)を用いたよりもっともらしい復号は、組み合わせ問題それ自身であるが、 $p(x|z)$ の逐次因数分解を利用するビームサーチを用いることでより効率的に見つけることができる。 $x^{\star} = \bm{D}(z) \in \bm{X}$ において、この $p_{\bm{X}}(x^{\star})$ でも $p(z|x^{\star})$ でもない探索を用いた復号戦略はとても小さいものである。
+
+* 出力の構成的な予測
+　VAEのコンポーネントに加えて、我々は構造について出力予測を行うモデルを標準的な feed forward neural network $\mathpzc{F}$ ($F:\mathbb{R}^d \rightarrow \mathbb{R}$) で作成し、これに fit させなければならない。我々の考える生成モデルは $F(x) = \mathbb{E}[Y|Z = z]$ である。 $Z$ を経由して $\mathbb{E}[Y|X = x] = \int \mathbb{F}(z)q_{\mathbb{E}}(z|x)dz$ を計算するよりも、一次のテイラー展開 $F(E(x))$ (この近似誤差は $\mathbb{F}$ がアフィン変換に近いほど縮小します) を用いるほうが良いです。この近似推論の条件付き期待値を正確に推定するために、我々は _損失関数に $\mathpzc{E}$ と $\mathpzc{F}$ を一緒に取って_ training します。(joint training)　 
+\begin{align}
+\mathcal{L}_{mse}(x, y) = [y - \bm{F}(\bm{E}(x))]^2
+\end{align}
+　基礎となる条件付き関係を補足するのに十分な容量でネットワーク $\mathpzc{E}$ $\mathpzc{F}$ が指定されている場合は、 _十分に大きなデータセット_ からネットワークパラメータを設定した後に、 $\bm{F}(\bm{E}(x))\approx \mathbb{E}[Y|X=x]$ を得る必要がある。($\mathbb{F}$ が非線形なマップ(non lenear map)であったとしても))
+* 不変性を強制する
+　理論的には、$z$ のいくつかの次元は結果 $y$ にのみ関係し、複合されたシーケンス $\bm{D}(z)$ には何も影響を与えてない可能性がある。この種の潜在的な表現を学ぶ事は厄介であり、 $z$ に関する推論された $y$ のその後の最適化は、実際には優れた修正されたシーケンスに繋がらない事があるからである。この問題を軽減するために、潜在値 $\bm{Z}$ の次元数 $d$ が、正確な結果予測と VAE の再構成を生成するために必要な最低限の容量を超えないように注意する。つまりこの望ましくないシナリオを明示的に抑制するには、次のような損失を加えて neural network の training を補助する。
+\begin{align}
+\mathcal{L}_{inv} = \mathbb{E}_{z \sin p_{\bm{Z}}}[\bm{F}(z) - \bm{F}(\bm{E}(\bm{D}(z)))]^2
+\end{align}
+　neural network のパラメータを損失に基づいて最適化する場合、 $\mathpzc{E},\mathpzc{F}$ で単独にモンテカルロ法による勾配 (Monte-Carlo estimated gradients) のバックプロパゲーションをされた $\mathpzc{D}$ のパラメータと右辺の修正された $\bm{F}(z)$ 項を扱う必要がある。 $\mathcal{L}_{inv}$ を0へ近づけることは、我々の出力予測が encoding-decoding のプロセスにおいて導入された変化に対して不変であることを保証する。
+* Joint training
+　このモデルに含まれるすべてのコンポーネントのパラメータ ($q_{\bm{E}}, p_{\bm{D}}, \bm{F}$)は 一貫したプロセスで学習される。 Training は $\bm{D}_n＄ の例よりも以下の目的関数を最小化するSGDを適用することになる。
+\begin{align}
+\mathcal{L}(x, y) = \mathcal{L}_{rec} + \lambda_{pri}\mathcal{L}_{pri} +
+\frac{\lambda_{mse}}{\sigma^2_{\bm{Y}}} \mathcal{L}_{mse} + \frac{\lambda_{inv}}{\sigma^2_{\bm{Y}}} \mathcal{L}_{inv}
+\end{align}
+　ただし、 $\sigma_{\bm{Y}}^2$ は(経験的な)出力の分散であり、 $\lambda \geqslant 0$ は全体的なフレームワークの効果を最大限に引き出すための、それぞれの目的に対する重み付のために選ばれた定数である。最初に $\lambda_{mse} = \lambda_{inv} = 0$  とすることで、オプションとして別々のコーパスの入力をラベルなしのものとして同一の入力として教師なしなVAEの学習として使うことができる。これは教師なしの事前学習がうまくいくことが Kirosら や Erhanらによって示されているためである。
+　実際に、以下の上手く行く学習戦略を見つけることが出来た。それは次の各ステップの中で多数のミニバッチのSGDの更新(通常は 10 ~ 30 epoch)) を適用する戦略である。
+** Step 1
+　 $\lambda_{inv} = \lambda_{pri} = 0$ 、つまり $\lambda_{rec}$ と $\lambda_{mse}$ について training を始める。　$\lambda_{mse}$ について適切な値を指定したにもかかわらず、この joint trainig による最適化を通して $\mathcal{L}_{rec}$ と $\mathcal{L}_{mse}$ の両方が極小な正の値に向かうことがわかった。(それぞれの目的に対して個別に training することで検証された)
+** Step 2
+　Bowmanらによって提案されたシグモイドアニーリングスケジューリング (sigmoid annealing schedule) に従って、$\lambda_{pri}$ を0から1へを大きくする。これは 変分 seq2seq モデルが単に z の encoding  を無視しないことを保証するためである。(公式の変分下限は $\lambda_{pri} = 1$ で達成されることに注意しなければならない)
+** Step 3
+　 $z \sim p_{\bm{Z}}$ のモンテカルロサンプルを通して平均して $\mathcal{L}_{inv}$ が小さくなるまで $\lambda_{inv}$ を増加させていく。ここで、 $p_{\bm{D}}$ は $\mathcal{L}_{inv}$ に関して定数として扱われ、SGDで使用されるミニバッチは、(シーケンス、出力) を対として $\mathcal{L}_{inv}$ を推定するために同数のモンテカルロサンプルを含むように選択される。
+* 変形の提案
+　前述の訓練手順は計算集約的(computationally intensive)であるが、一度学習を行うことで、 neural network を効率的な推論のために活用する事ができる。ユーザ指定な定数 $\alpha > 0$ と修正大賞のシーケンス $x_0$ が与えられた際に、次の手順を経て変形されたシーケンス $x^*$ を提案する。
+|--------------------------------
+|Revise Algorithm
+|--------------------------------
+|Input: シーケンス $x_0 \in \bm{X}$ , 定数 $\alpha \in (0, | 2\pi \Sigma_{z|x_0} | ^{-1/2})$
+|Output: 変形されたシーケンス $x^* \in \bm{X}$
+|1) $\mathpzc{E}$ を用いて $q_{\bm{E}}(z|x_0)$
+|2) $C_{x_0} = \{z \in \mathbb{R}^d : q_{\bm{E}}(z|x_0) \geqslant \alpha \}$ とする
+|3) $z^* = \argmax_{z\in C_{x_0}} \bm{F}(z)$ を見つける　(勾配降下法)
+|4) $x^* = \bm{D}(z^*)$ を返す (ビームサーチ)
+|--------------------------------
+　直感的には、レベルを決定する制約 $C_{x_0} \subseteq \mathbb{R}^d$ は $x^*$ を decode する潜在的な構成である $z^*$ が、 $x_0$ の生成に関与する潜在的な特性に近い特性を持っているということを保証する。 $x_0$ と $x^*$ が潜在因子を共有していると仮定すると、これらのシーケンスは生成モデルに従って根本的に近いと言える。   
+($\alpha$ のどのような値に対しても) $z^* = \bm{E}(x_0)$ は常に $z \in \bm{C}_{x_0}$ に対する潜在因子の最適化に関する実現可能な解であることに注意しなければならない。(つまり自然なシーケンスを生み出す空間上に位置しているということ) ただ、この制約付き最適化は事後ガウス近似 (Gausian approximate-posterior) の仮定の元では、 $C_{x_0}$ の概形が単純な $\bm{E}(x_0)$ を中心とする楕円体であるため、簡単に行うことができる。
+　変形を行う手続きであるStep 3 において $z^*$ を見つけるために、初期値を $z = \bm{E}(x_0)$ として勾配降下法を用いる。これはもし $\bm{F}$ が単純な feed forward network によってパラメーター化されていると 、局所最適をすぐに調べることができる。
+　 $E(x_0)$ で検索を始めると、ガウス分布を持つ $q_{\bm{E}}$ のような単峰性の事後近似のためには最も良いと考えられます。実行可能な空間 $C_{x_0}$ においてすべての反復が残っていることを確かめるために、代わりにペナルティ化された目的関数 (penalized objective) $\bm{F}(z) + \mu \cdot \bm{J}(z)$ に関して勾配ステップを取る。ただし、
+\begin{align}
+\bm{J}(z) = log[\bm{K} - (z - \bm{E}(x_0))^T \Sigma_{z|x_0}^{-1}(z - \bm{E}(x_0))]  \notag \\
+K = -2log[(2\pi)^{d/2}|\Sigma_{z|x}|^{1/2} \alpha]
+\end{align}
+　そして、 $0 < \mu \ll 1$ は 0 に向かって徐々に減少し、最適化が $\bm{C}_{x_0}$ の境界に近づくことを保証する。結果として得られる変形の品質の観点から、この log バリア関数 (log barrier function) は、投影勾配(projected gradient) や Franke-Wolfe アルゴリズムなどの制約付き最適化問題のための他の標準的な一次技法(first-order techniques) よりも優れていることがわかった。
+　原則として、我々の変形方法は、 SutskeverらやChoらの seq2seq モデルのようなシーケンスのための従来の決定論的な autoencoder の潜在的表現に作用することができる。しかしながら、 VAE は数多くの実用上の利点があり、そのうちのいくつかには、より一貫性のある文章を生成できると言う点が Bowman らによって強調されている。VAEの事後における不確実性は、ネットワークが潜在的な分布のサポートを、training の例を全体的にスムーズに広げることができることを示している。大賞的に、伝統的な autoencoder の元での潜在値の領域の中央部には、(example にはマッピングされていない) 穴が含まれている可能性があり、 $z*$ の最適化でこれらを避けることは簡単ではない。さらに、さあ遺書のシーケンスがすでに適切でないように構成されていた場合 ($\bm{D}(\bm{E}(x_0)) \geq x_0$) の貧弱な変形を避けるように設計された、後述する S1 の decoder の適応型変形について紹介する。
+* 変形の理論的性質
+* 現代のテキストをシェークスピア風に書き直す
+* Discussion
