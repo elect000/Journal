@@ -1,0 +1,100 @@
+#+TITLE: 夏季レポート4
+#+SUBTITLE: 
+#+AUTHOR: 情報科学類３年 江畑 拓哉 (201611350)
+# This is a Bibtex reference
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:t arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:t todo:t |:t
+#+DATE: 
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 26.1 (Org mode 9.1.4)
+#+LATEX_CLASS: koma-article
+#+LATEX_CLASS_OPTIONS: 
+#+LATEX_HEADER_EXTRA: \DeclareMathOperator*{\argmax}{argmax}
+#+LATEX_HEADER_EXTRA: \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+#+LaTeX_CLASS_OPTIONS:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+STARTUP: indent overview inlineimages
+
+* CopyNet の理解とその応用についての考察
+より柔軟に対話システムを作ることが出来るらしい CopyNet とそれに関連して意図的にデータのノイズを乗せる手法について調べた。
+** CopyNet
+*** 概要
+　Seq2Seqに対して、入出力時のコピーを行うタスクを追加したもの。例えば、任意のAに対して「Aはどうですか？」という質問に対して「Aはーです。」といった回答を期待することが出来る。
+　つまり任意の対象について(例えばある任意の人物の評価について)議論する場合にこの手法は有効であると考えられる。
+*** 実装
+　PyTorchでの [[https://github.com/adamklec/copynet][実装]] があるため、これを熟読している。
+*** 問題点
+　任意のそれに対して有効なので、特徴をもたせる際に問題となる可能性がある。
+　例えば、Aは好きでBは嫌い、という特徴を持たせたいが、「Xは好きですか？」という質問に対して「Xは好き/嫌いです」という回答を生成してしまう場合、どちらかは間違った回答を生成してしまう。
+*** 注目した理由
+　CopyNet は対話タスクや要約タスクにおいて単語をコピーするという手法を取っている。また、同様の手法として [[https://arxiv.org/abs/1611.09235][Joint Copying and Restricted Generation for Paraphrase]] に示されているものがあり、これに関してはまるで単語をコピーしているため、未知語に対しても同様の結果を得ることが出来ている。
+　しかし日本語での実験結果は [[https://qiita.com/kenchin110100/items/6dd952b73f2a2411a04f][この]] ようなものであり、対話というにはやや心もとないと考えられる。
+　ところがスタイル変換というタスクでこれを見た場合、この手法は極めて有力な手法のように思える。
+　特に今回求めているスタイル変換ではかなりの確率でCopyを要しているため、これを使うことで良い結果を得られるのかも知れないと考えている。
+**** 実際の例 （[[https://qiita.com/kenchin110100/items/6dd952b73f2a2411a04f][ここ]] より引用）
+|--------------------+--------------------|
+| （入力）           | (出力)             |
+| おはよう           | おはようございます |
+| 調子はどうですか？ | 調子は             |
+| お腹が空きました   | お腹が空きました   |
+| 今日は暑いです     | 暑いです           |
+|--------------------+--------------------|
+*** 参考文献
+[[http://www.lr.pi.titech.ac.jp/~sasano/acl2016suzukake/slides/08.pdf][Incorporating Copying Mechanism in Sequence-to-Sequence Learning ALC2016読み会@すずかけ台]]
+[[https://arxiv.org/pdf/1603.06393.pdf][Incorporating Copying Mechanism in Sequence-to-Sequence Learning]]
+[[https://arxiv.org/abs/1611.09235][Joint Copying and Restricted Generation for Paraphrase]] 
+
+** Unsupervised Machine Translation Using Monolingual Corpora Only
+*** この論文に至った経緯
+　先述の CopyNet における話で、 ``コピーによって未知語に対する反応が出来ている'' という部分、そしてどうやらデータセットをそこまで大きくすることが時間的に難しいという問題、そしてスタイル変換に関する別の実装を示した、 [[https://arxiv.org/abs/1705.09655][Style Transfer from Non-Parallel Text by Cross-Alignment]] の実装を眺めていた所偶然 ``データにノイズを乗せる'' という手法を発見したことによる。
+*** この論文の概要
+　（※まだ精読が出来ていないため不安定な部分が含まれている）
+　機械翻訳のタスクにおいて並列なデータを要している問題に対して、中間表現を作成することで非並列なデータでこのタスクを達成できるようにしようという取り組み。中間表現を作成するためにAutoEncoderの中の、特に学習時に入力に対して任意にノイズを乗せる Denoising Auto-Encoding を用いている。
+*** DAE とは何か
+　DAE こと Denoising Auto-Encoding は AutoEncoder の一種で主にデータにノイズを乗せ元のデータを復元することで逆に元データのノイズを削ることが出来る手法であり、日本では専ら音声認識のノイズ除去に使われているようである。
+　詳しい説明を [[https://ipsj.ixsq.nii.ac.jp/ej/?action=pages_view_main&active_action=repository_view_main_item_detail&item_id=112658&item_no=1&page_id=13&block_id=8][Stacked Denoising Autoencoder の汎化性能向上に関する一検討]] から以下に引用する。
+#+begin_example
+Denoising Autoencoder(dA) は、上述したAutoencoder の学習段階で、入力データにノイズを付与し、そのノイズが付与する前のオリジナルデータを復元するように学習を行う Autoencoder である。このようにして、 dA は、単純な Autoencoder と比較して、より頑健な特徴抽出が可能となり、未知のデータに対する汎化性能を高めることが出来る。
+#+end_example
+* Twitterを用いたデータ収集について
+　Twitterよりデータを収集する手法に関する記事が最近公開されていたため、それについて学習している。
+** データ収集について
+　APIを叩くことでデータを収集することが出来るようである。
+　この部分に関しては既存のものがあるためそれを利用する予定である。
+** 前処理について
+　 [[https://www.pytry3g.com/entry/master-Preprocessing#%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%EF%BC%94---%E9%A1%94%E6%96%87%E5%AD%97][この]] 前処理手法に加え、手でデータを精査、再精製する必要があると考えられるが、（現実問題として自分の脳からデータを作成するのも（発想力の問題で）限界に近いため）こちらのほうがデータの生成速度を挙げることが出来ると考えている。
+** 参考文献
+[[https://www.pytry3g.com/entry/master-TwitterConversationCrawler#API%E3%82%92%E4%BD%BF%E3%81%86][Twitterから対話データを収集する]]
+* 日本語の類語について
+** WordNet について
+　日本語を取り扱う上で厄介な問題として同義語や、漢字・かな問題がある。漢字・かな問題に関してはすべてをひらがなにすることで対応が出来るが、同義語に関してはどうだろうかと調べ、WordNet にたどり着いた。
+　WordNet とは語の類義関係のセットをグループ化し、各グループの相互関係を結んでいるネットワークを検索するツールである。これを用いることで同義語を一つにまとめることが出来るのではないかと考えていた。
+** 実際に WordNet を使ってみた結果
+|------------+-----------------------------------------------|
+| ご飯       | 供米, 舎利, 白米, 神米, 米, 八木, 禾穀, ご飯, |
+|            | 米穀, 稲孫, 飯米, 米飯, 上げ米, 枕米, 褻稲,   |
+|            | 御飯, おまんま, 糧米, 上米, 田の実, 飯,       |
+|            | 粮米, 銀飯, 穀, ライス, 産米, 稲, イネ        |
+|------------+-----------------------------------------------|
+| おはよう   | なし                                          |
+|------------+-----------------------------------------------|
+| こんにちは | やあ, こんにちは                              |
+|------------+-----------------------------------------------|
+　以上の結果から、ある一定の精度で良い結果を得られることがわかった。
+　これを用いることで大幅な語彙削減を行うことが出来る可能性があることがわかった。
+　問題点として、細かいニュアンスの違いを表現できない可能性があるということである。例えば、``ご飯'' を``食事''というニュアンスで用いている場合、``イネ'' は余りにも不適当な表現であるはずだ。
+　また、どの単語をメインの単語にするかは難しい問題だろう。
+* 今週の方針
+- 手打ちデータを1000まで増やす
+    現在約800まで集まったので更に増やす
+- Twitterからデータを収集する
+    実際にデータを1万ほど集めてみる
+- CopyNet を書いてみる
+    実装したものが既にあるため、これを書き写すことになると思われる
+- Style Transfer の実装にノイズ部を書き足してみる
