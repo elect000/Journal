@@ -12,3 +12,6 @@
 *.vrb
 *.snm
 *.sty
+*.blg
+*.bbl
+*.tex

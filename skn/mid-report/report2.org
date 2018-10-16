@@ -1,0 +1,58 @@
+#+TITLE: モジュール分割された日本語対話システムの作成
+#+SUBTITLE: 
+#+AUTHOR: 江畑 拓哉
+# This is a Bibtex reference
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil arch:headline ^:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:nil title:t toc:nil todo:t |:t
+#+LANGUAGE: ja
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 26.1 (Org mode 9.1.4)
+#+LATEX_CLASS: skn
+#+LATEX_CLASS_OPTIONS: 
+#+LaTeX_CLASS_OPTIONS:
+#+LATEX_HEADER:  \addbibresource{reference.bib}
+#+DESCRIPTION:
+#+KEYWORDS:
+#+STARTUP: indent overview inlineimages
+
+#+LATEX: \maketitle
+#+LATEX: \pagestyle{empty}
+
+* 序論
+  現在世界では様々な目的を持った対話システムが研究されている。主にそれは、ユーザを何らかの目標に導くためのタスク指向システム、対話そのものを目的とした非タスク指向システムの二種類に分かれている。またこの二つを組み合わせたシステムも開発されており、例えば Apple 社の Siri がこれに該当する。\\
+  　本研究では上記の二つを満たしなおかつより低コストなシステムを構築するため、様々な目的を持ったモジュールを作成し組み合わせる手法を提案する。
+* 研究概要
+** 研究目標
+   #+CAPTION: システム概図
+   #+NAME: fig:label1
+   #+ATTR_LATEX: :width 10cm
+   [[./figure2.jpg]]
+   本研究は上記のシステムを構築することを目的とする。\\
+   　例えばそのエージェントの名前に関する質問が来た場合には、 Question Detection を通り Answer Generation で自分の名前に関する文章を生成し、 Style Transfer を経由して回答を出力する。またゲームに関する入力が来た場合には Question Detection を通過し Sentence Categorization で ゲームに関する Topic Dialogue にアクセスし出力を得、 Style Transfer を通して出力する。Style Transfer は口調変換であり、エージェントに様々なペルソナを持たせるために用いられる。そのペルソナはエージェントの外見などと同期することでより対話感を出すことが出来ると考えている。
+   　またエージェントは天候などの環境データ、今までの対話データからそのステータスが変化することを想定しており、例えばあるモノに対する好感度はそれまでの対話から形成されるようにする。
+** 利用するデータ
+　このシステムにおいて必要とするデータは主に二種類である。
+- スタイル変換を行うためのデータ\\
+  　このデータには、スタイルが付与されていない文と付与された文のペアを集めたものと、スタイルが付与されていない文の群と付与された文の群を用いるものがある。現在の進捗としてはデータ生成の問題から前者を用いている。
+- 対話を行うためのデータ\\
+  　入力文と出力文のペアを集めたものである。収集手法として、\textcircled{1} 実際に手作りする \textcircled{2} アニメや演劇などから集める \textcircled{3} SNS から集める を行い、特に後者２つについては有効なデータをフィルタリングする手法を研究している。
+** それぞれのモジュールに適用した手法
+- Question Detection\\
+  　入力文に対して LSTM を適用し質問番号を出力する手法より殆どの分類が行えることがわかった。
+- Answer Generation\\
+  　予め用意したテンプレートにエージェントのステータスから取り出した値を当てはめ生成する。
+- Sentence Categorization\\ 
+  　SCDV cite:scdv のような手法や、sentiment analysis で使われる手法 cite:cnnsa を検討している。また単語埋め込みとして、 fasttext cite:fasttext や Word2Vec を採用したいと考えている。いずれも十分なサイズのデータを収集できておらず実験が出来ていないため、代替としてアニメの台本から入出力のペアを切り出した対話として成立しているデータ、一般的な対話を集めたデータを用いて RNN, CNN を用いた二値分類実験を行い、後者で8割5部ほどの検出をすることが出来た。
+- Topic Dialogue\\
+  　日本語でも Sequence to Sequence cite:seq2seq のような手法を用いた様々な取り組みが行われているが、芳しい結果を得られたものは少ない。しかし公開されているデータセットを確認すると、英語のデータセットと比較して、余り有効なデータセットであるようには思えなかった(入力と出力のペアで意味が通らないものがある等)ため、自作の日常会話を集めたデータセットで Sequence to Sequence を用いた実験をした所、それなりの精度の実験結果を得ることが出来た。しかしデータ量が少ないため(1k程度)これをいかに増やしていくかが今後の課題だ。
+- Style Transfer\\
+  　スタイルを付与されていないものと、付与されたもののペアをデータセットとして、 Sequence to better Sequence cite:seq2bseq と、DAE cite:dae から着想を得たそれの一部変更したものと CopyNet cite:dae を用いて実験を行った。結果として前者2つはチューニングが難しい代わりに自然な文を生成することが出来、後者は比較的高速に文を生成できる他にある程度未知語に対応が出来ることがわかった。今後 Sequence to better Sequence に CopyNet を組み合わせたシステムを提案したいと考えている。
+- データ収集について\\
+  　手打ちに関しては誤字脱字や意味の通らない文を含まない理想的なデータになるように打ち込んでしまっている。アニメや演劇からの収集については、長すぎる文は必要な部分のみにし、専門的過ぎる文は削除している。こちらは著作権などの問題があるため、この対処を調べている。SNS からのデータの収集については Twitter を用いているが、ノイズの多いデータが混じっているため、そのデータクリーニングについて既存の手法 cite:twitercleaning を参考にしながら研究している。
+- ステータス更新を行う手法\\
+    　文章に関しては Word2Vec cite:word2vec や fasttext を用いた極性判定を用いて実験する予定だ。
+#+LATEX: \printbibliography
