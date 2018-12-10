@@ -124,6 +124,7 @@ $\star$ S2BS with DAE : Sequence to better sequence with DAE
    - 最適化関数は Adam を用いた
    - epoch は十分に学習ができるまでとした
 ** 実験結果
+   　以下の通り
    
 ** 考察
 * 日本語言語理解タスクのためのSubword
