@@ -52,6 +52,7 @@
 ** スタイル変換
    - *センテンスにおける口調を変換する* という問題。
    - 今回主に取り扱うのは、 *です・ます調<=>話し言葉* への変換。
+     ex. おはようございます。 $\rightarrow$ おはよう。
    - データセットは自作の *並行な* ものを使用 (データ数が少ないのでLossやAccへの言及はしない)
    - 3つの手法で実験し、その結果を観察する。
 ** Sequence to better sequence
@@ -111,15 +112,24 @@ $\star$ S2BS with DAE : Sequence to better sequence with DAE
    
 * 不均衡データ分散な...
 ** 不均衡データ分散なデータセットと不均衡データ数なデータセットの関係
-   *本来の問題*: 任意の入力文からいくつかの質問・文を抽出したい。
+   - *本来の問題*
+       任意の入力文からいくつかの質問・文を抽出したい。
+       ex1. おはようございます。 $\rightarrow$ class<朝の挨拶> (抽出したい文)
+       ex2. 進捗どうですか？ $\rightarrow$ class<None> (抽出したい文ではない)
+   - *問題の需要*
+      昨今日本で人気であるシナリオ型対話システム等の文判定のシステムを作ることが出来る。
 
+** 
    　しかし以下の理由から画像認識の問題として(1)の問題を設定した。
+   　(昨今では画像認識の技術が積極的に自然言語処理に利用されているため、画像認識の問題に置換できると考えている。)
    - 自然言語(日本語)の *データを十分* に用意できない。
    - 2つの選択肢が考えられる。
      1. シンプルなクラス分類 (文A、文B ... その他)
      2. *文章類似度* を活用したクラス分類
         \begin{eqnarray*}
-        class &=& \max_{i}f(similarity(x, {Y_i}_j))\\
+        class &=& \max_{i}f(similarity(x, Y_i)) \\
+        &if& f(similarity(x, Y_i))> threathold\\
+        similarity(x, Y_i)&=& \Sigma_j dist(x, {Y_i}_j)\\
         x&\dots& input\ sentence\\
         Y_i&\dots& set\ of\ sentences\ in\ class\ i
         \end{eqnarray*}
