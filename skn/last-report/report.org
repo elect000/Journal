@@ -12,7 +12,7 @@
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 26.1 (Org mode 9.1.4)
 #+LATEX_CLASS: article
-#+LATEX_CLASS_OPTIONS: [a4paper, 10pt, dvipdfmx]
+#+LATEX_CLASS_OPTIONS: [a4paper, dvipdfmx]
 #+LATEX_HEADER: \usepackage{amsmath, amssymb, bm}
 #+LATEX_HEADER: \usepackage{graphics}
 #+LATEX_HEADER: \usepackage{color}
