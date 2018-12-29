@@ -2,7 +2,7 @@
 #+SUBTITLE: 
 #+AUTHOR: 
 # This is a Bibtex reference
-#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil arch:headline ^:nil
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:t arch:headline ^:nil
 #+OPTIONS: author:nil broken-links:nil c:nil creator:nil
 #+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t
 #+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
@@ -24,7 +24,7 @@
 #+LATEX_HEADER: \usepackage{pxjahyper}
 #+LATEX_HEADER: \hypersetup{colorlinks=false, pdfborder={0 0 0}}
 #+LATEX_HEADER: \usepackage[utf8]{inputenc}
-#+LATEX_HEADER: \usepackage[backend=biber, bibencoding=utf8]{biblatex}
+#+LATEX_HEADER: \usepackage[backend=biber, bibencoding=utf8, style=authoryear]{biblatex}
 #+LATEX_HEADER: \usepackage[top=30truemm, bottom=30truemm, left=25truemm, right=25truemm]{geometry}
 #+LATEX_HEADER: \addbibresource{reference.bib}
 #+DESCRIPTION:
@@ -35,9 +35,22 @@
 * 序論
 #+LATEX: \pagenumbering{arabic}
 ** 研究背景及び目的
+   ある目的に対してより完璧に(accuracyが高くなるように)命令を実行をする Artificial Intelligence が求められている昨今のAI競争の時代に対し、自然言語処理やゲームAIのようなタスクは極めて複雑な課題を抱えている。例えばそれは``言葉''という問題である。これは人間がコンピュータに正解となるものを提供することが極めて難しく、何気なしに``なんとなく良い感じに''目的を達成してくれることを祈るという有様である。この問題に対処するための手段として、入手できるだけの大規模なデータを用意して中心極限定理的に尤もらしい中心部を得る方法や、とにかく何らかの単一のモデルに押し込めて問題を解くというスタイル [fn:hred] がある。それに対して、データそのものを一旦精査・前処理すること、問題を整理・分解しそれぞれを解くことも研究 [fn:multimordule] として存在している。
+   　自然言語処理の、特に対話システムについて考えたとき、小問題に分割した上で対話システムを達成した例として、例として Amazon Alexa Prize [fn:alexaprize] というコンテストやMicrosoft社が研究・開発している``りんな'' [fn:rinna] を挙げることができる。これらは対話を行うという問題に対して小さな部分問題を解くタスクを設定し、それぞれを組み合わせることで元の問題を解くというスタイルを取っている。
+   　本研究ではこれらを参考に、日本語の対話システムを作成するという問題に対して小問題を設定しそれを解くための手法を提案・実験する。またその前準備としてデータ収集に絡めて日本語データとその前処理について考察する。
+   　もう少し言及すると、本研究ではデータからモデルにかけて5つの少テーマについて研究を行った。概要をそれぞれ説明すると以下のようになる。
+   1. 日本語データの取り扱いについて
+      我々は一般に英語のみを話しているわけではない。しかし機械学習等のデータセットや実験で多く使われているのは英語のものである。しかし日本語と英語には、例えば使っている文字や文型で大きく異なっていると言える。その前提のもとで日本語のデータ、特にセンテンスに対して、どのような性質があるのかを調査し、また提案する漢字→ひらがな変換という前処理とそれによって得られる性質についても議論する。
+   2. 文抽出を念頭においた不均衡分散・サイズの分類問題
+      テスト
+   [abstract]
   　まず受付やオンラインチャットなどにおいて対話システムの需要が増えていること、Amazon AlexaやSiriなどを例に出して説明する。次にキャラクタ性を持ったマルチモーダル対話システムとして、りんなを例に上げる。
   　その実装例として、Amazon Alexa Prize のコンテストを例に出す。
   　本研究の目的として、日本語環境下で、りんなのような機能を持つシステムを構築すること、ゲームAIへの転用などを視野にいれていることを説明する。そしてシステムの概要として、対話システムという大問題に対して、いくつかの小問題に分割し、それらを組み合わせるモジュール分割という手法を用いることにしたことを説明する。
+[fn:rinna] https://twitter.com/ms_rinna
+[fn:alexaprize] https://developer.amazon.com/alexaprize
+[fn:hred] HRED (\cite{1507.02221}) や VHRED (\cite{1605.06069}) があるが、発話の多様性を得ること(一般的な受け答えを学んでしまい、同じような文ばかり生成してしまうこと)やデータを十分に集めることが難しいなど課題がある。
+[fn:multimordule] 日本で人気を得ている ``マルチモーダルエージェントAI'' とは、複数のソースから問題を見直すという特徴があるが、これは複数のモデルを使っているという意味で同じではあるが、問題を分割しようとしているわけではないという点でこの研究と大きく違うと言えるだろう。
 ** 本論文の構成
    　1章として論文の導入をしていること。2章で対話システムの関連研究として1章の研究背景で紹介した(Amazon Alexa Prizeやりんな)の概要を説明していること。3章として対話システム全体の実装として目標としている構成図を示していること。4章については日本語のデータをどのように扱うべきか考察したこと。5章から8章にかけてはそれぞれのモジュールに対する研究について説明をしていること。9章に対してはそれぞれの章で説明が不足しているであろう内容を補足するための付録であること。を説明する。
 * 対話システムの関連研究
@@ -163,3 +176,4 @@
 * 結論
 ** 今後の課題
    今回できなかった文生成の問題・論文に載せることのできなかった推論の内部状態の更新等について言及する。また精度向上や今後取り組みたい問題設定(Unityなどで仮想世界を作り、その中で対話を行えるようにするエージェント作成したい旨)について話す。
+\printbibliography
