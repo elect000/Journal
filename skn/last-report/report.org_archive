@@ -1,0 +1,21 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/meguru/Github/Journal/skn/last-report/report.org
+
+
+* abstract 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2018-12-30 日 02:25
+  :ARCHIVE_FILE: ~/Github/Journal/skn/last-report/report.org
+  :ARCHIVE_OLPATH: 序論/研究背景及び目的
+  :ARCHIVE_CATEGORY: report
+  :END:
+　まず受付やオンラインチャットなどにおいて対話システムの需要が増えていること、Amazon AlexaやSiriなどを例に出して説明する。次にキャラクタ性を持ったマルチモーダル対話システムとして、りんなを例に上げる。
+　その実装例として、Amazon Alexa Prize のコンテストを例に出す。
+　本研究の目的として、日本語環境下で、りんなのような機能を持つシステムを構築すること、ゲームAIへの転用などを視野にいれていることを説明する。そしてシステムの概要として、対話システムという大問題に対して、いくつかの小問題に分割し、それらを組み合わせるモジュール分割という手法を用いることにしたことを説明する。
+[fn:rinna] https://twitter.com/ms_rinna
+[fn:alexaprize] https://developer.amazon.com/alexaprize
+[fn:hred] HRED (\cite{1507.02221}) や VHRED (\cite{1605.06069}) があるが、発話の多様性を得ること(一般的な受け答えを学んでしまい、同じような文ばかり生成してしまうこと)やデータを十分に集めることが難しいなど課題がある。
+[fn:multimordule] 日本で人気を得ている ``マルチモーダルエージェントAI'' とは、複数のソースから問題を見直すという特徴があるが、これは複数のモデルを使っているという意味で同じではあるが、問題を分割しようとしているわけではないという点でこの研究と大きく違うと言えるだろう。
+[fn:transformer] 2017年12月時点
