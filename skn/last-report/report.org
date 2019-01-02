@@ -8,7 +8,7 @@
 #+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+OPTIONS: timestamp:nil title:nil toc:t todo:t |:t
 #+LANGUAGE: ja
-#+SELECT_TAGS: export
+#+SELECT_TAGS: export 
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 26.1 (Org mode 9.1.4)
 #+LATEX_CLASS: article
@@ -114,7 +114,7 @@
 :END:
 日本語データは英語データに比べていくつかの問題を抱えている。問題の例としては、文字の数が多すぎること、スペースといった意味ごとの分割がないこと、容易にペルソナを特定できるような多彩な語尾変化があること、多国語も日本語であるかのように用いること、同意同音の語でも様々な表記方法があることが挙げられる[fn:spacesplit]。\\
 　また一般に公開されている対話データセットを対話テキストのみで学習させると想定したとき、背景知識の欠如を指摘せざるを得ない。更に言えば日本人の特徴として``言外にわかり合う''というコミュニケーションスタイルも問題を難しくしていると言えるだろう。\\
-　この章では上記の問題があることを公開されているデータセット、Twitterから収集したデータセットを用いて調査するとともに、``漢字をかなに変換する''という前処理を用いることでどのようにデータの性質が変化するのかを、単語分散を得るというタスクについて実験する。
+　この章では上記の問題があることを公開されているデータセット、Twitterから収集したデータセットを用いて調査するとともに、``漢字をかなに変換する''という前処理を用いることでどのようにデータの性質が変化するのかを、単語分散を得るというタスクについて実験する。\\
 　尚本研究では、形態素解析にはMeCab 0.996、単語辞書として mecab-ipadic-neologd 20181112-01 を用いた。特にTwitterのようなデータは流行語や新語に対応するため、単語辞書を定期的に更新する必要がある。
 [fn:spacesplit] 前2つに関しては、中国語も共通して抱えている問題と言える。
 ** abstract :noexport:
@@ -274,7 +274,7 @@
 　調査結果を表を用いて示す。そして後述の実験である極性判定実験のために抽出できたデータが10%程度であったことを説明する。
 
 ** 調査) 対話データ
-対話データとして、2018年8月から12月にかけて不定期にTwitterから収集した対話データ、一般公開されている書き起こしの対話コーパス、一般公開されているチャットの対話コーパスについてデータを観測した。
+対話データとして、2018年8月から12月にかけて不定期にTwitterから収集した対話データ、一般公開されている書き起こしの対話コーパス、一般公開されているチャットの対話コーパスについてデータを観測した。\\
 　以下に調査結果として何らかの問題があると考えられる特徴について報告し、それに対する考察を述べる。
 *** 調査結果
 **** Twitterから収集した対話データ
@@ -313,7 +313,7 @@
 [fn:pre-knowledge] アノテータが一人のため境界を判定することは難しいため、割合を明言することは出来ない。
 **** 名大会話コーパスから収集したデータ
 \\
-　名大会話コーパス(\cite{meidai}) から入手できる129会話について観測した。名大会話コーパスとは日本語母語話者同士の雑談を文字化したコーパスで、129会話を収録、その合計時間は100時間に及ぶ比較的大規模なものだ。ライセンスがクリエイティブ・コモンズ表示-非営利-改変禁止 4.0 国際ライセンスで公開されているため、研究目的で用いることが非常に容易なコーパスであると言える。
+　名大会話コーパス(\cite{meidai}) から入手できる129会話について観測した。名大会話コーパスとは日本語母語話者同士の雑談を文字化したコーパスで、129会話を収録、その合計時間は100時間に及ぶ比較的大規模なものだ。ライセンスがクリエイティブ・コモンズ表示-非営利-改変禁止 4.0 国際ライセンスで公開されているため、研究目的で用いることが非常に容易なコーパスであると言える。\\
 　非常に大規模かつ考察で述べるように複雑な内容であるため、出現頻度については言及しない。
 
 #+ATTR_LATEX: :caption \caption{対話データの調査結果2} :environment longtable :align |c|c|c|
@@ -349,9 +349,9 @@ Twitterから収集した対話データに関してはTwitterデータとして
  　対話データとして、Twitterのデータ、一般公開されている書き起こしの対話コーパスの内容について言及し、前者に比べ後者は文字だけでは学習することが難しい(背景知識が必要である)ことを説明する。
 ** 問題設定
 NLP の研究分野の一つについて単語分散を用いた言語モデル生成がある。単語といったある単位ごとの意味をベクトルなどの数値にする手法であり、この利点としては、単位ごとの距離を考えたとき、意味的に近い要素は近く、遠い要素は遠くなることで様々な NLP のタスクで自然言語を数値化する際に、自然言語の特徴を強く表すことができるようになるというものがある。\\
-　本研究ではこの単語分散を得るという問題に対してデータの前処理がどのように影響するのかを理解する目的で、2つの実験を行う。
+　本研究ではこの単語分散を得るという問題に対してデータの前処理がどのように影響するのかを理解する目的で、2つの実験を行う。\\
 　一つは、1.漢字・かな入り混じり文、2.かな飲みに変換した文、によって得られる単語分散の性質の違いを確認する実験、もう一つは得られた単語分散を用いて極性判定を行う実験である。\\
-TODO: Word Embedding で得られるT-SNE画像を挿入する\\
+TODO: Word Embedding で得られるT-SNE画像を挿入する
 *** next :noexport:
 　もう一つは、同様の2つのデータに対して、文字ベースで単語分散を得る手法である、Contextual String Embedding for Sequence Labeling の言語モデル生成を用い、クラス分類を行う実験。
 *** abstract :noexport:
@@ -361,7 +361,8 @@ TODO: Word Embedding で得られるT-SNE画像を挿入する\\
 *** 関連研究
 単語分散を得るための手法としては、SVD(特異値分解)(TODO:svd)やWord2Vec(TODO:word2vec)やglove(TODO:glove)、fasttext(TODO::fasttext)といった手法が有名だ。また昨今、NLPでは文単位での解析が多いこと、文全体の意味も考慮したほうが良いというモチベーションから、単語分散のみならず、文ごとの関係も考慮してベクトルを生成する手法が提案されている。その代表例が、ELMo(TODO:ELMo)、BERT(TODO:BERT)と言った深層学習のモデルであり、昨今の様々なNLPのタスクでSOTAを達成している。
 ** 実験) 漢字かな問題に対する単語分散取得
-*** 実験概要   
+　この実験では、日本語特有に存在する``漢字とかなによる同意表現の複数表記''を解消するための漢字 $\rightarrow$ かな変換を行い、
+*** 実験概要
     単語分散を得るためのコーパスとしてWikipediaコーパスを用いたことなど、実験の概要を示す。
 *** 実験結果
     実験結果を示す。
@@ -537,6 +538,79 @@ F107：さっきちょっとなでただけなのにって。\\
 * 結論
 ** 今後の課題
    今回できなかった文生成の問題・論文に載せることのできなかった推論の内部状態の更新等について言及する。また精度向上や今後取り組みたい問題設定(Unityなどで仮想世界を作り、その中で対話を行えるようにするエージェント作成したい旨)について話す。
-
-
+#+LATEX: \newpage
 #+LATEX: \printbibliography
+
+* C++ コードをEmacs + Org mode で書く
+#+CAPTION: テストコード
+#+header: :includes <iostream>
+#+header: :var greet="Hello World"
+#+begin_src C++ :exports both :results latex :cache yes
+std::cout << greet << std::endl;
+#+end_src
+
+#+RESULTS[72a19f4e33f7ff6180eab6e0536194c82f003d2c]:
+#+BEGIN_EXPORT latex
+Hello World
+#+END_EXPORT
+
+#+CAPTION: init.el
+#+BEGIN_SRC emacs-lisp
+
+(setq org-latex-listings 'minted
+      org-latex-packages-alist '(("" "minted")))
+
+(require 'org)
+(require 'ox-latex)
+(require 'ox-bibtex)
+(require 'org-ref)
+
+(setq org-latex-toc-command 
+"\\pagenumbering{roman} \\tableofcontents
+ \\clearpage \\listoffigures \\clearpage")
+
+(setq org-format-latex-options 
+  (plist-put org-format-latex-options :scale 2.0))
+
+(setq bibtex-completion-pdf-open-function 'org-open-file)
+
+(setq org-latex-listings 'minted)
+
+(setq org-latex-minted-options
+      '(("frame" "lines") ("linenos=ture")
+        ("obeytabs") ("tabsize=4")))
+
+(setq org-latex-pdf-process
+      '("platex --shell-escape --kanji=utf-8 %f"
+        "platex --shell-escape --kanji=utf-8 %f" 
+        "biber %b"
+        "platex --shell-escape --kanji=utf-8 %f" 
+        "dvipdfmx %b"))
+
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((C . t)))
+#+END_SRC
+
+#+CAPTION: 書き方
+#+BEGIN_SRC text
+#+CAPTION: テストコード
+#+header: :includes <iostream>
+#+header: :var greet="Hello World"
+,#+begin_src C++ :exports both :results latex :cache yes
+std::cout << greet << std::endl;
+,#+end_src
+
+#+RESULTS[72a19f4e33f7ff6180eab6e0536194c82f003d2c]:
+,#+BEGIN_EXPORT latex
+Hello World
+,#+END_EXPORT
+#+END_SRC
+
+
+
+
+
+
+
