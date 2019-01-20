@@ -831,16 +831,29 @@ Sequence to Better Sequence とSequence to Better Sequence に Denoising autoenc
 #+LATEX: \newpage
 [fn:general_loss] 厳密にどちらかと明言された文書を見つけることが出来なかった他、ここ(https://stats.stackexchange.com/questions/258166) に興味深い議論があるように、頭ごなしに loss のみを観測して過剰適合かどうかを判定するのは早計であると考えたため、``一般的''という表現を用いた。
 * 付録
-  この付録の存在意義について説明する。(論文の補足であることを説明する)
+この章ではこれまでの章で登場したモデル・論文などについての補足説明を行う。更に深い説明に関しては参考文献を参照していただきたい。
 ** 対話システムの関連研究
 :PROPERTIES:
 :CUSTOM_ID: extra_rsearch
 :END:
-この章では [[#relation-reserch]] で引用した対話システムのうち、 Sounding Board と Gunrock について詳細な説明を行う。りんなに関しては非公開情報が多いため説明を省略する。
+この章では [[#relation-reserch]] で引用した対話システムのうち、 Sounding Board と Gunrock について簡易な説明を行う。りんなに関しては非公開情報が多いため説明を省略する。
 *** Sounding Board
- Sounding Board \cite{1804.10202}
+Sounding Board (\cite{1804.10202}) は 2017 年度の Amazon Alexa Prize で優勝した social bot の名称で、Washington 大学の大学院生らが作り上げたシステムだ。ここで定義するSocial bot とは Personal Assistant と所謂 ChatBot (日本で言うChitChat或いはチャットボット、人工無能) の中間にあるものだ。本研究と異なるものとして、これが目的としているものは ``bot'' の開発で、``人と対話するよな''体験をさせることを目的とするわけではなく、例えば受付や何らかの教師といったシステムへの応用を考えていることが挙げられる。\\
+　また Sounding Board はネットワークを介して積極的に外部情報を用いるという点が特徴だ。また逐次的に収集される情報を知識グラフとして持つことで、過去の資源とのつながりも持つことが出来ると考えられる点も興味深い。この機能のおかげでシステムの老朽化を比較的に抑えることを見込まれている。\\
+　更にユーザモデリングを重視している点や、ユーザの発話から会話を掘り下げていくスタイルはこの bot が審査員から 10 分以上の対話を勝ち取った秘訣として挙げることが出来る。しかし逆に言えばこの bot はキャラクタ性や自主性に乏しい。その点が本研究とは目標が異なっているものとして挙げられる。\\
+　また小規模のルールベースを用いたモデルを用いているという点は非常に興味深い。本研究では深層学習を積極的に用いるようにしているが、こちらはデータの前処理が苦になるということを Sounding Board の研究では指摘している。この点については先述の章らで示したように認めざるを得ない。\\
+　 [[[fig:ssb][Figure 3]]] にSounding Board のシステムアーキテクチャを引用する。まずFront-end であるが、これは Amazon が提供している Automatic Speech Recognition (ASR) [fn:ASR] と Text-to-Speech (TTS) API [fn:TTS] が用いられている。Middle-end に関しては記載されている通り、NLU(Natual Language Understanding) と Dialogue Management、Natural Language Generation の3テーマをそれぞれ小問題に分割して解決している。Natural Language Understanding ではユーザからの入力の振り分け、感情分類などを行っており、Dialogue Management では会話全体を管理するマスターと、挨拶や特定のトピックに対する対話など様々なタイプのモードについての処理を行う集合とによる階層構造を持っており、マスターでは会話の一貫性やユーザからのエンゲージメント、コンテンツの可用性などを推測し会話の統制を取っている。Back-end では主に知識グラフを保存するために用いられている。
+#+CAPTION: Sounding Board のシステムアーキテクチャ (\cite{1804.10202} より)
+#+NAME: fig:ssb
+#+ATTR_LATEX: :width 10cm
+[[./img/sbarchitect.PNG]]
+
+[fn:ASR] https://developer.amazon.com/ja/alexa-skills-kit/asr
+[fn:TTS] https://aws.amazon.com/jp/polly/ や https://developer.amazon.com/ja/docs/alexa-voice-service/speechsynthesizer.html
+
 *** Gunrock
-Gunrock \cite{Gunrock}
+Gunrock (\cite{Gunrock}) は 2017 年度の Amazon Alexa Prize で優勝した Social bot の名称で、Calfornia 大学の Davis 校のチームが作成した Social bot である。
+
 ** 日本語データの取り扱いについて
 :PROPERTIES:
 :CUSTOM_ID: attr-japanese
