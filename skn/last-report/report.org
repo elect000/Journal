@@ -77,7 +77,7 @@
 　いずれも複数のモデルを組み合わせて構成されており、例えば言語理解部と文生成部、そして本研究で取り扱わないものとしては、音声理解部と音声生成部を挙げることができる。またりんなに関してはそれに加えて画像認識部などの対話以外の [fn:rinna2] システムも構築している [[[fig:RINNA-FRAMEWORK][Figure 1]]] 。
 
 #+ATTR_LATEX: :width 12cm
-#+CAPTION: りんなのフレームワーク
+#+CAPTION: りんなのフレームワーク(\cite{rinna_article} より)
 #+NAME: fig:RINNA-FRAMEWORK
 [[./img/rinna-framework.png]]
 #+LATEX: \newpage
