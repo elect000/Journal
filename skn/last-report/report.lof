@@ -4,7 +4,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {2}{\ignorespaces 本研究のシステム全体像}}{4}{figure.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3}{\ignorespaces 単語分散の例(t-SNE(t-Distributed Stochastic Neighbor Embedding(\cite {vanDerMaaten2008}))を用いて二次元平面に描画)}}{10}{figure.3}
+\contentsline {figure}{\numberline {3}{\ignorespaces 単語分散の例(t-SNE(t-Distributed Stochastic Neighbor Embedding(\cite {vanDerMaaten2008}))を用いて二次元平面に描画)}}{11}{figure.3}
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {4}{\ignorespaces 漢字かな問題に対する単語分散獲得}}{12}{figure.4}
 \defcounter {refsection}{0}\relax 
@@ -12,4 +12,6 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {6}{\ignorespaces 対話システムのエラー検知の実験結果 における epoch と 精度の変化}}{24}{figure.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {7}{\ignorespaces Sounding Board のシステムアーキテクチャ (\cite {1804.10202} より)}}{25}{figure.7}
+\contentsline {figure}{\numberline {7}{\ignorespaces Sounding Board のシステムアーキテクチャ (\cite {1804.10202} より)}}{26}{figure.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {8}{\ignorespaces Gunrock のシステムアーキテクチャ (\cite {Gunrock} より)}}{27}{figure.8}

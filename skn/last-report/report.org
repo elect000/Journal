@@ -121,8 +121,10 @@
 日本語データは英語データに比べていくつかの問題を抱えている。問題の例としては、文字の数が多すぎること、スペースといった意味ごとの分割がないこと、容易にペルソナを特定できるような多彩な語尾変化があること、多国語も日本語であるかのように用いること、同意同音の語でも様々な表記方法があることが挙げられる[fn:spacesplit]。\\
 　また一般に公開されている対話データセットを対話テキストのみで学習させると想定したとき、背景知識の欠如を指摘せざるを得ない。更に言えば日本人の特徴として``言外にわかり合う''というコミュニケーションスタイルも問題を難しくしていると言えるだろう。\\
 　この章では上記の問題があることを公開されているデータセットやTwitterから収集したデータセットを用いて調査するとともに、``漢字をかなに変換する''という前処理を用いることでどのようにデータの性質が変化するのかを、単語分散を得るというタスクについて実験する。\\
-　尚本研究では、形態素解析にはMeCab 0.996、単語辞書として mecab-ipadic-neologd 20181112-01 を用いた。特にTwitterのようなデータは流行語や新語に対応するため、単語辞書を定期的に更新する必要がある。
+　尚本研究では、形態素解析には MeCab[fn:mecab] 0.996、単語辞書として mecab-ipadic-neologd[fn:mecab-neologd] 20181112-01 を用いた。特にTwitterのようなデータは流行語や新語に対応するため、単語辞書を定期的に更新する必要がある。
 [fn:spacesplit] 前2つに関しては、中国語も共通して抱えている問題と言える。
+[fn:mecab] http://taku910.github.io/mecab/
+[fn:mecab-neologd] https://github.com/neologd/mecab-ipadic-neologd
 ** abstract :noexport:
   　日本語データは英語データに比べていくつかの問題があること。その例として。語尾の多彩な変化や漢字かな問題があることを紹介する。また一般に公開されている対話データセットをどのように用いるべきなのかについての考察を行ったこと、漢字かな問題に対して単語分散を得るための手法を二種類想定し、それぞれの性質を比較する。
 ** 調査) 発話データ
@@ -287,7 +289,6 @@
 :PROPERTIES:
 :CUSTOM_ID: conv_data
 :END:
-
 対話データとして、2018年8月から12月にかけて不定期にTwitterから収集した対話データ、一般公開されている書き起こしの対話コーパス、一般公開されているチャットの対話コーパスについてデータを観測した。\\
 　以下に調査結果として何らかの問題があると考えられる特徴について報告し、それに対する考察を述べる。
 *** 調査結果
@@ -369,7 +370,7 @@ NLP の研究分野の一つについて単語分散を用いた言語モデル�
 #+CAPTION: 単語分散の例(t-SNE(t-Distributed Stochastic Neighbor Embedding(\cite{vanDerMaaten2008}))を用いて二次元平面に描画)
 [[./img/foo.PNG]]
 *** 関連研究
-単語分散を得るための手法としては、SVD (特異値分解 A singularly valuable decomposition(\cite{Kalman96asingularly})) や Word2Vec (\cite{NIPS2013_5021}) や Glove (\cite{Pennington14glove:global})、fasttext (\cite{Bojanowski2017EnrichingWV})といった手法が有名だ。また昨今、NLPでは文単位での解析が多いこと、文全体の意味も考慮したほうが良いというモチベーションから、単語分散のみならず、文ごとの関係も考慮してベクトルを生成する手法が提案されている。その代表例が、ELMo(TODO:ELMo)、BERT(TODO:BERT)と言った深層学習のモデルであり、昨今の様々なNLPのタスクでSOTAを達成している。
+単語分散を得るための手法としては、SVD (特異値分解 A singularly valuable decomposition(\cite{Kalman96asingularly})) や Word2Vec (\cite{NIPS2013_5021}) や Glove (\cite{Pennington14glove:global})、fasttext (\cite{Bojanowski2017EnrichingWV})といった手法が有名だ。また昨今、NLPでは文単位での解析が多いこと、文全体の意味も考慮したほうが良いというモチベーションから、単語分散のみならず、文ごとの関係も考慮してベクトルを生成する手法が提案されている。その代表例が、ELMo(\cite{Peters2018DeepCW})、BERT(\cite{Devlin2018BERTPO}) といった深層学習のモデルであり、昨今の様々なNLPのタスクでSOTAを達成している。
 *** abstract :noexport:
 英語では単語分散を得るために space で区切られた単語ごとに id を振る手法が有名であったが、最近では単語の一部 subword を用いる手法が出てきている。その例として google の出した wordpiece があることを紹介する。
 　(単語分散を得る際に、日本語は英語と違って、単語ごとに分割されていないことを上げ、WordPirce SentencePiece 単語分割を用いる手法があることを紹介し、最近では単語分散を得ることのできる有力な手法としてELMo、 BERT が台頭してきたことを紹介し、そこでは SentencePiece が有力であるという実験結果が出ていることを示す。)
@@ -696,7 +697,7 @@ BERTモデルを用いて、文類似度を測り、それを用いてクラス�
 *** 考察
 それぞれのモデルからの出力文そのものを眺めると、いずれも文法的に不自然でないテキストを出力していることがわかる。しかしおおよそ短文としては成立している一方で文脈の考慮という点では今ひとつという出力が見られることがわかる。\\
 　しかし教師データである入力と出力がそもそも文脈上でのみ成り立っているものも含まれていることがわかるため、この点を考慮すればおおよそ期待通りの学習が出来たと考えている。\\
-　また本テーマでは翻訳とは違って単語対単語の直接的なつながりが比較的薄く、RNNのような文全体を読む機能が必要であるように思われたが、Transformer に組み込まれている単語間の関係を示す Positional Encoding が効いているおかげか単語対単語の対応ではない (n-gram 的な精度 = BLEU が高い) 学習が出来ていると考えられる。(実際にPositional Encoding を削除した場合で実験を行った際には Sequence to Sequence Attention よりも精度が悪くなってしまった。)\\
+　また本テーマでは翻訳とは違って単語対単語の直接的なつながりが比較的薄く、機械翻訳よりも精度が落ちるのではないかという予測があったものの、Transformer に組み込まれている単語間の関係を示す Positional Encoding が効いているおかげか単語対単語の対応ではない (n-gram 的な精度 = BLEU が高い) 学習が出来ていると考えられる。(実際にPositional Encoding を削除した場合で実験を行った際には Sequence to Sequence Attention よりも精度が悪くなってしまった。)\\
 　訓練時間については Sequence to Sequence Attention よりも Transformer のほうが圧倒的に早かった。これはまず Transformer が RNN を用いていないという影響が大きいと考えられる。しかしそれであったとしても、epoch 数が前者は 700 程度必要であったのに対して、後者は 60 程度で収まっているという点が興味深く感じられた。こちらの理由に関しては、Attention 機構とRNNの機構を組み合わせることでモデルが比較的に大きくなってしまったというということが考えられるが、確証のある説を提示することは出来なかった。尚具体的には以下の自宅環境で実験を行った際に、前者は60分、後者は25分ほどで学習することが出来た。[fn:environment]
 
 #+ATTR_LATEX: :caption \caption{実験環境} :environment longtable :align |c|c|
@@ -831,7 +832,7 @@ Sequence to Better Sequence とSequence to Better Sequence に Denoising autoenc
 #+LATEX: \newpage
 [fn:general_loss] 厳密にどちらかと明言された文書を見つけることが出来なかった他、ここ(https://stats.stackexchange.com/questions/258166) に興味深い議論があるように、頭ごなしに loss のみを観測して過剰適合かどうかを判定するのは早計であると考えたため、``一般的''という表現を用いた。
 * 付録
-この章ではこれまでの章で登場したモデル・論文などについての補足説明を行う。更に深い説明に関しては参考文献を参照していただきたい。
+この章ではこれまでの章で登場したモデル・論文・用語などについての補足説明を行う。更に深い説明に関しては参考文献を参照していただきたい。
 ** 対話システムの関連研究
 :PROPERTIES:
 :CUSTOM_ID: extra_rsearch
@@ -839,34 +840,89 @@ Sequence to Better Sequence とSequence to Better Sequence に Denoising autoenc
 この章では [[#relation-reserch]] で引用した対話システムのうち、 Sounding Board と Gunrock について簡易な説明を行う。りんなに関しては非公開情報が多いため説明を省略する。
 *** Sounding Board
 Sounding Board (\cite{1804.10202}) は 2017 年度の Amazon Alexa Prize で優勝した social bot の名称で、Washington 大学の大学院生らが作り上げたシステムだ。ここで定義するSocial bot とは Personal Assistant と所謂 ChatBot (日本で言うChitChat或いはチャットボット、人工無能) の中間にあるものだ。本研究と異なるものとして、これが目的としているものは ``bot'' の開発で、``人と対話するよな''体験をさせることを目的とするわけではなく、例えば受付や何らかの教師といったシステムへの応用を考えていることが挙げられる。\\
-　また Sounding Board はネットワークを介して積極的に外部情報を用いるという点が特徴だ。また逐次的に収集される情報を知識グラフとして持つことで、過去の資源とのつながりも持つことが出来ると考えられる点も興味深い。この機能のおかげでシステムの老朽化を比較的に抑えることを見込まれている。\\
+　また Sounding Board はネットワークを介して積極的に外部情報を用いるという点が特徴だ。また逐次的に収集される情報を知識グラフとして持つことで、過去の資源とのつながりも持つことが出来ると考えられる点も興味深い。これらの機能のおかげでシステムの老朽化を比較的に抑えることを見込まれている。\\
 　更にユーザモデリングを重視している点や、ユーザの発話から会話を掘り下げていくスタイルはこの bot が審査員から 10 分以上の対話を勝ち取った秘訣として挙げることが出来る。しかし逆に言えばこの bot はキャラクタ性や自主性に乏しい。その点が本研究とは目標が異なっているものとして挙げられる。\\
 　また小規模のルールベースを用いたモデルを用いているという点は非常に興味深い。本研究では深層学習を積極的に用いるようにしているが、こちらはデータの前処理が苦になるということを Sounding Board の研究では指摘している。この点については先述の章らで示したように認めざるを得ない。\\
 　 [[[fig:ssb][Figure 3]]] にSounding Board のシステムアーキテクチャを引用する。まずFront-end であるが、これは Amazon が提供している Automatic Speech Recognition (ASR) [fn:ASR] と Text-to-Speech (TTS) API [fn:TTS] が用いられている。Middle-end に関しては記載されている通り、NLU(Natual Language Understanding) と Dialogue Management、Natural Language Generation の3テーマをそれぞれ小問題に分割して解決している。Natural Language Understanding ではユーザからの入力の振り分け、感情分類などを行っており、Dialogue Management では会話全体を管理するマスターと、挨拶や特定のトピックに対する対話など様々なタイプのモードについての処理を行う集合とによる階層構造を持っており、マスターでは会話の一貫性やユーザからのエンゲージメント、コンテンツの可用性などを推測し会話の統制を取っている。Back-end では主に知識グラフを保存するために用いられている。
 #+CAPTION: Sounding Board のシステムアーキテクチャ (\cite{1804.10202} より)
 #+NAME: fig:ssb
-#+ATTR_LATEX: :width 10cm
+#+ATTR_LATEX: :width 15cm
 [[./img/sbarchitect.PNG]]
 
+#+LATEX: \newpage
 [fn:ASR] https://developer.amazon.com/ja/alexa-skills-kit/asr
 [fn:TTS] https://aws.amazon.com/jp/polly/ や https://developer.amazon.com/ja/docs/alexa-voice-service/speechsynthesizer.html
 
 *** Gunrock
-Gunrock (\cite{Gunrock}) は 2017 年度の Amazon Alexa Prize で優勝した Social bot の名称で、Calfornia 大学の Davis 校のチームが作成した Social bot である。
+Gunrock (\cite{Gunrock}) は 2018 年度の Amazon Alexa Prize で優勝した Social bot の名称で、Calfornia 大学の Davis 校のチームが作成した Social bot である。\\
+　この研究では特に動物、映画・本、音楽といったトピックごとの対話を独立の流れを持つものとして取り扱ったこと、その bot の性格や好みを処理できるようにしたこと、NERについて議論していること、NLPにおける相互参照について処理したことが注目できる。1つ目に対してはトピックを分割するべきという立場が本研究に近いものとして考えることが出来る。2つ目に対してはは本研究の求めるものに非常に近い。しかしこれに関しては特定の質問を抽出する際に文の類似度を計るという解決策を取っていたものの、その手法にやや問題のあるもの [fn:Univ] を用いていたため本研究では参考とすることが出来なかった。3つ目に対しては特に英語の大文字小文字がNERに与える影響について言及しており、この問題は本研究で日本語の漢字→かな変換との関連を意識することが出来る(実際にはこの論文が発表される前に提案していたため、直接の関連はない)。4つ目に対しては特に日本語のNLPで極めて重要になる課題であると考えることが出来るものの、本研究では議論することが出来なかった。\\
+　また本研究とは接点がないものとしては音声理解の分野や、発話音声の抑揚などの調節について提案しそれが有効であることを示したことを挙げられる。本研究はキャラクタ性を重視していることから、発話の実装を検討をした場合、発話音声の調節は極めて重要な話題であると考えられる。\\
+　[[[fig:gsa][Figure 4]]] に Gunrock のシステムアーキテクチャを引用する。ASR や TTS は Sounding Board と同じものを指し示している。Netural Language Understanding は 3層の構造体になっている。1. Segmentationは、句読点を挿入して文のような単位に分割するということを行う部分、 2. Noun Phrase は、相互参照を解決する足がかりとなる、代名詞句や名詞句を取り出す部分、 3. NERやCoreferenceなどは、対話のログや知識ベースを用いて取り出した代名詞句・名詞句の補完を行う部分だ。Diglogue Manager は、対話の流れを汲み取り Topic Dialogue Module へと繋げる処理と担う Intent Classifier と、それに応じて対話内容を作成・Intent Classifier にフィードバックする Topic Dialogue Module の2つで構成されている。Natural Language Generation は生成された応答内容のチェックや文章化するためのテンプレートの提供、音声調律などを行う。Backstory はその bot そのもの、 bot の個人的な話題を処理するためのもので、EVI は所謂常識についての質問を処理するもので、例えば史実といった質問に対する回答を提供する。Knowledge Base は Reddit や Twitter などのオンライン資源からのデータをトピックごとに保持している。またそれらのデータは知識グラフに統合されてるようになっており、Sounding Board で紹介したような利点を見込むことが出来る。
+#+LATEX: \newpage
+#+CAPTION: Gunrock のシステムアーキテクチャ (\cite{Gunrock} より)
+#+NAME: fig:gsa
+#+ATTR_LATEX: :width 15cm
+[[./img/gsarchitect.PNG]]
+[fn:Univ] Universal Sentence Encoder と呼ばれるモデルで、Google 社の研究成果であるものの、性能や論文の内容について大変評価が悪いことで有名だ。https://www.reddit.com/r/MachineLearning/comments/88c2vp/r_180311175_universal_sentence_encoder/
 
+*** NLPにおける相互参照
+NLPにおいて相互参照(coreference resolution)とは、具体的に以下の例を考えることが出来る。人間はこの代替を容易に補完することが出来るが、一般に機械がこれを理解することは難しいことが知られている。また日本語での対話の場合、このような指示語は省略される場合が英語等に対して比較的に多いため、指示語を補完する以上のものを要求されることになると考えられる。\\
+　この分野の研究としては、Stanford Core NLP[fn:corenlp] を挙げることが出来るが、これは対話データに対しては良い結果が得られないことが Gunrock で言及されている。Gunrock では対話データに対してアノテーションを行ったものを用いて、該当部の付加情報として持つということを行っている。
+
+\begin{itembox}[l]{NLPにおける相互参照の例}
+HumanA: Xさんは機械学習について研究しているらしい\\
+HumanB: \underline{彼} は \underline{そんな} 研究に興味があるんだ。 \underline{それ} にしては研究室があっていないような気がするね。\\
+HumanA: \underline{そう} かもしれないね。何かあったのかもしれない。\\
+\\
+　下線部に注目すると、1つ目から順に ``Xさん''、``機械学習''、``機械学習を研究していること''、``研究室があっていないこと''を指し示している。
+\end{itembox}
+
+[fn:corenlp] https://stanfordnlp.github.io/CoreNLP/coref.html
 ** 日本語データの取り扱いについて
 :PROPERTIES:
 :CUSTOM_ID: attr-japanese
 :END:
-
 *** 単語分割
-    単語分割
+単語分割とは文等を単語単位に分割することであり、例えば英語では一般にスペースで分割することを示す。\\
+　日本語で単語分割を行う場合、ビタビアルゴリズム(Viterbi algorithm (\cite{Forney:1973ly}))を使う方法や、双方向LSTM(\cite{Schuster:1997:BRN:2198065.2205129}/\cite{Graves:2005:BLN:1986079.1986220}) などの深層学習モデルを用いる手法 [fn:bid-split] があるが、前者は新語への対応が難しいこと、後者は前者に比べ処理時間がかかってしまうこと、両者ともに誤る可能性があることが問題となる。
+\begin{itembox}[l]{単語分割の例}
+\label{tab:word-split}
+<英語の場合>\\
+I am a researcher about NLP. \\
+$\rightarrow$ [I] [am] [a] [reseacher] [about] [NLP] [.]\\
+\\
+<日本語の場合>\\
+私は自然言語処理の研究者です。\\
+$\rightarrow$ [私] [は] [自然言語処理] [の] [研究者] [です] [。]
+\end{itembox}
+[fn:bid-split] https://github.com/taishi-i/nagisa
 *** 形態素解析
+形態素解析とは文に対して形態素と呼ばれる単位に分割、分割したそれぞれに品詞等を割り当てることを指す。本研究や一般的な形態素解析で用いられる形態素という単位は単語であり、ほとんどの場合で形態素解析ができれば単語分割が出来たものとして認められる。この手法としてはルールベースに基づいた手法や、確率的言語モデルに基づいた手法があるが、いずれも完璧ではない。本研究では MeCab を用いたが、こちらは後者を用いた手法で形態素解析を行っている。
+
+\begin{itembox}[l]{形態素解析の例}
+\label{tab:keitaiso}
+MeCab 0.996 (単語辞書 mecab-ipadic-neologd 20181112-01) で形態素解析を行った。\\
+\\
+元の文：日本語の研究をしよう。\\
+解析結果：\\
+日本語  名詞,一般,*,*,*,*,日本語,ニホンゴ,ニホンゴ\\
+の      助詞,連体化,*,*,*,*,の,ノ,ノ\\
+研究    名詞,サ変接続,*,*,*,*,研究,ケンキュウ,ケンキュー\\
+を      助詞,格助詞,一般,*,*,*,を,ヲ,ヲ\\
+しよ    動詞,自立,*,*,サ変・スル,未然ウ接続,する,シヨ,シヨ\\
+う      助動詞,*,*,*,不変化型,基本形,う,ウ,ウ\\
+。      記号,句点,*,*,*,*,。,。,。\\
+\\
+(順に ``表層形 品詞,品詞細分類1,品詞細分類2,品詞細分類3,活用型,活用形,原形,読み,発音'' となっており、``*''は未定義を示す。)
+\end{itembox}
 *** NER
-*** Word Piece
-    Word Piece
-*** Sentence Pieces
-    Sentence Pieces
+NER(固有表現抽出 Named Entity Recognition)とは文中から固有表現と分類される固有名詞、数詞、時刻や日付などの情報を抽出し、それぞれに分類するタスクだ。固有表現の例としては、MUC (Message Understanding Conference (\cite{chinchor98}))の定義によれば、ORG(組織名)/PER(人名)/LOC(地名)/DATE(日付)/TIME(時間)/MONEY(金額)/PERCENT(割合) の7種類がある。この分野は現在も活発に研究が行われており、BERT(\cite{Devlin2018BERTPO}) モデルを用いてファインチューニングでもこのタスクに取り組み発表時点で SOTA を獲得した。
+
+\begin{itembox}[l]{NERの例}
+\label{tab:ner}
+元の文：Yさんは12月にパソコンを30万円で買った。\\
+解析結果： <PER> Yさん </PER> は <DATA> 12月 </DATE> にパソコンを <MONEY> 30万円 </MONEY> で買った。
+\end{itembox}
 *** Skip-gram
 :PROPERTIES:
 :CUSTOM_ID: skip-gram
@@ -900,9 +956,13 @@ Skip-gram のアルゴリズムは以下(\ref{tab:Skip-algo})のとおりであ�
 
 [fn:neg-sample] 計算の都合上、辞書全体の単語を取り上げることが不可能なため、ネガティブサンプリングを行っている。またこのサンプリングは均一ではなく、高頻度な単語は程よく省かれるようになっている。(TODO:Distributed Representations of Words and phrases and their compositionality)
 *** CNN-LSTM
-
-    CNN-LSTM
-*** 名大会話コーパスのデータ例 :noexport:
+CNN-LSTM
+*** CNN
+*** RNN
+*** LSTM
+*** Twitterから収集した対話データの例
+Twitter
+*** 名大会話コーパスのデータ例
 以下に名大会話コーパス(\cite{meidai})のデータ例を示す。
 #+begin_quote
 ＠データ１（約３５分）\\
@@ -952,6 +1012,8 @@ F107：さっきちょっとなでただけなのにって。\\
 かわいかったね。\\
 ...
 #+end_quote
+*** 対話破綻チャレンジの雑談対話コーパスのデータ例
+TAIWA
 ** 質問文抽出を念頭においた不均衡分散・サイズの分類問題
 *** 画像データ
 :PROPERTIES:
