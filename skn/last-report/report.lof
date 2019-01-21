@@ -15,3 +15,5 @@
 \contentsline {figure}{\numberline {7}{\ignorespaces Sounding Board のシステムアーキテクチャ (\cite {1804.10202} より)}}{26}{figure.7}
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {8}{\ignorespaces Gunrock のシステムアーキテクチャ (\cite {Gunrock} より)}}{27}{figure.8}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {9}{\ignorespaces Skip-gram は文中におけるある単語の周辺単語を予測する (w(t)は t番目の単語を示す。) (\cite {NIPS2013_5021} より)}}{29}{figure.9}
