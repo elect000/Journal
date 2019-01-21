@@ -8,12 +8,12 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {4}{\ignorespaces 本研究のシステム全体像}}{6}{figure.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5}{\ignorespaces 単語分散の例(t-SNE(t-Distributed Stochastic Neighbor Embedding(\cite {vanDerMaaten2008}))を用いて二次元平面に描画)}}{13}{figure.5}
+\contentsline {figure}{\numberline {5}{\ignorespaces 単語分散の例(t-SNE(t-Distributed Stochastic Neighbor Embedding(\cite {vanDerMaaten2008}))を用いて二次元平面に描画)}}{12}{figure.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {6}{\ignorespaces 漢字かな問題に対する単語分散獲得}}{14}{figure.6}
+\contentsline {figure}{\numberline {6}{\ignorespaces Skip-gram は文中におけるある単語の周辺単語を予測する (w(t)は t番目の単語を示す。) (\cite {NIPS2013_5021} より)}}{13}{figure.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {7}{\ignorespaces 画像タスクに置換した場合における一般的なクラス分類}}{19}{figure.7}
+\contentsline {figure}{\numberline {7}{\ignorespaces 漢字かな問題に対する単語分散獲得}}{15}{figure.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {8}{\ignorespaces 対話システムのエラー検知の実験結果 における epoch と 精度の変化}}{26}{figure.8}
+\contentsline {figure}{\numberline {8}{\ignorespaces 画像タスクに置換した場合における一般的なクラス分類}}{20}{figure.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {9}{\ignorespaces Skip-gram は文中におけるある単語の周辺単語を予測する (w(t)は t番目の単語を示す。) (\cite {NIPS2013_5021} より)}}{30}{figure.9}
+\contentsline {figure}{\numberline {9}{\ignorespaces 対話システムのエラー検知の実験結果 における epoch と 精度の変化}}{27}{figure.9}
