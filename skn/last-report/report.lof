@@ -12,8 +12,16 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {6}{\ignorespaces Skip-gram は文中におけるある単語の周辺単語を予測する (w(t)は t番目の単語を示す。) (\cite {NIPS2013_5021} より)}}{13}{figure.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {7}{\ignorespaces 漢字かな問題に対する単語分散獲得}}{15}{figure.7}
+\contentsline {figure}{\numberline {7}{\ignorespaces CLDNN の概略 (\cite {Sainath2015ConvolutionalLS} より)}}{15}{figure.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {8}{\ignorespaces 画像タスクに置換した場合における一般的なクラス分類}}{20}{figure.8}
+\contentsline {figure}{\numberline {8}{\ignorespaces 漢字かな問題に対する単語分散獲得}}{17}{figure.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {9}{\ignorespaces 対話システムのエラー検知の実験結果 における epoch と 精度の変化}}{27}{figure.9}
+\contentsline {figure}{\numberline {9}{\ignorespaces 画像タスクに置換した場合における一般的なクラス分類}}{22}{figure.9}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {10}{\ignorespaces 対話システムのエラー検知の実験結果 における epoch と 精度の変化}}{30}{figure.10}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {11}{\ignorespaces 標準的な RNN の構造 (\cite {Goodfellow2016c10} より)}}{34}{figure.11}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {12}{\ignorespaces 双方向 RNN の構造 (\cite {Goodfellow2016c10} より)}}{35}{figure.12}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {13}{\ignorespaces LSTM セルの構造 (\cite {Goodfellow2016c10} より)}}{36}{figure.13}

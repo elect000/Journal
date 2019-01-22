@@ -19,3 +19,56 @@ Archived entries from file /home/meguru/Github/Journal/skn/last-report/report.or
 [fn:hred] HRED (\cite{1507.02221}) や VHRED (\cite{1605.06069}) があるが、発話の多様性を得ること(一般的な受け答えを学んでしまい、同じような文ばかり生成してしまうこと)やデータを十分に集めることが難しいなど課題がある。
 [fn:multimordule] 日本で人気を得ている ``マルチモーダルエージェントAI'' とは、複数のソースから問題を見直すという特徴があるが、これは複数のモデルを使っているという意味で同じではあるが、問題を分割しようとしているわけではないという点でこの研究と大きく違うと言えるだろう。
 [fn:transformer] 2017年12月時点
+
+* Skip-gram
+  :PROPERTIES:
+  :CUSTOM_ID: skip-gram
+  :ARCHIVE_TIME: 2019-01-22 火 15:16
+  :ARCHIVE_FILE: ~/Github/Journal/skn/last-report/report.org
+  :ARCHIVE_OLPATH: 日本語データの取り扱いについて/関連研究
+  :ARCHIVE_CATEGORY: report
+  :END:
+Skip-gram (\cite{Mikolov2013DistributedRO})のアルゴリズムは以下(\ref{tab:Skip-algo})のとおりである。[fn:neg-sample]
+\begin{itembox}[l]{Skip-gram のアルゴリズム}
+\label{tab:Skip-algo}
+1. 正のサンプルとして、ターゲットの単語とその周辺の単語を取り出す。\\
+2. 負のサンプルとして、単語辞書の中からランダムにサンプルされた単語を取り出す。\\
+3. ロジスティックス回帰を用いてこの2つのサンプルを区別できるようにネットワークを訓練する。\\
+4. ネットワークの重みを単語埋め込みとみなす。
+\end{itembox}
+#+ATTR_LATEX: :width 10cm
+#+CAPTION: Skip-gram は文中におけるある単語の周辺単語を予測する (w(t)は t番目の単語を示す。) (\cite{NIPS2013_5021} より)
+#+NAME: fig:
+[[./img/skip-gram.PNG]]
+#+CAPTION: fasttext の Skip-gram を用いた単語分散獲得学習のパラメータ
+#+ATTR_LATEX: :environment longtable :align |c|c|
+|--------------------------+--------------------------------------------------------------|
+| パラメータ名             | 説明                                                         |
+|--------------------------+--------------------------------------------------------------|
+| 許容最低語彙頻度         | 語彙として認める単語の頻度。                                 |
+|                          | これを下回る単語は頻度の少ない単語として学習の対象としない。 |
+| 学習係数                 | 目的関数 Adagrad の学習係数。                                |
+| 学習係数向上率           | 学習率の更新率、単語がこの数だけ訓練されると更新される。     |
+| epoch 数                 | 語彙の数 に対して何倍訓練を行うかを決定する。                |
+| ネガティブサンプリング数 | 学習ごとに負のサンプルをどのくらい抽出するか。               |
+| ウィンドウサイズ         | アルゴリズムで説明した m の値                                |
+| 損失関数                 | 損失関数                                                     |
+| dim                      | 埋め込みベクトルの次元数                                     |
+|--------------------------+--------------------------------------------------------------|
+
+ここで fasttext で用いられている subword との関連について説明する。まず Skip-gram の損失関数を以下の条件のもとで示すと以下のようになる。
+1. Skip-gram で予測する単語はある単語の前後一単語のみ。
+2. 単語を $w_i$ 、コーパスを $[w_1, \cdots, w_T]$ とする。
+3. ネガティブサンプルの手続きを省く。
+4. 語彙数は W とする。
+\begin{eqnarray}
+L &=& - \cfrac{1}{T}\Sigma^T_{t=1}(logP(w_{t-1}, w_{t+1}|w_t)) \notag \\
+  &=&- \cfrac{1}{T}\Sigma^T_{t=1}(logP(w_{t-1}|w_t) + logP(w_{t+1}|w_t))
+\end{eqnarray}
+　この際に通常のSkip-gram では $P(w_c|w_t)$ は以下の式で表される。
+\begin{eqnarray}
+P(w_c|w_t) = \cfrac{e_{s(w_t, w_c)}}{\Sigma^W_{j=1}e^{s(w_t, j)}}
+\end{eqnarray}
+　問題はこの内の関数 $s$ だ。
+[fn:neg-sample] 計算の都合上、辞書全体の単語を取り上げることが不可能なため、ネガティブサンプリングを行っている。またこのサンプリングは均一ではなく、高頻度な単語は程よく省かれるようになっている。(\cite{NIPS2013_5021})
+
