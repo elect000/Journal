@@ -1134,7 +1134,7 @@ h^{(t)}_i = tanh(s_i^{t})o^{(t)}_i
 \REQUIRE 初期パラメータ $\theta$
 \STATE $k\leftarrow 1$
 \WHILE{終了条件を満たさない}
-\STATE 訓練データ ${x^{(1)}, \dots , x^{(m)}}$ と対応する目標 $y^{(i)}$ の m 個の事例を集めたミニバッチをサンプリングする。
+\STATE 訓練データ ${x^{(1)}, \dots , x^{(m)}}$ と対応する目標 $y^{(i)}$ の m 個の事例を集めたミニバッチをサンプリングする
 \STATE 勾配の推定値を計算する: $\hat{g}\leftarrow \cfrac{1}{m}\nabla_{\theta}\Sigma_i L(f(x^{(i)}; \theta), y^{(i)})$ 
 \STATE パラメータの更新を行う: $\theta \leftarrow \theta - \epsilon_k \hat{g}$
 \STATE $k \leftarrow k+1$
@@ -1151,11 +1151,17 @@ h^{(t)}_i = tanh(s_i^{t})o^{(t)}_i
 \REQUIRE 数値的な安定のために使われる小さい定数 $\delta$ (推奨値 $10^{-8}$)
 \STATE 一次・二次モーメントに関する初期値: $s=0$, $r=0$
 \STATE 時間ステップの初期値: $t=0$
-\WHILE 終了条件を満たさない
-\STATE 訓練データ ${x^{(1)}, \dots , x^{(m)}}$ と対応する目標 $y^{(i)}$ の m 個の事例を集めたミニバッチをサンプリングする。
+\WHILE{終了条件を満たさない}
+\STATE 訓練データ ${x^{(1)}, \dots , x^{(m)}}$ と対応する目標 $y^{(i)}$ の m 個の事例を集めたミニバッチをサンプリングする
 \STATE 勾配の推定値を計算する: $\hat{g}\leftarrow \cfrac{1}{m}\nabla_{\theta}\Sigma_i L(f(x^{(i)}; \theta), y^{(i)})$ 
 \STATE $t\leftarrow t+1$
-\STATE バイアス付きの一次モーメントの推定値を更新する: $s \leftarrow \rho_1 s + (1- \pho_1)$
+\STATE バイアス付きの一次モーメントの推定値を更新する: $s \leftarrow \rho_1 s + (1- \rho_1) g$
+\STATE バイアス付きの二次モーメントの推定値を更新する: $r \leftarrow \rho_2 r + (1- \rho_2) g \odot g$
+\STATE 一次モーメントのバイアスを修正する: $\hat{s} \leftarrow \cfrac{s}{1-\rho_1^t}$
+\STATE 二次モーメントのバイアスを修正する: $\hat{r} \leftarrow \cfrac{r}{1-\rho_2^t}$
+\STATE 更新量を計算する: $\Delta \theta = -\epsilon\cfrac{\hat{s}}{\sqrt{\hat{r}} + \delta}$ (この計算は要素ごとに計算される)
+\STATE 更新量を適用する: $\theta \leftarrow \theta + \Delta \theta$
+\ENDWHILE
 \end{algorithmic}
 \end{algorithm}
 *** Twitterから収集した対話データの例
