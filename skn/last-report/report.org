@@ -1,12 +1,12 @@
 #+TITLE: モジュール分割された日本語対話システムの研究
 #+SUBTITLE: 
-#+AUTHOR: 
+#+AUTHOR: 江畑 拓哉
 # This is a Bibtex reference
 #+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil arch:headline ^:nil
-#+OPTIONS: author:nil broken-links:nil c:nil creator:nil
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
 #+OPTIONS: d:(not "LOGBOOK") date:nil e:nil email:nil f:t inline:t num:t
 #+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
-#+OPTIONS: timestamp:nil title:nil toc:t todo:t |:t
+#+OPTIONS: timestamp:nil title:t toc:t todo:t |:t
 #+LANGUAGE: ja
 #+SELECT_TAGS: export 
 #+EXCLUDE_TAGS: noexport
@@ -15,6 +15,7 @@
 #+LATEX_CLASS_OPTIONS: [a4paper, dvipdfmx]
 #+LATEX_HEADER: \usepackage{amsmath, amssymb, bm}
 #+LATEX_HEADER: \usepackage{graphics}
+#+LATEX_HEADER: \usepackage{coins-jp}
 #+LATEX_HEADER: \usepackage{color}
 #+LATEX_HEADER: \usepackage{times}
 #+LATEX_HEADER: \usepackage{longtable}
@@ -30,10 +31,13 @@
 #+LATEX_HEADER: \usepackage{algorithm}
 #+LATEX_HEADER: \usepackage{algorithmic}
 #+LATEX_HEADER: \addbibresource{reference.bib}
+#+LATEX_HEADER: \advisor{Claus Aranha 櫻井鉄也}
+#+LATEX_HEADER: \heiseiyear{30}
+#+LATEX_HEADER: \majorfield{知能情報メディア主専攻}
+#+LATEX_HEADER: \patchcmd{\abstract}{\Large}{}{}{}
 #+DESCRIPTION:
 #+KEYWORDS:
 #+STARTUP: indent overview inlineimages
-
 * 序論
 #+LATEX: \pagenumbering{arabic}
 ** 研究背景及び目的
@@ -141,7 +145,7 @@ Gunrock (\cite{Gunrock}) は 2018 年度の Amazon Alexa Prize で優勝した S
   　それぞれの問題をリストとして示す。
 
 #+LATEX: \newpage
-* 日本語データの取り扱いについて
+* 日本語データの取り扱いnについて
 :PROPERTIES:
 :CUSTOM_ID: deal-japanese-data
 :END:
@@ -1681,9 +1685,14 @@ Hello World
 (require 'ox-latex)
 (require 'ox-bibtex)
 (require 'org-ref)
-
 (setq org-latex-toc-command 
-"\\pagenumbering{roman} \\tableofcontents
+"\\thispagestyle{empty} 
+ \\clearpage
+\\include{abstract}
+\\thispagestyle{empty}
+\\clearpage
+\\pagenumbering{roman} 
+\\tableofcontents
  \\clearpage \\listoffigures \\clearpage")
 
 (setq org-format-latex-options 
