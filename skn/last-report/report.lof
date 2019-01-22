@@ -20,8 +20,10 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {10}{\ignorespaces 対話システムのエラー検知の実験結果 における epoch と 精度の変化}}{30}{figure.10}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {11}{\ignorespaces 標準的な RNN の構造 (\cite {Goodfellow2016c10} より)}}{34}{figure.11}
+\contentsline {figure}{\numberline {11}{\ignorespaces 標準的な RNN の構造 (\cite {Goodfellow2016c10} より)}}{33}{figure.11}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {12}{\ignorespaces 双方向 RNN の構造 (\cite {Goodfellow2016c10} より)}}{35}{figure.12}
+\contentsline {figure}{\numberline {12}{\ignorespaces 双方向 RNN の構造 (\cite {Goodfellow2016c10} より)}}{34}{figure.12}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {13}{\ignorespaces LSTM セルの構造 (\cite {Goodfellow2016c10} より)}}{36}{figure.13}
+\contentsline {figure}{\numberline {13}{\ignorespaces LSTM セルの構造 (\cite {Goodfellow2016c10} より)}}{35}{figure.13}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {14}{\ignorespaces VAE のグラフィカルモデル(\cite {DBLP:journals/corr/KingmaW13} より)}}{38}{figure.14}

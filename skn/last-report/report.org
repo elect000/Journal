@@ -954,51 +954,10 @@ HumanA: \underline{そう} かもしれないね。何かあったのかもし�
 \end{itembox}
 
 [fn:corenlp] https://stanfordnlp.github.io/CoreNLP/coref.html
-** 日本語データの取り扱いについて
+** 深層学習の基礎知識
 :PROPERTIES:
-:CUSTOM_ID: attr-japanese
+:CUSTOM_ID: dlearning
 :END:
-*** 単語分割
-単語分割とは文等を単語単位に分割することであり、例えば英語では一般にスペースで分割することを示す。\\
-　日本語で単語分割を行う場合、ビタビアルゴリズム(Viterbi algorithm (\cite{Forney:1973ly}))を使う方法や、双方向LSTM(\cite{Schuster:1997:BRN:2198065.2205129}/\cite{Graves:2005:BLN:1986079.1986220}) などの深層学習モデルを用いる手法 [fn:bid-split] があるが、前者は新語への対応が難しいこと、後者は前者に比べ処理時間がかかってしまうこと、両者ともに誤る可能性があることが問題となる。
-\begin{itembox}[l]{単語分割の例}
-\label{tab:word-split}
-<英語の場合>\\
-I am a researcher about NLP. \\
-$\rightarrow$ [I] [am] [a] [reseacher] [about] [NLP] [.]\\
-\\
-<日本語の場合>\\
-私は自然言語処理の研究者です。\\
-$\rightarrow$ [私] [は] [自然言語処理] [の] [研究者] [です] [。]
-\end{itembox}
-[fn:bid-split] https://github.com/taishi-i/nagisa
-*** 形態素解析
-形態素解析とは文に対して形態素と呼ばれる単位に分割、分割したそれぞれに品詞等を割り当てることを指す。本研究や一般的な形態素解析で用いられる形態素という単位は単語であり、ほとんどの場合で形態素解析ができれば単語分割が出来たものとして認められる。この手法としてはルールベースに基づいた手法や、確率的言語モデルに基づいた手法があるが、いずれも完璧ではない。本研究では MeCab を用いたが、こちらは後者を用いた手法で形態素解析を行っている。
-
-\begin{itembox}[l]{形態素解析の例}
-\label{tab:keitaiso}
-MeCab 0.996 (単語辞書 mecab-ipadic-neologd 20181112-01) で形態素解析を行った。\\
-\\
-元の文：日本語の研究をしよう。\\
-解析結果：\\
-日本語  名詞,一般,*,*,*,*,日本語,ニホンゴ,ニホンゴ\\
-の      助詞,連体化,*,*,*,*,の,ノ,ノ\\
-研究    名詞,サ変接続,*,*,*,*,研究,ケンキュウ,ケンキュー\\
-を      助詞,格助詞,一般,*,*,*,を,ヲ,ヲ\\
-しよ    動詞,自立,*,*,サ変・スル,未然ウ接続,する,シヨ,シヨ\\
-う      助動詞,*,*,*,不変化型,基本形,う,ウ,ウ\\
-。      記号,句点,*,*,*,*,。,。,。\\
-\\
-(順に ``表層形 品詞,品詞細分類1,品詞細分類2,品詞細分類3,活用型,活用形,原形,読み,発音'' となっており、``*''は未定義を示す。)
-\end{itembox}
-*** NER
-NER(固有表現抽出 Named Entity Recognition)とは文中から固有表現と分類される固有名詞、数詞、時刻や日付などの情報を抽出し、それぞれに分類するタスクだ。固有表現の例としては、MUC (Message Understanding Conference (\cite{chinchor98}))の定義によれば、ORG(組織名)/PER(人名)/LOC(地名)/DATE(日付)/TIME(時間)/MONEY(金額)/PERCENT(割合) の7種類がある。この分野は現在も活発に研究が行われており、BERT(\cite{Devlin2018BERTPO}) モデルを用いてファインチューニングでもこのタスクに取り組み発表時点で SOTA を獲得した。
-
-\begin{itembox}[l]{NERの例}
-\label{tab:ner}
-元の文：Yさんは12月にパソコンを30万円で買った。\\
-解析結果： <PER> Yさん </PER> は <DATA> 12月 </DATE> にパソコンを <MONEY> 30万円 </MONEY> で買った。
-\end{itembox}
 *** CNN
 CNN(Convolutional neural network (\cite{fukushima:neocognitronbc})/\cite{LeCun:1999:ORG:646469.691875}) とは格子型のトポロジーを持つデータを解析するためのニューラルネットワークの一種だ。例えばそれは二次元な(RGB 8bit)デジタル画像 ($\mathbb{N}'^{x \times y}\ \mathbb{N}' \in \{0, 2, \dots, 254\}$)、或いは一単語をベクトル $x_i\in\mathbb{R}^{x\times 1}$ としたときの文章ベクトル $[x_1, \dots, x_n] \in\mathbb{R}^{x\times n}$ を挙げることが出来る。\\
 　ここでいう畳み込みとは、線形変換の一種であり、以下の式(この式は一次畳み込み)で表されるものを指している。
@@ -1121,7 +1080,7 @@ h^{(t)}_i = tanh(s_i^{t})o^{(t)}_i
 #+LATEX: \newpage
 *** 最適化関数
 最適化関数とは、求められた損失に基づいてそれが小さくなるように重みを更新するための関数だ。例えばSGD (確率的勾配降下法 Stochastic Gradient Descent) や Adam といった種類が存在する。\\
-　SGDのアルゴリズム(\cite{Goodfellow2016c10} より)を以下に示す。補足すると SGD の収束を保証する学習率の十分条件は以下のようになる。
+　SGDのアルゴリズム(\cite{Goodfellow2016c8} より)を以下に示す。補足すると SGD の収束を保証する学習率の十分条件は以下のようになる。
 \begin{eqnarray}
 \Sigma_{k=1}^{\infty}\epsilon_k = \infty \ and \ \Sigma_{k=1}^{\infty} \epsilon_k^2 < \infty
 \end{eqnarray}
@@ -1141,7 +1100,7 @@ h^{(t)}_i = tanh(s_i^{t})o^{(t)}_i
 \ENDWHILE
 \end{algorithmic}
 \end{algorithm}
-　Adam のアルゴリズム(\cite{Goodfellow2016c10} より)を以下に示す。
+　Adam のアルゴリズム(\cite{Goodfellow2016c8} より)を以下に示す。
 \begin{algorithm}
 \caption{Adam の アルゴリズム}
 \label{adam}
@@ -1164,12 +1123,147 @@ h^{(t)}_i = tanh(s_i^{t})o^{(t)}_i
 \ENDWHILE
 \end{algorithmic}
 \end{algorithm}
-*** Twitterから収集した対話データの例
+*** VAE
+VAE(Variational autoencoder(\cite{DBLP:journals/corr/KingmaW13})) は 学習によって近似推論を行う有向モデル、生成モデルだ。有向モデルとはデータの流れが決まっているモデルで、データから出力への流れを逆転することが出来ないことを示している。生成モデルとは簡潔に説明すると、入力データのようなデータを生成することが出来るモデルを示している。
+ このモデルを説明するにあたり、まずいくつかの変数を定義する。
+- $x$
+  モデル化したいデータ
+- $z$
+  潜在変数
+- $P(x)$
+  データの確率分布
+- $P(z)$
+  潜在変数の確率分布
+- $P(x|z)$
+  潜在変数を用いて生成されるデータの分布
 
-Twitter
+潜在変数を説明するために一つの例を紹介する。\\
+　まず我々は今博物館でモナ・リザを見ているとする。つまりここでモデル化したいデータとしてモナ・リザを設定する。すると我々は脳内のどこかにモナ・リザのイメージを何らかの形式で保存する。この保存されたそれが潜在変数と考えることが出来る。確率分布というのはそれぞれ、博物館の絵画全体、我々が脳内で記憶しているそれらと想像することが出来る。潜在変数を用いて生成されるデータの分布とは、我々が紙を渡されて完璧なモナ・リザを模写する能力を示している。\\
+　VAEの目的はデータの分布 $P(x)$ を見つけることにある。これは以下の周辺化の式を用いて計算することが出来る。
+\begin{eqnarray}
+P(x) &=& \int P(x, z) dz \notag \\
+&=& \int P(x|z)P(z)dz
+\end{eqnarray}
+　VAEは $P(z|x)$ を用いて $P(z)$ を学習する。\\
+　ここで仮定として $p(z)$ を シンプルな(多変量正規)分布 $N(\mu_z, \sigma_z)$ (例えば $N(0, I)$)とする。\\
+　VAEでは生成モデルの一種であることから encoder、decoderというものがあり、encoder にデータを通すことにより $P(z)$ を近似した確率分布を得、decoder に確率分布を通すことにより元のデータを生成する。つまり encoder は $P(z|x)$ の近似 $E(z|x)$ 、decoder は $P(x|z)$ の近似 $D(x|z)$ となる。こう仮定することで $p(z|x)$ も多変量正規分布であるという性質が得られる。\\
+　さて encoder の学習を考えたとき、 $E(z|x)$ の近似の精度を計る尺度として KLダイバージェンス (Kullback-Leibler divergence) の最小化が登場する。KLダイバージェンスは近似精度を計る尺度であり、厳密な距離ではないが非負性といった有用な性質がある。
+\begin{eqnarray}
+KL(E(z|x)||P(z|x)) &=& \mathbb{E}_{z \sim E(z|x)} [\log \cfrac{E(z|x)}{P(z|x)}]\notag \\
+&=& \mathbb{E}_{z \sim E(z|x)} [\log E(z|x) - \log P(x|z) - \log P(z)] + \log P(x) 
+\notag \\
+&=& KL(E(z|x)|| P(z)) - \mathbb{E}_{z \sim E(z|x)} [\log P(x|z)] + \log P(x)\\
+\Leftrightarrow \notag \\
+\log P(x) - KL(E(z|x)||P(z|x))&=& \mathbb{E}_{z \sim E(z|x)} [\log P(x|z)] - KL(E(z|x)|| P(z))
+\end{eqnarray}
+　このとき右辺は ELBO(evidence lower bound)という指標になり、元のKLダイバージェンスの最小化という問題を ELBO の最大化の問題として考えることが出来る。\\
+　更にここで潜在のパラメータベクトル $\theta$ を別に導入すると $P(x)$ は以下の式で書き直すことが出来る。(これはVAEモデル全体に共通したパラメータベクトルだ)
+\begin{eqnarray}
+P(x) &=& \int P_{\theta}(x, z) dz \notag \\
+&=& \int P(x|z;\theta)P(z)dz
+\end{eqnarray}
+　このパラメータベクトルは事前に与えられrるものではないから、学習する $E(z|x)$ は潜在ベクトル $\phi$ を導入して $E_{\phi}(z|x)$ となる。\\
+　ところでこの学習を行っている際に、encoder である $E_{\phi}(z|x)$ は $z$ を得るために訓練されることから、$P_{\theta}(x|z)$ は decoder である $D(x|z;\theta)$ と見なすことが出来る。\\
+　さてここからVAEの有名な特徴である、Reparameterization Trick を説明する。\\
+　単純に上記の手続きを学習しようとしたとき、多変量正規分布である encoder から z をサンプリングするという手続きが存在しているため、深層学習を用いる際に重要となる誤差逆伝搬を行うことが出来なくなる。これを解決する手法として Reprarameterization Trick がある。$z$ を以下の関数を用いて決定的に生成する。
+\begin{eqnarray}
+z = \mu_z + \epsilon * \sigma_z &where\ \epsilon \sim N(0, I)
+\end{eqnarray}
+#+CAPTION: VAE のグラフィカルモデル(\cite{DBLP:journals/corr/KingmaW13} より)
+#+NAME: fig:lstm
+#+ATTR_LATEX: :width 8cm
+[[./img/vae.PNG]]
+#+LATEX: \newpage
+
+** 日本語データの取り扱いについて
+:PROPERTIES:
+:CUSTOM_ID: attr-japanese
+:END:
+*** 単語分割
+単語分割とは文等を単語単位に分割することであり、例えば英語では一般にスペースで分割することを示す。\\
+　日本語で単語分割を行う場合、ビタビアルゴリズム(Viterbi algorithm (\cite{Forney:1973ly}))を使う方法や、双方向LSTM(\cite{Schuster:1997:BRN:2198065.2205129}/\cite{Graves:2005:BLN:1986079.1986220}) などの深層学習モデルを用いる手法 [fn:bid-split] があるが、前者は新語への対応が難しいこと、後者は前者に比べ処理時間がかかってしまうこと、両者ともに誤る可能性があることが問題となる。
+\begin{itembox}[l]{単語分割の例}
+\label{tab:word-split}
+<英語の場合>\\
+I am a researcher about NLP. \\
+$\rightarrow$ [I] [am] [a] [reseacher] [about] [NLP] [.]\\
+\\
+<日本語の場合>\\
+私は自然言語処理の研究者です。\\
+$\rightarrow$ [私] [は] [自然言語処理] [の] [研究者] [です] [。]
+\end{itembox}
+[fn:bid-split] https://github.com/taishi-i/nagisa
+*** 形態素解析
+形態素解析とは文に対して形態素と呼ばれる単位に分割、分割したそれぞれに品詞等を割り当てることを指す。本研究や一般的な形態素解析で用いられる形態素という単位は単語であり、ほとんどの場合で形態素解析ができれば単語分割が出来たものとして認められる。この手法としてはルールベースに基づいた手法や、確率的言語モデルに基づいた手法があるが、いずれも完璧ではない。本研究では MeCab を用いたが、こちらは後者を用いた手法で形態素解析を行っている。
+
+\begin{itembox}[l]{形態素解析の例}
+\label{tab:keitaiso}
+MeCab 0.996 (単語辞書 mecab-ipadic-neologd 20181112-01) で形態素解析を行った。\\
+\\
+元の文：日本語の研究をしよう。\\
+解析結果：\\
+日本語  名詞,一般,*,*,*,*,日本語,ニホンゴ,ニホンゴ\\
+の      助詞,連体化,*,*,*,*,の,ノ,ノ\\
+研究    名詞,サ変接続,*,*,*,*,研究,ケンキュウ,ケンキュー\\
+を      助詞,格助詞,一般,*,*,*,を,ヲ,ヲ\\
+しよ    動詞,自立,*,*,サ変・スル,未然ウ接続,する,シヨ,シヨ\\
+う      助動詞,*,*,*,不変化型,基本形,う,ウ,ウ\\
+。      記号,句点,*,*,*,*,。,。,。\\
+\\
+(順に ``表層形 品詞,品詞細分類1,品詞細分類2,品詞細分類3,活用型,活用形,原形,読み,発音'' となっており、``*''は未定義を示す。)
+\end{itembox}
+*** NER
+NER(固有表現抽出 Named Entity Recognition)とは文中から固有表現と分類される固有名詞、数詞、時刻や日付などの情報を抽出し、それぞれに分類するタスクだ。固有表現の例としては、MUC (Message Understanding Conference (\cite{chinchor98}))の定義によれば、ORG(組織名)/PER(人名)/LOC(地名)/DATE(日付)/TIME(時間)/MONEY(金額)/PERCENT(割合) の7種類がある。この分野は現在も活発に研究が行われており、BERT(\cite{Devlin2018BERTPO}) モデルを用いてファインチューニングでもこのタスクに取り組み発表時点で SOTA を獲得した。
+
+\begin{itembox}[l]{NERの例}
+\label{tab:ner}
+元の文：Yさんは12月にパソコンを30万円で買った。\\
+解析結果： <PER> Yさん </PER> は <DATA> 12月 </DATE> にパソコンを <MONEY> 30万円 </MONEY> で買った。
+\end{itembox}
+*** Twitterから収集した対話データの例
+以下にTwitterから収集した対話データの例を示す。\\
+個人情報に近いものや出力が困難であるものは以下の記号で置換した。
+- [PER]: 人名
+- [ORG]: 組織・団体名
+- [UNK]: 判別不能なものの恐らく個人情報なもの
+- [NUM]: 数字
+- [E]: 絵文字・顔文字を含む特殊文字
+\\
+#+begin_quote
+--------------------------------------------------------------\\
+IN: "[PER]ちゃんが1番だけど香子もすき"\\
+OUT: " 唐突な告白かと思ってしまった"\\
+\\
+IN:" 唐突な告白かと思ってしまった"\\
+OUT: "[ORG]の[PER]ちゃんです[E]でも[PER]さんもだいすきですよ[E]！！"\\
+\\
+IN: "[E]秋の落ち鮒シーズンだって〜のに…こお天気が[E]クッソ〜！！[E]"\\
+OUT: "明日は仕事だし、日曜は雨だしやってられないですわ！[E]"\\
+\\
+IN: "明日は仕事だし、日曜は雨だしやってられないですわ！[E]"\\
+OUT: "フラストレーションが溜まるいっぽうですね[E]"\\
+\\
+IN: "さっきたまにうちの店にくる女の子のお客さんが来たんだけどちっちゃくて可愛いしなんかいい匂いするしお釣り渡すとき手が触れたんだけどめっちゃ柔らかかったしちょっとやばかった"\\
+OUT: "変態じゃん"\\
+\\
+IN: "珍しくこの時間に起きてるw"\\
+OUT: "珍しすぎる笑笑"\\
+\\
+IN: "人に簡単に死ねとか言う奴いるけど ガチで死んでやろうか?? ほんとに死んだ後に死ねって言ったやつが「え??あいつガチで死んだの??俺のせい？」みたいになってるのを見たい[E] 死んだら見れないけどそうなってるのかとか思ってたら死んでみたいァ”ァ”ァ”ァ”ァ”"\\
+OUT: " おちつけひんぬーはやまるなちびぃ"\\
+\\
+IN: "おやすみなさい[E]"\\
+OUT: "おやすみなさいませ[E]"\\
+\\
+IN: "[NUM]w[NUM]d体重[NUM]kg前日より+[NUM]kg。スタートから-[NUM]kg。体脂肪率[UNM]% おはようございます(-_-)zzz ひたすら揚げる作業に入ります… 朝[NUM]時から雨マークなんだけど… 運動会やるんかい…"\\
+OUT: " お弁当つくり ファイティン![E]。家族は楽しみにしてるよ!"\\
+--------------------------------------------------------------\\
+#+end_quote
+
 *** 名大会話コーパスのデータ例
 以下に名大会話コーパス(\cite{meidai})のデータ例を示す。
 #+begin_quote
+--------------------------------------------------------------\\
 ＠データ１（約３５分）\\
 ＠収集年月日：２００１年１０月１６日\\
 ＠場所：ファミリーレストラン\\
@@ -1215,22 +1309,331 @@ F107：ほいであちしなんかとびつかれちゃったよ。\\
 F023：＊＊＊って言ってさ。\\
 F107：さっきちょっとなでただけなのにって。\\
 かわいかったね。\\
-...
+...\\
+--------------------------------------------------------------\\
 #+end_quote
 *** 対話破綻チャレンジの雑談対話コーパスのデータ例
-TAIWA
+以下に対話破綻チャレンジ(\cite{40020632863})の雑談対話コーパスのデータ例(json形式)を示す。\\
+　尚一部 "annotations" のデータは紙面の都合上 ``["..."]''を用いて省略している。\\
+　今回特に必要になったタグ名について説明する。
+- "annotations"
+  その発話が妥当なものであったかの判定に関する情報を示している。
+- "utterance"
+  実際の発話データを示す。
+
+#+BEGIN_SRC json
+{
+    "dialogue-id": "1407219916", 
+    "group-id": "init100", 
+    "speaker-id": "12_08", 
+    "turns": [
+        {
+            "annotations": [
+                {
+                    "annotator-id": "01_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "01_B", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "02_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "02_B", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "03_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "04_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "04_B", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "05_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "05_B", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "06_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "07_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "08_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "08_B", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "08_C", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "09_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "09_B", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "10_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "10_B", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "11_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "12_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "13_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "13_B", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "14_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }, 
+                {
+                    "annotator-id": "15_A", 
+                    "breakdown": "O", 
+                    "comment": "", 
+                    "ungrammatical-sentence": "O"
+                }
+            ], 
+            "speaker": "S", 
+            "time": "2014-08-05 15:22:54", 
+            "turn-index": 0, 
+            "utterance": "こんにちは！声かけてくれるのを待ってたんだ。"
+        }, 
+        {
+            "annotations": [], 
+            "speaker": "U", 
+            "time": "2014-08-05 15:23:07", 
+            "turn-index": 1, 
+            "utterance": "今日は最高気温36度だって。暑いねえ"
+        }, 
+        {
+            "annotateions": ["..."],
+            "speaker": "S", 
+            "time": "2014-08-05 15:23:07", 
+            "turn-index": 2, 
+            "utterance": "最高気温は１７度が予想されます？？"
+        }, 
+        {
+            "annotations": [], 
+            "speaker": "U", 
+            "time": "2014-08-05 15:23:15", 
+            "turn-index": 3, 
+            "utterance": "いやいや猛暑ですよ"
+        }, 
+        {
+            "annotations": ["..."],
+            "speaker": "S", 
+            "time": "2014-08-05 15:23:15", 
+            "turn-index": 4, 
+            "utterance": "猛暑に備えてますか？"
+        }, 
+        {
+            "annotations": [], 
+            "speaker": "U", 
+            "time": "2014-08-05 15:23:32", 
+            "turn-index": 5, 
+            "utterance": "うん、日傘さしたり、水飲んだり、クーラー入れたりしてる"
+        }, 
+        {
+            "annotations": ["..."],
+            "speaker": "S", 
+            "time": "2014-08-05 15:23:32", 
+            "turn-index": 6, 
+            "utterance": "クーラーは快適ですね"
+        }, 
+        {
+            "annotations": [], 
+            "speaker": "U", 
+            "time": "2014-08-05 15:23:47", 
+            "turn-index": 7, 
+            "utterance": "うん、会社だと朝はつけられないから死にそう"
+        }, 
+        {
+            "annotations": ["..."],
+            "speaker": "S", 
+            "time": "2014-08-05 15:23:47", 
+            "turn-index": 8, 
+            "utterance": "会社は冷房が効きますよねえ"
+        }, 
+        {
+            "annotations": [], 
+            "speaker": "U", 
+            "time": "2014-08-05 15:24:12", 
+            "turn-index": 9, 
+            "utterance": "昼間は効くね。ここはパソコンがいっぱいあるからないと大変"
+        }, 
+        {
+            "annotations": ["..."],
+            "speaker": "S", 
+            "time": "2014-08-05 15:24:12", 
+            "turn-index": 10, 
+            "utterance": "動きが悪いです"
+        }, 
+        {
+            "annotations": [], 
+            "speaker": "U", 
+            "time": "2014-08-05 15:24:25", 
+            "turn-index": 11, 
+            "utterance": "そうなの？こっちは快適だよ"
+        }, 
+        {
+            "annotations": ["..."],
+            "speaker": "S", 
+            "time": "2014-08-05 15:24:25", 
+            "turn-index": 12, 
+            "utterance": "パソコンは使い勝手が悪いです"
+        }, 
+        {
+            "annotations": [], 
+            "speaker": "U", 
+            "time": "2014-08-05 15:24:35", 
+            "turn-index": 13, 
+            "utterance": "えー、それは使い方がわかってないからだよ"
+        }, 
+        {
+            "annotations": ["..."], 
+            "speaker": "S", 
+            "time": "2014-08-05 15:24:35", 
+            "turn-index": 14, 
+            "utterance": "パソコンは調子がいいですね"
+        }, 
+        {
+            "annotations": [], 
+            "speaker": "U", 
+            "time": "2014-08-05 15:24:50", 
+            "turn-index": 15, 
+            "utterance": "うん、壊れやすいけどね"
+        }, 
+        {
+            "annotations": ["..."],
+            "speaker": "S", 
+            "time": "2014-08-05 15:24:50", 
+            "turn-index": 16, 
+            "utterance": "パソコンは気分が悪いですか"
+        }, 
+        {
+            "annotations": [], 
+            "speaker": "U", 
+            "time": "2014-08-05 15:25:05", 
+            "turn-index": 17, 
+            "utterance": "気分の問題なのかもね"
+        }, 
+        {
+            "annotations": ["..."],
+            "speaker": "S", 
+            "time": "2014-08-05 15:25:05", 
+            "turn-index": 18, 
+            "utterance": "パソコンは元気ですね"
+        }, 
+        {
+            "annotations": [], 
+            "speaker": "U", 
+            "time": "2014-08-05 15:25:13", 
+            "turn-index": 19, 
+            "utterance": "うん、私のは元気。"
+        }, 
+        {
+            "annotations":  ["..."], 
+            "speaker": "S", 
+            "time": "2014-08-05 15:25:13", 
+            "turn-index": 20, 
+            "utterance": "パソコンは大事ですね"
+        }
+    ]
+}
+#+END_SRC
 ** 質問文抽出を念頭においた不均衡分散・サイズの分類問題
 *** 画像データ
 :PROPERTIES:
 :CUSTOM_ID: img-class
 :END:
-CNNや最大プーリングなどについては [[#attr-japanese]] に示したが、
 *** 文データ
     文データ
 ** 機械翻訳システムを用いた対話
 *** Seq2Seq Attention
-    Seq2Seq Attention
+
 *** Transformer
+
 *** BLEUスコア
 :PROPERTIES:
 :CUSTOM_ID: bleu
