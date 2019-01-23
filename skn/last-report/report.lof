@@ -18,12 +18,14 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {9}{\ignorespaces 画像タスクに置換した場合における一般的なクラス分類}}{22}{figure.9}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {10}{\ignorespaces 対話システムのエラー検知の実験結果 における epoch と 精度の変化}}{30}{figure.10}
+\contentsline {figure}{\numberline {10}{\ignorespaces 自然言語処理の場合における点類似度を用いたクラス分類の概要図}}{23}{figure.10}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {11}{\ignorespaces 標準的な RNN の構造 (\cite {Goodfellow2016c10} より)}}{33}{figure.11}
+\contentsline {figure}{\numberline {11}{\ignorespaces 対話システムのエラー検知の実験結果 における epoch と 精度の変化}}{30}{figure.11}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {12}{\ignorespaces 双方向 RNN の構造 (\cite {Goodfellow2016c10} より)}}{34}{figure.12}
+\contentsline {figure}{\numberline {12}{\ignorespaces 標準的な RNN の構造 (\cite {Goodfellow2016c10} より)}}{33}{figure.12}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {13}{\ignorespaces LSTM セルの構造 (\cite {Goodfellow2016c10} より)}}{35}{figure.13}
+\contentsline {figure}{\numberline {13}{\ignorespaces 双方向 RNN の構造 (\cite {Goodfellow2016c10} より)}}{34}{figure.13}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {14}{\ignorespaces VAE のグラフィカルモデル(\cite {DBLP:journals/corr/KingmaW13} より)}}{38}{figure.14}
+\contentsline {figure}{\numberline {14}{\ignorespaces LSTM セルの構造 (\cite {Goodfellow2016c10} より)}}{35}{figure.14}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {15}{\ignorespaces VAE のグラフィカルモデル(\cite {DBLP:journals/corr/KingmaW13} より)}}{38}{figure.15}
