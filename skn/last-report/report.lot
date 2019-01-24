@@ -1,0 +1,51 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {1}{発話データに対して適用したフィルタとその理由}}{8}{table.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {2}{発話データの調査結果1}}{9}{table.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {3}{発話データの調査結果2}}{9}{table.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {4}{発話データの調査結果3}}{10}{table.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {5}{対話データの調査結果1}}{11}{table.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {6}{対話データの調査結果2}}{12}{table.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {7}{fasttext の Skip-gram を用いた単語分散獲得学習のパラメータ}}{15}{table.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {8}{fasttext を用いた単語分散獲得学習の共通パラメータ}}{17}{table.8}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {9}{漢字かな入り混じり文 の類似単語}}{19}{table.9}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {10}{かなのみの文 の類似単語}}{19}{table.10}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {11}{実験に用いたCNNの概要}}{20}{table.11}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {12}{得られた単語分散を用いた極性判定}}{20}{table.12}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {13}{学習データ中の語彙外の単語数}}{21}{table.13}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {14}{得られた単語分散を用いた極性判定(Wikipedia + 学習データ)}}{21}{table.14}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {15}{実験に用いたCNNの概要}}{22}{table.15}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {16}{自然言語処理の場合における点類似度を用いたクラス分類のデータ例}}{24}{table.16}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {17}{データセットの入力と出力の例}}{33}{table.17}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {18}{Sequence to Sequence Attention と Transformer によって得られた出力}}{33}{table.18}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {19}{学習に用いたデータのBLEUスコア}}{34}{table.19}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {20}{学習外のデータについてのBLEUスコア}}{34}{table.20}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {21}{実験環境}}{34}{table.21}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {22}{文スタイル変換に用いる学習データ例}}{36}{table.22}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {23}{文スタイル変換の実験結果}}{37}{table.23}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {24}{対話システムのエラー検知のデータ例}}{38}{table.24}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {25}{対話システムのエラー検知の実験結果}}{38}{table.25}

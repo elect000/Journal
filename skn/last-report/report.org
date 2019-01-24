@@ -484,7 +484,7 @@ CNN-LSTM (\cite{Sainath2015ConvolutionalLS}) とは CNNとLSTMを組み合わせ
 　上記の調査で明らかになったように、日本語には同意ながら様々な表現が存在している。その中でも比較的簡単に差がわかる・前処理が簡単なものとして、``漢字とかな''について挙げることができる。例えば``寒い''という単語は``さむい''、``寒い''といった場合があるが、これらは単語的にはほとんど同じ意味を示す。また漢字とかなが入り交じることによって文字の種類が増加し、英語に比べて解析時の次元数が増大してしまう可能性が直ちにわかる。更に日本語のみならず英語を代表とした他国語をそれらの文字のまま併用し、それを当然のように会話に組み込んでいるという特徴から、日本語の文字種数を削減することは重要だと考えられる。そこで漢字をすべてかなに変換するという前処理を実験する。\\
 　しかしこの前処理を行う弊害として、例えば``すなわち''、``即ち''、``則ち''、``乃ち'' といった微妙にニュアンスの異なる同音の単語がまとめられてしまうことによる影響をについて憂慮する必要があり、考察しなければならない。
 *** 実験概要
-単語分散を得るためのコーパスとしてWikipediaから入手したコーパスを用いた。Wikipediaコーパスを選択した理由として、プライバシーや料金といったデータの入手難易度が低いこと、言語モデルを作成することを視野にいれた際に、百科事典的な特徴から大まかに日本語の語彙を網羅することが期待でき魅力的なことを挙げられる。\\
+単語分散を得るためのコーパスとしてWikipediaから入手したコーパス [fn:wiki] を用いた。Wikipediaコーパスを選択した理由として、プライバシーや料金といったデータの入手難易度が低いこと、言語モデルを作成することを視野にいれた際に、百科事典的な特徴から大まかに日本語の語彙を網羅することが期待でき魅力的なことを挙げられる。\\
 　前処理として行う 漢字 $\rightarrow$ かな変換には MeCab の辞書を用いて行った。\\
 　実験に用いるモデルは、fasttext の  Skip-gram だ (\cite{Bojanowski2017EnrichingWV})。fasttext は Skip-gram の機構に subword という仕組みが追加されており、使わない場合よりも良い性能が得られることが知られている。\\
 　subwordとは活用や語幹といった単位で単語を分割することで、例え単語が文字上一致しなくともその単語間の距離が近くなることを保証できるという利点が得られる。これは特に英語が、単語が小さな意味を持つ文字群に分割できることに大きく影響する。この利点は日本語にも応用可能だという理屈としては、任意の国語辞典を開けばわかることだ。\\
@@ -519,6 +519,8 @@ CNN-LSTM (\cite{Sainath2015ConvolutionalLS}) とは CNNとLSTMを組み合わせ
 | ネガティブサンプル数 |                     5 |
 | ウィンドウサイズ     |                     5 |
 |----------------------+-----------------------|
+
+[fn:wiki] https://ja.wikipedia.org/w/index.php?title=WP:DD&redirect=yes
 *** 実験結果
 実験結果を示す。\\
 　ここでいう次元数とは単語埋め込みベクトルの次元数 dim で、default とは漢字かな入り混じり文、 yomi とは漢字 $\rightarrow$ かな変換を行ったものを示す。\\
@@ -950,6 +952,7 @@ BERT を用いた文類似度を求めるプロセスでの精度は申し分な
 ** 実験) 書き言葉→話し言葉のスタイル変換
 *** 実験概要
 Sequence to Better Sequence とSequence to Better Sequence に Denoising autoencoder(\cite{dae}) を加えたもの、CopyNet(\cite{Gu2016IncorporatingCM}) を用いたものの3つについて同じデータセットで実験を行った。それぞれのモデルの説明は、[[#style-transfer-]] で行う。
+　Sequence to Better Sequence に Denoising autoencoder を加えたモチベーションは、Unsupervised Machine Translation Using Monolingual Corpora Only (\cite{lample2018unsupervised}) で、教師なしの機械翻訳を行う際に DAE を用いて学習を行い良い結果が得られていたことから、autoencoder を用いて文生成を行う際に DAE のようなノイズを加えることが精度向上につながるのではないかと推測したことだ。
 *** 実験結果
 以下に得られた結果を示す。学習精度については学習に用いたデータが少ないため議論できない。
 尚、S2BS は Sequence to Better Sequence、S2BS with DAE は Sequence to Better Sequence に Denoising autoencoder を加えたものを示す。
@@ -1249,7 +1252,18 @@ z = \mu_z + \epsilon * \sigma_z &where\ \epsilon \sim N(0, I)
 [[./img/vae.PNG]]
 #+LATEX: \newpage
 ** BERT
-BERT
+BERT (Bidirectional Encoder Representations from Transformers \cite{Devlin2018BERTPO}) とは 言語モデル の一種だ。これは fasttext のような単語分散表現を学習するモデルに近いものがあるが、これらよりも良い成果を挙げることが出来ている。\\
+　このモデルの概要は Transformer の encoder を双方向にしたモデルだ。学習内容は学習データの文のランダムにマスクされた単語を予測することと、ある2文を用意してそれらが連続しているかを予測することの2つだ。\\
+　モデルの概要図を以下に示す。Tm とは Transoformer の encoder を指している。$E_i$ は 文要素(例えば単語)で、$T_i$ は対応する文要素を示している。つまりいくつかのがマスクされた $E_i$ を予測し $T_i$ で出力することが BERT モデルの1つ目の学習内容に該当する。\\
+　また2つ目の学習を行うため2文を入力する場合など2文の関係性を学習するときは、BERTはそれらの文を区切り要素でつないでまとめたものを学習し、指定された $T_j$ からラベルを出力する。\\
+　BERT モデルの訓練は非常にコストが高いため、本研究ではBERTモデルそのものの訓練は行わず、公式 [fn:bertoff] で公開されているモデルを利用した。
+
+#+CAPTION: BERT モデルの概要図 (\cite{Devlin2018BERTPO} より)
+#+NAME: fig:bertimg
+#+ATTR_LATEX: :width 5cm
+[[./img/bert.PNG]]
+
+[fn:bertoff] https://github.com/google-research/bert から 11月23日に公表された BERT-Base, Multilingual Cased 
 ** 対話システムの関連研究
 :PROPERTIES:
 :CUSTOM_ID: extra_rsearch
@@ -1846,9 +1860,21 @@ Sequence to Better Sequence(\cite{s2bs}) とはシーケンシャルなデータ
 [[./img/s2bss.PNG]]
 #+LATEX: \newpage
 *** CopyNet
-CopyNet(\cite{Gu2016IncorporatingCM}) とは
-
-*** Denoising Auto Encoder
+CopyNet(\cite{Gu2016IncorporatingCM}) とは Sequence to Sequence モデルに語彙の共有という機能を追加したモデルだと言える。\\
+　例えば Sequence to Sequence モデルを用いて要約や言い換えのタスクを解くことを考えた場合、未知語になるような出現頻度の低い単語はそのまま出力文に反映されれることが多い。この性質を考えたとき、decoder には encoder で用いた単語がすべて共有できるような仕組みが精度向上につながると考えることが出来る。\\
+　このモデルの概要図を以下に示す。Attention-based Encoder-Decoder とは Sequence to Sequence Attention と同じ機構(但しこちらは Bahdanau Attention (\cite{Bahdanau2014NeuralMT}))だ。Generate-Mode & Copy-Mode では vocab 内の単語が出力される確率と入力内の単語がコピーされる確率を組み合わせて出力する単語を予測している。この機構によって語彙外ので単語であっても入力文内にその単語が存在していれば出力することが出来るようになる。State Updateでは、前回出力した単語が入力文にあった場合に、対応する encoder の隠れ状態を用いて decoder の状態を更新する。これによって連続する未知語の対応が出来るようになる。
+#+CAPTION: CopyNetの概要図 (\cite{Gu2016IncorporatingCM} より)
+#+NAME: fig:s2bsg
+#+ATTR_LATEX: :width 15cm
+[[./img/cnn.PNG]]
+#+LATEX: \newpage
+*** Denoising autoencoder
+Denoising autoencoder(\cite{dae}) は破損したデータを入力とし、破損される前のデータを復元するように訓練された autoencoder だ。このモデルは破損データの復元を学習しているという解釈以外にも、多様体学習やより堅牢な生成モデルの学習を行っているといった解釈が出来ることが、論文では考察されている。\\
+　Denoising autoencoder のグラフィカルモデルを以下に示す。まず元のデータ $x$ に対して破損過程 $C(\tilde{x}|x)$ を導入することで $\tilde{x}$ を得る。次に encoder $f(h|\tilde{x})$ を通すことで潜在変数 $h$ を得る。そして得られた潜在変数 $h$ を decoder  $g(x|h)$ に通し元のデータの予測 $x$ を得る。
+#+CAPTION: Denoising autoencoder の概要図 (\cite{Goodfellow2016c8} より)
+#+NAME: fig:dae
+#+ATTR_LATEX: :width 8cm
+[[./img/dae.PNG]]
 
 
 #+LATEX: \newpage
@@ -1857,6 +1883,10 @@ CopyNet(\cite{Gu2016IncorporatingCM}) とは
 　そして  [[#con-model-use-mt]] 機械翻訳システムを用いた対話モデル を代表としたいくつかの研究についてはある程度の良い水準を見込める結果を得ることが出来た。また [[#deal-japanese-data]] 日本語データの取扱い においては実世界からデータを収集しそれを機械学習に用いることを考えた際の問題について考察しまとめた。\\
 　まだまだ 対話システムの関連研究に追いつくには程遠いものの、 [[#inbalance-categorization]] 文抽出を念頭においた不均衡分散・サイズの分類問題 で用いた BERT モデルを用いた文の類似度計算などは、関連研究で用いられていた該当部よりも良い性能を持つと言われているモデルを用い、実験を行いその是非を考察した。\\
 　今後の課題としては、今回出来なかった文生成についての研究や、 [[#big-image]] 想定する対話システムの全体像 で示した内部状態の更新についての研究を行わなければならない他、本研究で用いた技術を実際に組み合わせ対話システムとして稼働させ、その性質を調査する必要がある。そしてこれらの課題の先には、対話システムの全体像を見直すためにもアンケートなどを行いやすいよう、なんらかの形で公開することを目指す必要があると想像できる。
+#+LATEX: \newpage
+\section*{謝辞}
+本研究を進めるにあたり、多くの方々からご支援・ご指導を頂きました。同級生の方々には研究に関する不安や研究内容やその周辺に関する話題について深い議論をさせて頂きました。Claus Aranha先生にはほぼ毎週進捗について親身に相談に乗って頂きました。また櫻井鉄也先生を始めとする情報数理研究室の教授・准教授・助教の方々にはお忙しい中ゼミや英語輪講の場でご指導を頂きました。また両親に関しましては計算資源や書籍といったものにかかる経費を支援頂きました。\\
+　最後にこの研究を進めるにあたり大学生活を支援頂いた全ての方々にこの場を借りて深く感謝申し上げます。
 #+LATEX: \newpage
 #+LATEX: \printbibliography
 
@@ -1891,7 +1921,10 @@ Hello World
 \\clearpage
 \\pagenumbering{roman} 
 \\tableofcontents
- \\clearpage \\listoffigures \\clearpage")
+ \\clearpage \\listoffigures 
+\\clearpage
+\\listoftables
+\\clearpage")
 
 (setq org-format-latex-options 
   (plist-put org-format-latex-options :scale 2.0))
