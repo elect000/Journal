@@ -1195,7 +1195,7 @@ h^{(t)}_i = tanh(s_i^{t})o^{(t)}_i
 \end{algorithmic}
 \end{algorithm}
 *** VAE
-VAE(Variational autoencoder(\cite{DBLP:journals/corr/KingmaW13})) は 学習によって近似推論を行う有向モデル、生成モデルだ。有向モデルとはデータの流れが決まっているモデルで、データから出力への流れを逆転することが出来ないことを示している。生成モデルとは簡潔に説明すると、入力データのようなデータを生成することが出来るモデルを示している。
+VAE(Variational autoencoder(\cite{DBLP:journals/corr/KingmaW13})) は 学習によって近似推論を行う有向モデル、生成モデルだ。有向モデルとはデータの流れが決まっているモデルで、データから出力への流れを逆転することが出来ないことを示している。生成モデルとは簡潔に説明すると、クラス分類を行うような識別モデルではない、データを生成することが出来るモデルを示している。
  このモデルを説明するにあたり、まずいくつかの変数を定義する。
 - $x$
   モデル化したいデータ
@@ -1207,6 +1207,9 @@ VAE(Variational autoencoder(\cite{DBLP:journals/corr/KingmaW13})) は 学習に�
   潜在変数の確率分布
 - $P(x|z)$
   潜在変数を用いて生成されるデータの分布
+- $P(z|x)$
+  データから生成される潜在変数の分布
+
 
 潜在変数を説明するために一つの例を紹介する。\\
 　まず我々は今博物館でモナ・リザを見ているとする。つまりここでモデル化したいデータとしてモナ・リザを設定する。すると我々は脳内のどこかにモナ・リザのイメージを何らかの形式で保存する。この保存されたそれが潜在変数と考えることが出来る。確率分布というのはそれぞれ、博物館の絵画全体、我々が脳内で記憶しているそれらと想像することが出来る。潜在変数を用いて生成されるデータの分布とは、我々が紙を渡されて完璧なモナ・リザを模写する能力を示している。\\
@@ -1216,8 +1219,8 @@ P(x) &=& \int P(x, z) dz \notag \\
 &=& \int P(x|z)P(z)dz
 \end{eqnarray}
 　VAEは $P(z|x)$ を用いて $P(z)$ を学習する。\\
-　ここで仮定として $p(z)$ を シンプルな(多変量正規)分布 $N(\mu_z, \sigma_z)$ (例えば $N(0, I)$)とする。\\
-　VAEでは生成モデルの一種なことから encoder、decoderというものがあり、encoder にデータを通すことにより $P(z)$ を近似した確率分布を得、decoder に確率分布を通すことにより元のデータを生成する。つまり encoder は $P(z|x)$ の近似 $E(z|x)$ 、decoder は $P(x|z)$ の近似 $D(x|z)$ となる。こう仮定することで $p(z|x)$ も多変量正規分布の性質を得る。\\
+　ここで仮定として $p(z)$ を シンプルな(多変量正規)分布 $N(\mu_z, \sigma_z)$ (例えば $N(0, I)$)とする。こう仮定することで $p(z|x)$ も多変量正規分布の性質を得る。\\
+　VAEでは生成モデルの一種なことから encoder、decoderというものがあり、encoder にデータを通すことにより $P(z)$ を近似した確率分布を得、decoder に確率分布を通すことにより元のデータを生成する。つまり encoder は $P(z|x)$ の近似 $E(z|x)$ 、decoder は $P(x|z)$ の近似 $D(x|z)$ となる。\\
 　さて encoder の学習を考えたとき、 $E(z|x)$ の近似の精度を計る尺度として KLダイバージェンス (Kullback-Leibler divergence) の最小化が登場する。KLダイバージェンスは近似精度を計る尺度で、厳密な距離ではないが非負性といった有用な性質がある。
 \begin{eqnarray}
 KL(E(z|x)||P(z|x)) &=& \mathbb{E}_{z \sim E(z|x)} [\log \cfrac{E(z|x)}{P(z|x)}]\notag \\
@@ -1241,12 +1244,12 @@ P(x) &=& \int P_{\theta}(x, z) dz \notag \\
 z = \mu_z + \epsilon * \sigma_z &where\ \epsilon \sim N(0, I)
 \end{eqnarray}
 #+CAPTION: VAE のグラフィカルモデル(\cite{DBLP:journals/corr/KingmaW13} より)
-#+NAME: fig:lstm
+#+NAME: fig:vaeg
 #+ATTR_LATEX: :width 8cm
 [[./img/vae.PNG]]
 #+LATEX: \newpage
 ** BERT
-    BERT
+BERT
 ** 対話システムの関連研究
 :PROPERTIES:
 :CUSTOM_ID: extra_rsearch
@@ -1727,27 +1730,126 @@ Softmax(\hat{y}_i) = \cfrac{e^{\hat{y}_i}} {\Sigma^N_{j=1}e^{(\hat{y}_j)}}
 
 さてここで $p(x)$ と $q(x)$ についてクロスエントロピーをそのまま適用した場合、2つの分布の偽陽性率と真陰性率は等価値になるように計算される。ここで偽陽性率か真陽性率のいずれかを特に重く価値を持たせたい場合を考えたとき、クロスエントロピーに重み付けを行うという手法が提案される。\\
 　そしてこれは深層学習の特にデータ数が不均衡な場合のクラス分類において広く使われれるテクニックとして知られている。\\
+　2クラス分類を例として考え、2クラスの学習データ $X_a$, $X_b$ が存在しているとする。これらのサイズ比が $9:1$ なとき、もし すべてのデータを $X_a$ に属するという学習を行ったとしても、9割の正答率が得られてしまうため、このように学習が行われてしまう可能性が高い。しかしもし $X_b$ を検出したいと考えたとき、この学習結果は望むものではない。このとき $X_b$ を $X_a$ と誤判定してしまったときの重みを $X_a$ を $X_b$ の重みに比べ大きく取ることによって($X_b$ を $X_a$ と検知してしまった際の方が損失が大きくなるため) $X_b$ の検出力を向上させることが出来る。本研究では損失の比較を行えるようにするため、重みの総和を 1 となるように設定した。
+
+\begin{eqnarray}
+cross\_entropy = -\Sigma_x\ weight\ (p(x)\log q(x))
+\end{eqnarray}
 
 ** 機械翻訳システムを用いた対話
 *** Sequence to Sequence Attention
+:PROPERTIES:
+:CUSTOM_ID: satt
+:END:
+Sequence to Sequence (\cite{Sutskever2014SequenceTS}) とは RNN (特にLSTMが多く使われている) を用いて機械翻訳を行う手法として登場した深層学習の手法だ。これは生成モデルの一種で、入力文 (翻訳されていない文) から意味変数を取り出しそれから出力文 (翻訳された文) を生成している。これを数式として簡潔に示すと以下のようになる。
+- $x_i$
+  翻訳されていない文の要素(例えば単語) 
+- $y_i$
+  翻訳された文の要素(例えば単語)
+- $T, T'$
+  それぞれ翻訳されていない文の要素長、翻訳された文の要素長
+- v
+  $(x_1, \dots , x_T)$ を用いて encoder から生成された翻訳されていない文の意味変数
+\begin{eqnarray}
+P(y_1, \dots, y_{T'}|x_1,\dots , x_T) = \Sigma^{T'}_{t=1}P(y_t|v, y_1, \dots , y_{t-1})
+\end{eqnarray}
 
+　ここで注目する点としては、要素を順に生成するという RNN の考え方から、$y_t$ の生成に対して $y_1,\dots , y_{t-1}$ を用いているという点だろう。この点は画像生成とは大きく異なる特徴として捉えることが出来る。\\
+　モデルの概要を以下に示す。ここで白い四角は LSTM をはじめとした RNN のセルであり、左から3つ (A, B, C) が入力となっている。次に <eos> を入力しているが、これは入力文の末尾に達したことを示す他に、ここから出力文を生成するということをセルに指示している。ここから出力の要素を一つずつ取り出し、それを次の入力に用いることで出力分を得、最後に <eos> を受け取ることで出力文の末尾に達したことを知る。学習時には図の下部はすべて与えられるためそれを学習し、上部の要素が正しく出力できるように最適化を行う。
+#+CAPTION: Sequence to Sequence モデルの概要図 (\cite{Sutskever2014SequenceTS} より)
+#+NAME: fig:lstm
+#+ATTR_LATEX: :width 15cm
+[[./img/seq2seqabst.PNG]]
+
+　ここで問題となるのが出力単語を生成する際に (先頭を除いて) 文の意味変数を直接的に参照することが出来ないということだ。すると入力文の情報を出力単語生成時に十分に供給できないのではないかという懸念が生じる。\\
+　これに対処するための手法として Attention 機構が提案された。Sequence to Sequence モデルについての Attention 機構の有名な種類として Bahdanau Attention (\cite{Bahdanau2014NeuralMT}) と Luong Attention (\cite{Luong2015EffectiveAT}) が存在しているが、本実験では精度上後者の Luong Attention の特に Global Attention を用いたためこちらについて説明を行う。\\
+　まずモデルの概要図を以下に示す。\\
+　 $\bar{h}_s$ は入力単語を受け付けるセルの隠れ状態で、Context vector を意味する $c_t$ はそれらの重み付きの和を取っている。
+
+\begin{eqnarray}
+c_t &=& \Sigma_s a_t(s) \bar{h}_s
+\end{eqnarray}
+
+\begin{eqnarray}
+where& \notag\\
+ a_t(s) &=& \cfrac{e^{score(h_t, \bar{h}_s)}}{\Sigma_{s'}e^{score(h_t, \bar{h}_{s'})}} \notag \\
+ score(h_t, \bar{h}_s) &=& h_t^T W_a \bar{h}_s \notag \\
+ W_a\ &is&\ weight\ matrix \notag
+\end{eqnarray}
+
+　$\tilde{h}_t$ はここで求められた $c_t$ と 出力単語を受け付けるセルの隠れ状態 $h_t$ を連結して重みをかけ合わせ、双曲線正接関数を適用して求める。
+
+\begin{eqnarray}
+\tilde{h}_t = tanh(W_c[c_t:h_t])
+\end{eqnarray}
+
+　これによって入力文の情報を出力単語を出力する際に直接的に参照することが出来る。
+#+CAPTION: Luong Attention (Global Attention) 機構の概要図 (\cite{Luong2015EffectiveAT} より)
+#+NAME: fig:lstm
+#+ATTR_LATEX: :width 10cm
+[[./img/luong.PNG]]
+#+LATEX: \newpage
 *** Transformer
-
+Transformer(\cite{Vaswani2017AttentionIA}) とは RNN を用いない機械翻訳の手法で、Attention 機構を重視したモデルだ。
+　以下のモデルの概要図を示し、簡潔な説明を行う。\\
+　左側は encoder 、右側は decoder と呼ばれている。$N \times$ は灰で囲まれた部分が　N (標準は 6) がスタックされている(繰り返されている)ことを示している。\\
+　Input・Output Embedding は入力文・出力文と入力のベクトル・出力のベクトルを橋渡しするための機構で、一般に単語をベクトルに写像している。\\
+　Positional Encoding とは文に対して単語がどの位置にあるのかを記憶するために各単語ベクトルの末尾に位置を示すベクトルを追加している。これによって RNN を用いずとも単語の流れを考慮することが期待できる。\\
+　Multi-Head Attentionとは、入力に対して複数の Attention 機構を並列に並べたものだ。Attention 機構は大きなものを一つ用意するよりも小さなものを複数用意するほう精度が良くなることが報告されている。尚 encoder と decoder の下部の Attention 機構は Self-Attention と呼ばれ、簡潔なイメージを説明すると、[[#satt]] の Attention 機構が入力文と出力単語に対するものだったのに対して、こちらは入力文と入力文を対象とした Attention 機構になる。Add & Norm は 矢印元から来たベクトルをまとめている。\\
+　decoder にある Masked Multi-Head Attention とは、単語予測を行う decoder の機能を持たせるため、予測したい(学習させたい)単語以降の単語を Mask した Multi-Head Attention だ。\\
+　その他 Linear, Softmax, Feed Forward は それぞれ線型結合層、Softmax 関数、Feed forward Network を示している。
+　
+#+CAPTION: Transformer モデルの概要図 (\cite{Vaswani2017AttentionIA} より)
+#+NAME: fig:lstm
+#+ATTR_LATEX: :width 15cm
+[[./img/transformer.PNG]]
+#+LATEX: \newpage
 *** BLEUスコア
 :PROPERTIES:
 :CUSTOM_ID: bleu
 :END:
+BLEUスコア (Bilingual Evaluation Understudy Score) とは主に機械翻訳の分野で用いられている評価手法で、文に対して N-gram 一致度を評価する。機械翻訳の分野では、識別問題に広く使われる accuracy よりもこちらのほうが好んで用いられるが、この理由は単語の一致度よりもおおよその文脈や単語の流れの一致度合いのほうがこの問題には求められているためだ。\\
+　以下に BLEU スコアの導出式を示す。$n$ は n-gram の n を示しており、$BP$ は brevity penalty を示している。$P_n$ は 修正n-gram 精度を示している。$r$ 、$c$ はそれぞれテストデータの文要素(単語)数、推論したデータの文要素(単語)数を示している。
 
+\begin{eqnarray}
+BLEU &=& BP\ e^{\Sigma_{n=1}^N \cfrac{1}{N}\log P_n} \\
+BP &=&  \begin{cases} 1 & \text{if $c > r$} \\ e^{(1 - \cfrac{r}{c})} & \text{else} \end{cases} \notag \\
+P_n &=& \cfrac{\text{テストデータと推論したデータの n-gram の共有数}}{\text{推論したデータの n-gram の数}} \notag 
+\end{eqnarray}
+
+　 $P_n$ についてはやや難解であるため、補足として例を示す。
+
+\begin{itembox}[l]{$P_n$ の例}
+テストデータ: A B C D E F A\\
+推論したデータ: A A A X X X X\\
+\\
+　このとき $P_1$ は $\cfrac{2}{7}$ となる。 共有した n-gram は テストデータの A 2つと、推論したデータの任意の A 2つだ。推論したデータには A が 3つ含まれているが、共有数なので一度一致した要素を複数回使うことは出来ない。
+\end{itembox}
+　またBLEU スコアは 1 以下の値を取るため、百分率のように 100 倍されて用いられることがある。本研究の BLEU スコアはこの 100 倍された値を表記している。
 ** 文のスタイル変換
 :PROPERTIES:
 :CUSTOM_ID: style-transfer-
 :END:
 *** Sequence to Better Sequence
-    Sequence to Better Sequence
+Sequence to Better Sequence(\cite{s2bs}) とはシーケンシャルなデータ群のペアを学習し、入力されるデータを連続的に修正するモデルだ。このモデルの概要は、VAEの潜在表現にはデータのスタイル(データのペアの差とみなすことが出来る)についての情報が存在すると仮定し、それを連続的にずらしていくことでスタイルを変換することを目指しているという点だ。これを行うためにこのモデルは ``joint approximate inference'' というテクニックを用いて、VAEの学習とスタイルについての学習を順に行っている。\\
+　このモデルのグラフィカルモデルを以下に示す。VAE のグラフィカルモデル [Figure [[fig:vaeg]]] の z と x の間の矢印が E, D に対応しており、それぞれ encoder、 decoder を示している。F は 潜在変数 z から スタイルを表す $[0, 1]$ の連続値を取る y を学習する。 y は2つのスタイルをそれぞれ 0, 1 とする。
+#+CAPTION: Sequence to Better Sequence のグラフィカルモデル(\cite{s2bs} より)
+#+NAME: fig:s2bsg
+#+ATTR_LATEX: :width 8cm
+[[./img/s2bsg.PNG]]
+
+次にモデルのスタイル変換を行う手続きについての図を以下に示す。まず入力文 $x_0$ から E を通すことで潜在変数 $z_0$ を取り出す。次に $z_0$ から F を通すことで $y_0$ を特定する。次に $z_0$ を``同じ意味を持っている文集合の中で''、 $y_0$ より高い $y_1$ を取れるようにずらし $z_1$ を得る。これを繰り返すことで $y^{\star}$ を得ることが出来る $z^{\star}$ にたどり着く。つまり初期値 $z = E(x_0)$ について、領域を制限した勾配降下法を用いて、y についての局所最適解 $z^{\star}$ を求めている。そこから D を通すことで出力文 $x^*$ を得る。\\
+　このモデルを学習する際の問題として、スタイルを変換するために 2 つの最適化を行わなければならないため、損失の変化を慎重に見極めなければならないという点がある。これによって学習の再現性が低くなってしまう他、学習の進捗を注意して観察し続けなければならない。
+#+CAPTION: Sequence to Better Sequence のスタイル変換を行う手続き(\cite{s2bs} より)
+#+NAME: fig:s2bsg
+#+ATTR_LATEX: :width 8cm
+[[./img/s2bss.PNG]]
+#+LATEX: \newpage
 *** CopyNet
-    CopyNet
+CopyNet(\cite{Gu2016IncorporatingCM}) とは
+
 *** Denoising Auto Encoder
-    Denoising Auto Encoder
+
 
 #+LATEX: \newpage
 * 結論
