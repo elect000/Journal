@@ -12,11 +12,11 @@
 #+CREATOR: Emacs 26.1 (Org mode 9.1.14)
 
 * デモ会話
-USER: ユーザ  \n
-CHAR： キャラクタ\n                
-SENTIMENT: 文\n
+USER: ユーザ  \\
+CHAR： キャラクタ \\
+SENTIMENT: 文 \\
 
-SENTIMENT: 1: positive / 0: negative                     
+SENTIMENT: 1: positive / 0: negative \\
 
 デモ会話
 |---------+----------------------------------------+------------+---------------------------------------------------|
