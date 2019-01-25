@@ -1655,7 +1655,7 @@ Denoising autoencoder(\cite{dae}) は破損したデータを入力とし、破�
 　最後にこの研究を進めるにあたり大学生活を支援頂いた全ての方々にこの場を借りて深く感謝申し上げます。
 #+LATEX: \newpage
 #+LATEX: \printbibliography
-\addcontentsline{toc}{section}{Referencesm}
+\addcontentsline{toc}{section}{References}
 * C++ コードをEmacs + Org mode で書く :noexport:
 #+CAPTION: テストコード
 #+header: :includes <iostream>
