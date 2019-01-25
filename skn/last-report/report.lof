@@ -44,16 +44,16 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {22}{\ignorespaces BERT モデルの概要図 (\cite {Devlin2018BERTPO} より)}}{48}{figure.22}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {23}{\ignorespaces Sequence to Sequence モデルの概要図 (\cite {Sutskever2014SequenceTS} より)}}{58}{figure.23}
+\contentsline {figure}{\numberline {23}{\ignorespaces Sequence to Sequence モデルの概要図 (\cite {Sutskever2014SequenceTS} より)}}{54}{figure.23}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {24}{\ignorespaces Luong Attention (Global Attention) 機構の概要図 (\cite {Luong2015EffectiveAT} より)}}{59}{figure.24}
+\contentsline {figure}{\numberline {24}{\ignorespaces Luong Attention (Global Attention) 機構の概要図 (\cite {Luong2015EffectiveAT} より)}}{55}{figure.24}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {25}{\ignorespaces Transformer モデルの概要図 (\cite {Vaswani2017AttentionIA} より)}}{60}{figure.25}
+\contentsline {figure}{\numberline {25}{\ignorespaces Transformer モデルの概要図 (\cite {Vaswani2017AttentionIA} より)}}{56}{figure.25}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {26}{\ignorespaces Sequence to Better Sequence のグラフィカルモデル(\cite {s2bs} より)}}{62}{figure.26}
+\contentsline {figure}{\numberline {26}{\ignorespaces Sequence to Better Sequence のグラフィカルモデル(\cite {s2bs} より)}}{58}{figure.26}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {27}{\ignorespaces Sequence to Better Sequence のスタイル変換を行う手続き(\cite {s2bs} より)}}{62}{figure.27}
+\contentsline {figure}{\numberline {27}{\ignorespaces Sequence to Better Sequence のスタイル変換を行う手続き(\cite {s2bs} より)}}{58}{figure.27}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {28}{\ignorespaces CopyNetの概要図 (\cite {Gu2016IncorporatingCM} より)}}{63}{figure.28}
+\contentsline {figure}{\numberline {28}{\ignorespaces CopyNetの概要図 (\cite {Gu2016IncorporatingCM} より)}}{59}{figure.28}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {29}{\ignorespaces Denoising autoencoder の概要図 (\cite {Goodfellow2016c8} より)}}{64}{figure.29}
+\contentsline {figure}{\numberline {29}{\ignorespaces Denoising autoencoder の概要図 (\cite {Goodfellow2016c8} より)}}{60}{figure.29}
