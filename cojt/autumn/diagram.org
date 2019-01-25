@@ -1,8 +1,8 @@
 * デモ会話
-USER: ユーザ\\
-CHAR： キャラクタ\\
-SENTIMENT: 文\\
-SENTIMENT: 1: positive / 0: negative\\
+USER: ユーザ         
+CHAR： キャラクタ                
+SENTIMENT: 文                   
+SENTIMENT: 1: positive / 0: negative                     
 
 デモ会話
 |---------+----------------------------------------+------------+---------------------------------------------------|
