@@ -8,12 +8,12 @@
 #+EMAIL: meguru@meguru-pc
 #+LANGUAGE: en
 #+SELECT_TAGS: export
-#+EXCLUDE_TAGS: noexport
+#+EXCLUDE_TAGS: export
 #+CREATOR: Emacs 26.1 (Org mode 9.1.14)
 
 * デモ会話
 USER: ユーザ  \\
-CHAR： キャラクタ  \\
+CHAR: キャラクタ  \\
 SENTIMENT: 文  \\
 
 SENTIMENT: 1: positive / 0: negative \\
