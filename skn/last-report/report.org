@@ -31,7 +31,7 @@
 #+LATEX_HEADER: \usepackage{algorithm}
 #+LATEX_HEADER: \usepackage{algorithmic}
 #+LATEX_HEADER: \addbibresource{reference.bib}
-#+LATEX_HEADER: \advisor{Claus Aranha 櫻井鉄也}
+#+LATEX_HEADER: \advisor{Claus Aranha 櫻井鉄也 北川高嗣}
 #+LATEX_HEADER: \heiseiyear{30}
 #+LATEX_HEADER: \majorfield{知能情報メディア主専攻}
 #+LATEX_HEADER: \patchcmd{\abstract}{\Large}{}{}{}
@@ -1730,6 +1730,7 @@ std::cout << greet << std::endl;
 Hello World
 ,#+END_EXPORT
 #+END_SRC
+
 
 
 
