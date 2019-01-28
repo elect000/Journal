@@ -32,20 +32,20 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {table}{\numberline {16}{自然言語処理の場合における点類似度を用いたクラス分類のデータ例}}{25}{table.16}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {17}{データセットの入力と出力の例}}{34}{table.17}
+\contentsline {table}{\numberline {17}{データセットの入力と出力の例}}{33}{table.17}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {18}{Sequence to Sequence Attention と Transformer によって得られた出力}}{34}{table.18}
+\contentsline {table}{\numberline {18}{Sequence to Sequence Attention と Transformer によって得られた出力}}{33}{table.18}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {19}{学習に用いたデータのBLEUスコア}}{35}{table.19}
+\contentsline {table}{\numberline {19}{学習に用いたデータのBLEUスコア}}{34}{table.19}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {20}{学習外のデータについてのBLEUスコア}}{35}{table.20}
+\contentsline {table}{\numberline {20}{学習外のデータについてのBLEUスコア}}{34}{table.20}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {21}{実験環境}}{35}{table.21}
+\contentsline {table}{\numberline {21}{実験環境}}{34}{table.21}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {22}{文スタイル変換に用いる学習データ例}}{37}{table.22}
+\contentsline {table}{\numberline {22}{文スタイル変換に用いる学習データ例}}{36}{table.22}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {23}{文スタイル変換の実験結果}}{38}{table.23}
+\contentsline {table}{\numberline {23}{文スタイル変換の実験結果}}{37}{table.23}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {24}{対話システムのエラー検知のデータ例}}{39}{table.24}
+\contentsline {table}{\numberline {24}{対話システムのエラー検知のデータ例}}{38}{table.24}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {25}{対話システムのエラー検知の実験結果}}{39}{table.25}
+\contentsline {table}{\numberline {25}{対話システムのエラー検知の実験結果}}{38}{table.25}

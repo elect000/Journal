@@ -22,38 +22,36 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {11}{\ignorespaces BERTモデルのファインチューニング (MRPC) の epoch と 精度の変化}}{26}{figure.11}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {12}{\ignorespaces 点類似度を用いたクラス分類 (合計値)}}{28}{figure.12}
+\contentsline {figure}{\numberline {12}{\ignorespaces 点類似度を用いたクラス分類 (最大値)}}{28}{figure.12}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {13}{\ignorespaces 点類似度を用いたクラス分類 (最大値)}}{29}{figure.13}
+\contentsline {figure}{\numberline {13}{\ignorespaces 点類似度を用いたクラス分類 (最小値)}}{29}{figure.13}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {14}{\ignorespaces 点類似度を用いたクラス分類 (最小値)}}{30}{figure.14}
+\contentsline {figure}{\numberline {14}{\ignorespaces 点類似度を用いたクラス分類 (中央値)}}{30}{figure.14}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {15}{\ignorespaces 点類似度を用いたクラス分類 (中央値)}}{31}{figure.15}
+\contentsline {figure}{\numberline {15}{\ignorespaces 点類似度を用いたクラス分類 (平均値)}}{31}{figure.15}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {16}{\ignorespaces 点類似度を用いたクラス分類 (平均値)}}{32}{figure.16}
+\contentsline {figure}{\numberline {16}{\ignorespaces 対話システムのエラー検知の実験結果 における epoch と 精度の変化}}{39}{figure.16}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {17}{\ignorespaces 対話システムのエラー検知の実験結果 における epoch と 精度の変化}}{40}{figure.17}
+\contentsline {figure}{\numberline {17}{\ignorespaces 標準的な RNN の構造 (\cite {Goodfellow2016c10} より)}}{41}{figure.17}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {18}{\ignorespaces 標準的な RNN の構造 (\cite {Goodfellow2016c10} より)}}{42}{figure.18}
+\contentsline {figure}{\numberline {18}{\ignorespaces 双方向 RNN の構造 (\cite {Goodfellow2016c10} より)}}{43}{figure.18}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {19}{\ignorespaces 双方向 RNN の構造 (\cite {Goodfellow2016c10} より)}}{44}{figure.19}
+\contentsline {figure}{\numberline {19}{\ignorespaces LSTM セルの構造 (\cite {Goodfellow2016c10} より)}}{43}{figure.19}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {20}{\ignorespaces LSTM セルの構造 (\cite {Goodfellow2016c10} より)}}{44}{figure.20}
+\contentsline {figure}{\numberline {20}{\ignorespaces VAE のグラフィカルモデル(\cite {DBLP:journals/corr/KingmaW13} より)}}{46}{figure.20}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {21}{\ignorespaces VAE のグラフィカルモデル(\cite {DBLP:journals/corr/KingmaW13} より)}}{47}{figure.21}
+\contentsline {figure}{\numberline {21}{\ignorespaces BERT モデルの概要図 (\cite {Devlin2018BERTPO} より)}}{47}{figure.21}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {22}{\ignorespaces BERT モデルの概要図 (\cite {Devlin2018BERTPO} より)}}{48}{figure.22}
+\contentsline {figure}{\numberline {22}{\ignorespaces Sequence to Sequence モデルの概要図 (\cite {Sutskever2014SequenceTS} より)}}{53}{figure.22}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {23}{\ignorespaces Sequence to Sequence モデルの概要図 (\cite {Sutskever2014SequenceTS} より)}}{54}{figure.23}
+\contentsline {figure}{\numberline {23}{\ignorespaces Luong Attention (Global Attention) 機構の概要図 (\cite {Luong2015EffectiveAT} より)}}{54}{figure.23}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {24}{\ignorespaces Luong Attention (Global Attention) 機構の概要図 (\cite {Luong2015EffectiveAT} より)}}{55}{figure.24}
+\contentsline {figure}{\numberline {24}{\ignorespaces Transformer モデルの概要図 (\cite {Vaswani2017AttentionIA} より)}}{55}{figure.24}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {25}{\ignorespaces Transformer モデルの概要図 (\cite {Vaswani2017AttentionIA} より)}}{56}{figure.25}
+\contentsline {figure}{\numberline {25}{\ignorespaces Sequence to Better Sequence のグラフィカルモデル(\cite {s2bs} より)}}{57}{figure.25}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {26}{\ignorespaces Sequence to Better Sequence のグラフィカルモデル(\cite {s2bs} より)}}{58}{figure.26}
+\contentsline {figure}{\numberline {26}{\ignorespaces Sequence to Better Sequence のスタイル変換を行う手続き(\cite {s2bs} より)}}{57}{figure.26}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {27}{\ignorespaces Sequence to Better Sequence のスタイル変換を行う手続き(\cite {s2bs} より)}}{58}{figure.27}
+\contentsline {figure}{\numberline {27}{\ignorespaces CopyNetの概要図 (\cite {Gu2016IncorporatingCM} より)}}{58}{figure.27}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {28}{\ignorespaces CopyNetの概要図 (\cite {Gu2016IncorporatingCM} より)}}{59}{figure.28}
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {29}{\ignorespaces Denoising autoencoder の概要図 (\cite {Goodfellow2016c8} より)}}{60}{figure.29}
+\contentsline {figure}{\numberline {28}{\ignorespaces Denoising autoencoder の概要図 (\cite {Goodfellow2016c8} より)}}{59}{figure.28}
