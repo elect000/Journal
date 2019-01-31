@@ -1,8 +1,9 @@
+
 #+LATEX_CLASS_OPTIONS: [dvipdfmx]
 #+TITLE: 卒業論文発表
 #+AUTHOR: 江畑 拓哉
 #+EMAIL: s1611350@u.tsukuba.ac.jp
-#+DATE: 2018-12-12 Wed
+#+DATE: 2019-1-31 Thr
 #+DESCRIPTION:
 #+KEYWORDS:
 #+BEAMER_ENV: dvipdfmx
@@ -176,3 +177,4 @@
 * 
 
 #+LATEX: \printbibliography
+
